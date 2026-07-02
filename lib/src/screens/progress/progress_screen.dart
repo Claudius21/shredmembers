@@ -11,6 +11,7 @@ import '../../models/workout_session.dart';
 import '../../services/mock_data.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_spacing.dart';
+import '../../utils/date_time_utils.dart';
 import '../../widgets/common/app_card.dart';
 import '../../widgets/common/section_header.dart';
 import '../../routing/app_router.dart';
@@ -85,8 +86,8 @@ class _ProgressScreenState extends ConsumerState<ProgressScreen> {
                           child: _SummaryCard(
                             label: 'This Week',
                             value: sessions
-                                .where((s) => s.startedAt
-                                    .isAfter(DateTime.now().subtract(const Duration(days: 7))))
+                                .where((s) => s.startedAt.isAfter(
+                                    DateTime.now().toUtc().subtract(const Duration(days: 7))))
                                 .length
                                 .toString(),
                             icon: Icons.calendar_view_week_rounded,
@@ -347,7 +348,7 @@ class _PRHistoryList extends ConsumerWidget {
       delegate: SliverChildBuilderDelegate(
         (ctx, i) {
           final record = displayRecords[i];
-          final date = DateFormat('EEE, MMM d').format(record.achievedAt);
+          final date = record.achievedAt.formatWithOffset('EEE, MMM d', null);
           final isBodyweight = record.weightKg == 0;
 
           return Padding(
@@ -432,7 +433,7 @@ class _SessionTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final date = DateFormat('EEE, MMM d').format(session.startedAt);
+    final date = session.startedAt.formatWithOffset('EEE, MMM d', session.startedAtOffsetMinutes);
     final duration = session.duration != null
         ? '${session.duration!.inMinutes} min'
         : '—';
@@ -525,8 +526,14 @@ class _SessionDetailsSheet extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final date = DateFormat('EEEE, MMM d, yyyy').format(session.startedAt);
-    final time = DateFormat('HH:mm').format(session.startedAt);
+    final date = session.startedAt.formatWithOffset(
+      'EEEE, MMM d, yyyy',
+      session.startedAtOffsetMinutes,
+    );
+    final time = session.startedAt.formatWithOffset(
+      'HH:mm',
+      session.startedAtOffsetMinutes,
+    );
     final duration = session.duration != null
         ? '${session.duration!.inMinutes} min'
         : '—';

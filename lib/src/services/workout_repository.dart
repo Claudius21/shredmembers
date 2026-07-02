@@ -175,7 +175,9 @@ class WorkoutRepository {
       'day_id': session.dayId.isNotEmpty ? session.dayId : null,
       'day_name': session.dayName,
       'started_at': session.startedAt.toIso8601String(),
+      'started_at_offset_minutes': session.startedAtOffsetMinutes,
       'finished_at': session.finishedAt?.toIso8601String(),
+      'finished_at_offset_minutes': session.finishedAtOffsetMinutes,
       'status': session.status.name,
       'total_volume_kg': session.totalVolumeKg,
       'session_type': session.sessionType.name,
@@ -588,10 +590,12 @@ class WorkoutRepository {
       planId: json['plan_id'] as String? ?? '',
       dayId: json['day_id'] as String? ?? '',
       dayName: json['day_name'] as String,
-      startedAt: DateTime.parse(json['started_at'] as String),
+      startedAt: DateTime.parse(json['started_at'] as String).toUtc(),
+      startedAtOffsetMinutes: json['started_at_offset_minutes'] as int?,
       finishedAt: json['finished_at'] != null
-          ? DateTime.parse(json['finished_at'] as String)
+          ? DateTime.parse(json['finished_at'] as String).toUtc()
           : null,
+      finishedAtOffsetMinutes: json['finished_at_offset_minutes'] as int?,
       status: SessionStatus.completed,
       exercises: exercises,
       totalVolumeKg: json['total_volume_kg'] as int? ?? 0,

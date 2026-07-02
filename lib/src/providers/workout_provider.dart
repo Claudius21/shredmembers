@@ -215,12 +215,14 @@ class ActiveSessionNotifier extends Notifier<WorkoutSession?> {
   }
 
   void startSession(WorkoutDay day, String planId) {
+    final now = DateTime.now();
     state = WorkoutSession(
-      id: 'session-live-${DateTime.now().millisecondsSinceEpoch}',
+      id: 'session-live-${now.millisecondsSinceEpoch}',
       planId: planId,
       dayId: day.id,
       dayName: day.name,
-      startedAt: DateTime.now().toUtc(),
+      startedAt: now.toUtc(),
+      startedAtOffsetMinutes: now.timeZoneOffset.inMinutes,
       status: SessionStatus.inProgress,
       exercises: day.exercises.map((e) => e.copyWith(
         sets: e.sets.map((s) => s.copyWith(isCompleted: false)).toList(),
@@ -333,8 +335,10 @@ class ActiveSessionNotifier extends Notifier<WorkoutSession?> {
         return setAcc + ((s.actualWeight ?? 0) * (s.actualReps ?? 0)).toInt();
       });
     });
+    final now = DateTime.now();
     final finished = state!.copyWith(
-      finishedAt: DateTime.now(),
+      finishedAt: now.toUtc(),
+      finishedAtOffsetMinutes: now.timeZoneOffset.inMinutes,
       status: SessionStatus.completed,
       totalVolumeKg: volume,
     );

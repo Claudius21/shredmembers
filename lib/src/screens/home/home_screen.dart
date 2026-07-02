@@ -19,6 +19,7 @@ import '../../providers/workout_provider.dart';
 import '../../routing/app_router.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_spacing.dart';
+import '../../utils/date_time_utils.dart';
 import '../../utils/list_extensions.dart';
 import '../../widgets/common/app_button.dart';
 import '../../widgets/common/app_card.dart';
@@ -66,8 +67,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final activePlan = ref.watch(activePlanProvider);
     final sessions = ref.watch(sessionHistoryProvider).valueOrNull ?? [];
     final thisWeekSessions = sessions
-        .where((s) =>
-            s.startedAt.isAfter(DateTime.now().subtract(const Duration(days: 7))))
+        .where((s) => s.startedAt.isAfter(
+            DateTime.now().toUtc().subtract(const Duration(days: 7))))
         .toList();
     final thisWeekLifting = thisWeekSessions.where((s) => !s.isCardio).length;
     final thisWeekCardio = thisWeekSessions.where((s) => s.isCardio).length;
@@ -79,7 +80,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       final nextSessions = next.valueOrNull ?? [];
       if (nextSessions.length <= prevSessions.length) return;
 
-      final weekStart = DateTime.now().subtract(const Duration(days: 7));
+      final weekStart = DateTime.now().toUtc().subtract(const Duration(days: 7));
       final weekSessions = nextSessions.where((s) => s.startedAt.isAfter(weekStart)).toList();
       final lifting = weekSessions.where((s) => !s.isCardio).length;
       final cardio = weekSessions.where((s) => s.isCardio).length;
@@ -510,8 +511,10 @@ class _LogCardioSheetState extends State<_LogCardioSheet> {
       planId: '',
       dayId: '',
       dayName: _type,
-      startedAt: now,
-      finishedAt: now,
+      startedAt: now.toUtc(),
+      startedAtOffsetMinutes: now.timeZoneOffset.inMinutes,
+      finishedAt: now.toUtc(),
+      finishedAtOffsetMinutes: now.timeZoneOffset.inMinutes,
       status: SessionStatus.completed,
       exercises: const [],
       totalVolumeKg: 0,
@@ -984,7 +987,7 @@ class _SessionTile extends ConsumerWidget {
     final user = ref.watch(authProvider).user;
     final live = ref.watch(sessionHistoryProvider).valueOrNull
         ?.firstWhere((s) => s.id == session.id, orElse: () => session) ?? session;
-    final date = DateFormat('EEE, MMM d').format(live.startedAt);
+    final date = live.startedAt.formatWithOffset('EEE, MMM d', live.startedAtOffsetMinutes);
     final duration = live.isCardio
         ? '${live.cardioMinutes ?? 0} min'
         : (live.duration != null ? '${live.duration!.inMinutes} min' : '—');
@@ -1166,8 +1169,14 @@ class _SessionDetailsSheetState extends ConsumerState<_SessionDetailsSheet> {
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(authProvider).user;
-    final date = DateFormat('EEEE, MMM d, yyyy').format(widget.session.startedAt);
-    final time = DateFormat('HH:mm').format(widget.session.startedAt);
+    final date = widget.session.startedAt.formatWithOffset(
+      'EEEE, MMM d, yyyy',
+      widget.session.startedAtOffsetMinutes,
+    );
+    final time = widget.session.startedAt.formatWithOffset(
+      'HH:mm',
+      widget.session.startedAtOffsetMinutes,
+    );
     final duration = widget.session.duration != null
         ? '${widget.session.duration!.inMinutes} min'
         : '—';

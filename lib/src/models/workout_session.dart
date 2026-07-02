@@ -12,7 +12,9 @@ class WorkoutSession extends Equatable {
   final String dayId;
   final String dayName;
   final DateTime startedAt;
+  final int? startedAtOffsetMinutes;
   final DateTime? finishedAt;
+  final int? finishedAtOffsetMinutes;
   final SessionStatus status;
   final List<Exercise> exercises;
   final int totalVolumeKg;
@@ -27,7 +29,9 @@ class WorkoutSession extends Equatable {
     required this.dayId,
     required this.dayName,
     required this.startedAt,
+    this.startedAtOffsetMinutes,
     this.finishedAt,
+    this.finishedAtOffsetMinutes,
     required this.status,
     required this.exercises,
     this.totalVolumeKg = 0,
@@ -43,7 +47,9 @@ class WorkoutSession extends Equatable {
     String? dayId,
     String? dayName,
     DateTime? startedAt,
+    int? startedAtOffsetMinutes,
     DateTime? finishedAt,
+    int? finishedAtOffsetMinutes,
     SessionStatus? status,
     List<Exercise>? exercises,
     int? totalVolumeKg,
@@ -58,7 +64,9 @@ class WorkoutSession extends Equatable {
       dayId: dayId ?? this.dayId,
       dayName: dayName ?? this.dayName,
       startedAt: startedAt ?? this.startedAt,
+      startedAtOffsetMinutes: startedAtOffsetMinutes ?? this.startedAtOffsetMinutes,
       finishedAt: finishedAt ?? this.finishedAt,
+      finishedAtOffsetMinutes: finishedAtOffsetMinutes ?? this.finishedAtOffsetMinutes,
       status: status ?? this.status,
       exercises: exercises ?? this.exercises,
       totalVolumeKg: totalVolumeKg ?? this.totalVolumeKg,
@@ -83,7 +91,9 @@ class WorkoutSession extends Equatable {
         'dayId': dayId,
         'dayName': dayName,
         'startedAt': startedAt.toIso8601String(),
+        'startedAtOffsetMinutes': startedAtOffsetMinutes,
         'finishedAt': finishedAt?.toIso8601String(),
+        'finishedAtOffsetMinutes': finishedAtOffsetMinutes,
         'status': status.name,
         'exercises': exercises.map((e) => e.toJson()).toList(),
         'totalVolumeKg': totalVolumeKg,
@@ -99,9 +109,11 @@ class WorkoutSession extends Equatable {
         dayId: json['dayId'] as String,
         dayName: json['dayName'] as String,
         startedAt: DateTime.parse(json['startedAt'] as String).toUtc(),
+        startedAtOffsetMinutes: json['startedAtOffsetMinutes'] as int?,
         finishedAt: json['finishedAt'] != null
             ? DateTime.parse(json['finishedAt'] as String).toUtc()
             : null,
+        finishedAtOffsetMinutes: json['finishedAtOffsetMinutes'] as int?,
         status: SessionStatus.values.firstWhere(
           (e) => e.name == json['status'],
           orElse: () => SessionStatus.inProgress,
@@ -125,8 +137,8 @@ class WorkoutSession extends Equatable {
 
   @override
   List<Object?> get props => [
-        id, planId, dayId, dayName, startedAt,
-        finishedAt, status, exercises, totalVolumeKg,
+        id, planId, dayId, dayName, startedAt, startedAtOffsetMinutes,
+        finishedAt, finishedAtOffsetMinutes, status, exercises, totalVolumeKg,
         sessionType, cardioMinutes, distanceKm, caloriesBurned,
       ];
 }
