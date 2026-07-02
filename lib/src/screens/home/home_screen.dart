@@ -5,6 +5,7 @@ import 'dart:ui' as ui;
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
@@ -25,6 +26,35 @@ import '../../widgets/common/app_button.dart';
 import '../../widgets/common/app_card.dart';
 import '../../widgets/common/section_header.dart';
 import '../../widgets/common/stat_chip.dart';
+
+/// Replaces commas with dots so German users can type `5,3` instead of `5.3`.
+class _DecimalInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+    var text = newValue.text.replaceAll(',', '.');
+    // Prevent more than one decimal point
+    final parts = text.split('.');
+    if (parts.length > 2) {
+      text = '${parts.first}.${parts.sublist(1).join('')}';
+    }
+    return newValue.copyWith(
+      text: text,
+      selection: newValue.selection.copyWith(
+        baseOffset: newValue.selection.baseOffset.clamp(0, text.length),
+        extentOffset: newValue.selection.extentOffset.clamp(0, text.length),
+      ),
+    );
+  }
+}
+
+double? _parseDoubleLocalized(String value) {
+  final normalized = value.trim().replaceAll(',', '.');
+  return double.tryParse(normalized);
+}
+
+int? _parseIntLocalized(String value) {
+  return int.tryParse(value.trim());
+}
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -587,7 +617,14 @@ class _LogCardioSheetState extends State<_LogCardioSheet> {
                 labelText: 'Distance (km) – optional',
                 prefixIcon: Icon(Icons.straighten, color: AppColors.onSurfaceMuted),
               ),
-              onSaved: (v) => _distanceKm = double.tryParse(v ?? '') ?? 0,
+              inputFormatters: [_DecimalInputFormatter()],
+              validator: (v) {
+                if (v == null || v.trim().isEmpty) return null;
+                final n = _parseDoubleLocalized(v);
+                if (n == null || n < 0) return 'Enter a valid distance';
+                return null;
+              },
+              onSaved: (v) => _distanceKm = _parseDoubleLocalized(v ?? '') ?? 0,
             ),
             const SizedBox(height: AppSpacing.md),
             TextFormField(
@@ -597,7 +634,13 @@ class _LogCardioSheetState extends State<_LogCardioSheet> {
                 labelText: 'Calories burned – optional',
                 prefixIcon: Icon(Icons.local_fire_department_outlined, color: AppColors.onSurfaceMuted),
               ),
-              onSaved: (v) => _calories = int.tryParse(v ?? '') ?? 0,
+              validator: (v) {
+                if (v == null || v.trim().isEmpty) return null;
+                final n = _parseIntLocalized(v);
+                if (n == null || n < 0) return 'Enter valid calories';
+                return null;
+              },
+              onSaved: (v) => _calories = _parseIntLocalized(v ?? '') ?? 0,
             ),
             const SizedBox(height: AppSpacing.xl),
             AppButton(
@@ -1281,13 +1324,35 @@ class _SessionDetailsSheetState extends ConsumerState<_SessionDetailsSheet> {
                       const SizedBox(height: 16),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          _ShareStat(icon: Icons.timer, value: duration, label: 'Time'),
-                          const SizedBox(width: 20),
-                          _ShareStat(icon: Icons.fitness_center, value: '${widget.session.completedExercisesCount}', label: 'Exercises'),
-                          const SizedBox(width: 20),
-                          _ShareStat(icon: Icons.monitor_weight, value: _getCorrectVolume(widget.session, user?.weightKg), label: 'kg'),
-                        ],
+                        children: widget.session.isCardio
+                            ? [
+                                _ShareStat(
+                                  icon: Icons.timer,
+                                  value: '${widget.session.cardioMinutes ?? 0} min',
+                                  label: 'Time',
+                                ),
+                                const SizedBox(width: 20),
+                                _ShareStat(
+                                  icon: Icons.straighten,
+                                  value: widget.session.distanceKm != null && widget.session.distanceKm! > 0
+                                      ? '${widget.session.distanceKm!.toStringAsFixed(1)} km'
+                                      : '—',
+                                  label: 'Distance',
+                                ),
+                                const SizedBox(width: 20),
+                                _ShareStat(
+                                  icon: Icons.local_fire_department,
+                                  value: widget.session.caloriesBurned != null ? '${widget.session.caloriesBurned} kcal' : '—',
+                                  label: 'Calories',
+                                ),
+                              ]
+                            : [
+                                _ShareStat(icon: Icons.timer, value: duration, label: 'Time'),
+                                const SizedBox(width: 20),
+                                _ShareStat(icon: Icons.fitness_center, value: '${widget.session.completedExercisesCount}', label: 'Exercises'),
+                                const SizedBox(width: 20),
+                                _ShareStat(icon: Icons.monitor_weight, value: _getCorrectVolume(widget.session, user?.weightKg), label: 'kg'),
+                              ],
                       ),
                       const SizedBox(height: 12),
                       
@@ -1771,6 +1836,7 @@ class _SessionEditSheet extends ConsumerStatefulWidget {
 }
 
 class _SessionEditSheetState extends ConsumerState<_SessionEditSheet> {
+  final _formKey = GlobalKey<FormState>();
   late List<Exercise> _exercises;
   bool _saving = false;
 
@@ -1835,15 +1901,17 @@ class _SessionEditSheetState extends ConsumerState<_SessionEditSheet> {
   }
 
   Future<void> _save() async {
+    if (!_formKey.currentState!.validate()) return;
+    _formKey.currentState!.save();
     setState(() => _saving = true);
     try {
       final WorkoutSession updated;
       if (widget.session.isCardio) {
         updated = widget.session.copyWith(
           dayName: _cardioType,
-          cardioMinutes: int.tryParse(_cardioMinutesCtrl.text) ?? widget.session.cardioMinutes,
-          distanceKm: double.tryParse(_distanceCtrl.text),
-          caloriesBurned: int.tryParse(_caloriesCtrl.text),
+          cardioMinutes: _parseIntLocalized(_cardioMinutesCtrl.text) ?? widget.session.cardioMinutes,
+          distanceKm: _parseDoubleLocalized(_distanceCtrl.text),
+          caloriesBurned: _parseIntLocalized(_caloriesCtrl.text),
         );
       } else {
         final exercisesWithCompleted = _exercises.map((e) => e.copyWith(
@@ -1884,24 +1952,26 @@ class _SessionEditSheetState extends ConsumerState<_SessionEditSheet> {
         return SingleChildScrollView(
           controller: scrollController,
           padding: const EdgeInsets.all(24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Center(
-                child: Container(
-                  width: 40, height: 4,
-                  decoration: BoxDecoration(
-                    color: AppColors.divider,
-                    borderRadius: BorderRadius.circular(2),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Center(
+                  child: Container(
+                    width: 40, height: 4,
+                    decoration: BoxDecoration(
+                      color: AppColors.divider,
+                      borderRadius: BorderRadius.circular(2),
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(height: AppSpacing.lg),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(widget.session.dayName,
-                      style: Theme.of(context).textTheme.headlineSmall),
+                const SizedBox(height: AppSpacing.lg),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(widget.session.dayName,
+                        style: Theme.of(context).textTheme.headlineSmall),
                   TextButton.icon(
                     onPressed: _saving ? null : _save,
                     icon: _saving
@@ -1929,31 +1999,49 @@ class _SessionEditSheetState extends ConsumerState<_SessionEditSheet> {
                   onChanged: (v) => setState(() => _cardioType = v ?? _cardioType),
                 ),
                 const SizedBox(height: AppSpacing.md),
-                TextField(
+                TextFormField(
                   controller: _cardioMinutesCtrl,
                   keyboardType: TextInputType.number,
                   decoration: const InputDecoration(
                     labelText: 'Duration (minutes)',
                     prefixIcon: Icon(Icons.timer_outlined, color: AppColors.onSurfaceMuted),
                   ),
+                  validator: (v) {
+                    final n = _parseIntLocalized(v ?? '');
+                    if (n == null || n <= 0) return 'Enter a valid duration';
+                    return null;
+                  },
                 ),
                 const SizedBox(height: AppSpacing.md),
-                TextField(
+                TextFormField(
                   controller: _distanceCtrl,
                   keyboardType: const TextInputType.numberWithOptions(decimal: true),
                   decoration: const InputDecoration(
                     labelText: 'Distance (km) – optional',
                     prefixIcon: Icon(Icons.straighten, color: AppColors.onSurfaceMuted),
                   ),
+                  inputFormatters: [_DecimalInputFormatter()],
+                  validator: (v) {
+                    if (v == null || v.trim().isEmpty) return null;
+                    final n = _parseDoubleLocalized(v);
+                    if (n == null || n < 0) return 'Enter a valid distance';
+                    return null;
+                  },
                 ),
                 const SizedBox(height: AppSpacing.md),
-                TextField(
+                TextFormField(
                   controller: _caloriesCtrl,
                   keyboardType: TextInputType.number,
                   decoration: const InputDecoration(
                     labelText: 'Calories burned – optional',
                     prefixIcon: Icon(Icons.local_fire_department_outlined, color: AppColors.onSurfaceMuted),
                   ),
+                  validator: (v) {
+                    if (v == null || v.trim().isEmpty) return null;
+                    final n = _parseIntLocalized(v);
+                    if (n == null || n < 0) return 'Enter valid calories';
+                    return null;
+                  },
                 ),
                 const SizedBox(height: AppSpacing.xl),
               ] else ...[
@@ -2041,8 +2129,10 @@ class _SessionEditSheetState extends ConsumerState<_SessionEditSheet> {
               const SizedBox(height: 32),
             ],
           ),
+        ),
         );
       },
     );
   }
 }
+
