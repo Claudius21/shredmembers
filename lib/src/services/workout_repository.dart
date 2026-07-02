@@ -25,9 +25,7 @@ class WorkoutRepository {
   // ─── Plans ───────────────────────────────────────────────────
 
   Future<List<WorkoutPlan>> fetchPlans() async {
-    final data = await _client
-        .from('workout_plans')
-        .select('''
+    final data = await _client.from('workout_plans').select('''
           *,
           workout_days (
             *,
@@ -36,11 +34,11 @@ class WorkoutRepository {
               exercises (*)
             )
           )
-        ''')
-        .eq('user_id', _uid)
-        .order('created_at');
+        ''').eq('user_id', _uid).order('created_at');
 
-    return (data as List).map((e) => _planFromJson(e as Map<String, dynamic>)).toList();
+    return (data as List)
+        .map((e) => _planFromJson(e as Map<String, dynamic>))
+        .toList();
   }
 
   /// Save or update a plan to Supabase for cross-device sync
@@ -99,29 +97,26 @@ class WorkoutRepository {
 
   Future<void> setActivePlan(String planId) async {
     print('[REPO] Setting active plan: $planId for user: $_uid');
-    
+
     // Store active plan in profile for cross-device sync (works for all plans including mock plans)
     try {
       await _client
           .from('profiles')
-          .update({'active_plan_id': planId})
-          .eq('id', _uid);
+          .update({'active_plan_id': planId}).eq('id', _uid);
       print('[REPO] Successfully updated profiles.active_plan_id to: $planId');
     } catch (e) {
       print('[REPO ERROR] Failed to update profiles: $e');
       rethrow;
     }
-    
+
     // Also update legacy is_active field for Supabase-stored plans (backward compatibility)
     try {
       await _client
           .from('workout_plans')
-          .update({'is_active': false})
-          .eq('user_id', _uid);
+          .update({'is_active': false}).eq('user_id', _uid);
       await _client
           .from('workout_plans')
-          .update({'is_active': true})
-          .eq('id', planId);
+          .update({'is_active': true}).eq('id', planId);
       print('[REPO] Successfully updated workout_plans.is_active');
     } catch (e) {
       print('[REPO] Plan $planId might be a mock plan (not in Supabase): $e');
@@ -148,7 +143,7 @@ class WorkoutRepository {
 
   // ─── Sessions ────────────────────────────────────────────────
 
-  Future<List<WorkoutSession>> fetchSessions({int limit = 20}) async {
+  Future<List<WorkoutSession>> fetchSessions({int limit = 1000}) async {
     final data = await _client
         .from('workout_sessions')
         .select('*, session_sets(*)')
@@ -156,7 +151,9 @@ class WorkoutRepository {
         .order('started_at', ascending: false)
         .limit(limit);
 
-    return (data as List).map((e) => _sessionFromJson(e as Map<String, dynamic>)).toList();
+    return (data as List)
+        .map((e) => _sessionFromJson(e as Map<String, dynamic>))
+        .toList();
   }
 
   Future<String> saveSession(WorkoutSession session) async {
@@ -165,27 +162,33 @@ class WorkoutRepository {
       print('ERROR: No user logged in - cannot save session');
       throw Exception('User not authenticated');
     }
-    
+
     print('Saving session for user: ${user.id}');
     print('Session: ${session.dayName}, volume: ${session.totalVolumeKg}');
-    
-    final result = await _client.from('workout_sessions').insert({
-      'user_id': user.id,
-      'plan_id': session.planId.isNotEmpty ? session.planId : null,
-      'day_id': session.dayId.isNotEmpty ? session.dayId : null,
-      'day_name': session.dayName,
-      'started_at': session.startedAt.toIso8601String(),
-      'started_at_offset_minutes': session.startedAtOffsetMinutes,
-      'finished_at': session.finishedAt?.toIso8601String(),
-      'finished_at_offset_minutes': session.finishedAtOffsetMinutes,
-      'status': session.status.name,
-      'total_volume_kg': session.totalVolumeKg,
-      'session_type': session.sessionType.name,
-      if (session.cardioMinutes != null) 'cardio_minutes': session.cardioMinutes,
-      if (session.distanceKm != null) 'distance_km': session.distanceKm,
-      if (session.caloriesBurned != null) 'calories_burned': session.caloriesBurned,
-    }).select().single();
-    
+
+    final result = await _client
+        .from('workout_sessions')
+        .insert({
+          'user_id': user.id,
+          'plan_id': session.planId.isNotEmpty ? session.planId : null,
+          'day_id': session.dayId.isNotEmpty ? session.dayId : null,
+          'day_name': session.dayName,
+          'started_at': session.startedAt.toIso8601String(),
+          'started_at_offset_minutes': session.startedAtOffsetMinutes,
+          'finished_at': session.finishedAt?.toIso8601String(),
+          'finished_at_offset_minutes': session.finishedAtOffsetMinutes,
+          'status': session.status.name,
+          'total_volume_kg': session.totalVolumeKg,
+          'session_type': session.sessionType.name,
+          if (session.cardioMinutes != null)
+            'cardio_minutes': session.cardioMinutes,
+          if (session.distanceKm != null) 'distance_km': session.distanceKm,
+          if (session.caloriesBurned != null)
+            'calories_burned': session.caloriesBurned,
+        })
+        .select()
+        .single();
+
     print('Session saved with ID: ${result['id']}');
 
     final sessionId = result['id'] as String;
@@ -257,7 +260,8 @@ class WorkoutRepository {
 
   Future<void> updateSessionSets(WorkoutSession session) async {
     if (!_isUuid(session.id)) {
-      throw Exception('Session has not been saved to the server yet. Please finish a new workout first.');
+      throw Exception(
+          'Session has not been saved to the server yet. Please finish a new workout first.');
     }
     print('updateSessionSets: deleting old sets for session ${session.id}');
     await _client.from('session_sets').delete().eq('session_id', session.id);
@@ -278,13 +282,15 @@ class WorkoutRepository {
     print('updateSessionSets: inserting ${sets.length} sets');
     if (sets.isNotEmpty) await _client.from('session_sets').insert(sets);
     final totalVolume = sets.fold<double>(
-      0, (sum, s) => sum + ((s['reps'] as int) * (s['weight_kg'] as double)));
+        0, (sum, s) => sum + ((s['reps'] as int) * (s['weight_kg'] as double)));
     await _client.from('workout_sessions').update({
       'total_volume_kg': totalVolume.round(),
       'day_name': session.dayName,
-      if (session.cardioMinutes != null) 'cardio_minutes': session.cardioMinutes,
+      if (session.cardioMinutes != null)
+        'cardio_minutes': session.cardioMinutes,
       if (session.distanceKm != null) 'distance_km': session.distanceKm,
-      if (session.caloriesBurned != null) 'calories_burned': session.caloriesBurned,
+      if (session.caloriesBurned != null)
+        'calories_burned': session.caloriesBurned,
     }).eq('id', session.id);
     print('updateSessionSets: done');
   }
@@ -302,7 +308,8 @@ class WorkoutRepository {
         .eq('user_id', _uid)
         .order('started_at', ascending: true);
 
-    final sessionIds = (sessionData as List).map((e) => e['id'] as String).toList();
+    final sessionIds =
+        (sessionData as List).map((e) => e['id'] as String).toList();
     if (sessionIds.isEmpty) return 0;
 
     final setsData = await _client
@@ -345,7 +352,8 @@ class WorkoutRepository {
         } else {
           final new1rm = weight * (1 + reps / 30);
           final existing1rm = existing != null
-              ? (existing['weight_kg'] as double) * (1 + (existing['reps'] as int) / 30)
+              ? (existing['weight_kg'] as double) *
+                  (1 + (existing['reps'] as int) / 30)
               : 0.0;
           if (new1rm > existing1rm) {
             sessionBest[name] = {'weight_kg': weight, 'reps': reps};
@@ -387,10 +395,8 @@ class WorkoutRepository {
   }
 
   Future<List<String>> _getOwnSessionIds() async {
-    final data = await _client
-        .from('workout_sessions')
-        .select('id')
-        .eq('user_id', _uid);
+    final data =
+        await _client.from('workout_sessions').select('id').eq('user_id', _uid);
     return (data as List).map((e) => e['id'] as String).toList();
   }
 
@@ -400,9 +406,11 @@ class WorkoutRepository {
         .select()
         .eq('user_id', _uid)
         .order('achieved_at', ascending: false);
-    final records = (data as List).map((e) => Map<String, dynamic>.from(e as Map)).toList();
+    final records =
+        (data as List).map((e) => Map<String, dynamic>.from(e as Map)).toList();
     // ignore: avoid_print
-    print('[REPO DEBUG] Fetched ${records.length} records: ${records.map((r) => '${r['exercise_name']}: ${r['weight_kg']}kg x ${r['reps']}').toList()}');
+    print(
+        '[REPO DEBUG] Fetched ${records.length} records: ${records.map((r) => '${r['exercise_name']}: ${r['weight_kg']}kg x ${r['reps']}').toList()}');
     return records;
   }
 
@@ -448,14 +456,14 @@ class WorkoutRepository {
   Future<void> cleanupDuplicatePRs() async {
     // ignore: avoid_print
     print('[PR CLEANUP] Starting cleanup...');
-    
+
     // Get all records
     final allRecords = await _client
         .from('personal_records')
         .select()
         .eq('user_id', _uid)
         .order('achieved_at', ascending: false);
-    
+
     // Group by exercise_id
     final Map<String, List<Map<String, dynamic>>> grouped = {};
     for (final record in allRecords) {
@@ -463,29 +471,29 @@ class WorkoutRepository {
       grouped.putIfAbsent(exerciseId, () => []);
       grouped[exerciseId]!.add(record);
     }
-    
+
     // For each exercise, keep only the best record
     for (final entry in grouped.entries) {
       final records = entry.value;
       if (records.length <= 1) continue;
-      
+
       // Find best record (highest 1RM for weighted, highest reps for BW)
       Map<String, dynamic> bestRecord = records.first;
       double best1RM = _calculate1RM(
         (bestRecord['weight_kg'] as num).toDouble(),
         bestRecord['reps'] as int,
       );
-      
+
       for (int i = 1; i < records.length; i++) {
         final record = records[i];
         final weight = (record['weight_kg'] as num).toDouble();
         final reps = record['reps'] as int;
         final current1RM = _calculate1RM(weight, reps);
-        
+
         // For BW exercises (weight == 0), compare reps only
         final isBW = weight == 0;
         final bestIsBW = (bestRecord['weight_kg'] as num).toDouble() == 0;
-        
+
         bool isBetter;
         if (isBW && bestIsBW) {
           isBetter = reps > (bestRecord['reps'] as int);
@@ -495,29 +503,34 @@ class WorkoutRepository {
           // Mixed (shouldn't happen), prefer weighted
           isBetter = !isBW;
         }
-        
+
         if (isBetter) {
           bestRecord = record;
           best1RM = current1RM;
         }
       }
-      
+
       // Delete all except best
       for (final record in records) {
         if (record['id'] != bestRecord['id']) {
-          await _client.from('personal_records').delete().eq('id', record['id']);
+          await _client
+              .from('personal_records')
+              .delete()
+              .eq('id', record['id']);
           // ignore: avoid_print
-          print('[PR CLEANUP] Deleted duplicate: ${record['exercise_name']} ${record['weight_kg']}kg x ${record['reps']}');
+          print(
+              '[PR CLEANUP] Deleted duplicate: ${record['exercise_name']} ${record['weight_kg']}kg x ${record['reps']}');
         }
       }
       // ignore: avoid_print
-      print('[PR CLEANUP] Kept best: ${bestRecord['exercise_name']} ${bestRecord['weight_kg']}kg x ${bestRecord['reps']} (1RM: ${best1RM.toStringAsFixed(1)})');
+      print(
+          '[PR CLEANUP] Kept best: ${bestRecord['exercise_name']} ${bestRecord['weight_kg']}kg x ${bestRecord['reps']} (1RM: ${best1RM.toStringAsFixed(1)})');
     }
-    
+
     // ignore: avoid_print
     print('[PR CLEANUP] Done!');
   }
-  
+
   double _calculate1RM(double weight, int reps) {
     if (weight <= 0) return reps.toDouble(); // For BW, just use reps
     return weight * (1 + reps / 30);
@@ -599,7 +612,8 @@ class WorkoutRepository {
       status: SessionStatus.completed,
       exercises: exercises,
       totalVolumeKg: json['total_volume_kg'] as int? ?? 0,
-      sessionType: typeStr == 'cardio' ? SessionType.cardio : SessionType.strength,
+      sessionType:
+          typeStr == 'cardio' ? SessionType.cardio : SessionType.strength,
       cardioMinutes: json['cardio_minutes'] as int?,
       distanceKm: (json['distance_km'] as num?)?.toDouble(),
       caloriesBurned: json['calories_burned'] as int?,
@@ -617,23 +631,28 @@ class WorkoutRepository {
     }
     return grouped.entries.map((entry) {
       final parts = entry.key.split('||');
-      final exId = parts[0] == 'local' ? entry.value.first['exercise_name'] as String : parts[0];
+      final exId = parts[0] == 'local'
+          ? entry.value.first['exercise_name'] as String
+          : parts[0];
       final exName = parts[1];
       final sets = entry.value
-        ..sort((a, b) => (a['set_number'] as int).compareTo(b['set_number'] as int));
+        ..sort((a, b) =>
+            (a['set_number'] as int).compareTo(b['set_number'] as int));
       return Exercise(
         id: exId,
         name: exName,
         muscleGroup: MuscleGroup.fullBody,
-        sets: sets.map((s) => ExerciseSet(
-          id: s['id'] as String? ?? '${parts[0]}-${s['set_number']}',
-          setNumber: s['set_number'] as int,
-          targetReps: s['reps'] as int? ?? 0,
-          targetWeight: (s['weight_kg'] as num?)?.toDouble() ?? 0,
-          actualReps: s['reps'] as int?,
-          actualWeight: (s['weight_kg'] as num?)?.toDouble(),
-          isCompleted: s['is_completed'] as bool? ?? true,
-        )).toList(),
+        sets: sets
+            .map((s) => ExerciseSet(
+                  id: s['id'] as String? ?? '${parts[0]}-${s['set_number']}',
+                  setNumber: s['set_number'] as int,
+                  targetReps: s['reps'] as int? ?? 0,
+                  targetWeight: (s['weight_kg'] as num?)?.toDouble() ?? 0,
+                  actualReps: s['reps'] as int?,
+                  actualWeight: (s['weight_kg'] as num?)?.toDouble(),
+                  isCompleted: s['is_completed'] as bool? ?? true,
+                ))
+            .toList(),
       );
     }).toList();
   }
@@ -678,23 +697,26 @@ class WorkoutRepository {
         .select()
         .eq('user_id', _uid)
         .order('created_at', ascending: false);
-    
-    return (data as List).map((e) => Exercise(
-      id: e['exercise_id'] as String,
-      name: e['exercise_name'] as String,
-      muscleGroup: _parseMuscleGroup(e['muscle_group'] as String?),
-      description: e['description'] as String? ?? '',
-      sets: List.generate(
-        e['default_sets'] as int? ?? 3,
-        (i) => ExerciseSet(
-          id: 'set-${e['exercise_id']}-$i',
-          setNumber: i + 1,
-          targetReps: e['default_reps'] as int? ?? 12,
-          targetWeight: (e['default_weight'] as num?)?.toDouble() ?? 20.0,
-        ),
-      ),
-      restSeconds: e['default_rest_seconds'] as int? ?? 60,
-    )).toList();
+
+    return (data as List)
+        .map((e) => Exercise(
+              id: e['exercise_id'] as String,
+              name: e['exercise_name'] as String,
+              muscleGroup: _parseMuscleGroup(e['muscle_group'] as String?),
+              description: e['description'] as String? ?? '',
+              sets: List.generate(
+                e['default_sets'] as int? ?? 3,
+                (i) => ExerciseSet(
+                  id: 'set-${e['exercise_id']}-$i',
+                  setNumber: i + 1,
+                  targetReps: e['default_reps'] as int? ?? 12,
+                  targetWeight:
+                      (e['default_weight'] as num?)?.toDouble() ?? 20.0,
+                ),
+              ),
+              restSeconds: e['default_rest_seconds'] as int? ?? 60,
+            ))
+        .toList();
   }
 
   /// Update a custom exercise
