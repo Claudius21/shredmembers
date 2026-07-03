@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../l10n/app_localizations.dart';
 import '../../models/app_user.dart';
 import '../../providers/auth_provider.dart';
+import '../../providers/locale_provider.dart';
 import '../../providers/subscription_provider.dart';
 import '../../routing/app_router.dart';
 import '../../services/local_storage_service.dart';
@@ -17,6 +19,7 @@ class ProfileScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final user = ref.watch(authProvider).user;
     if (user == null) return const SizedBox();
 
@@ -34,31 +37,32 @@ class ProfileScreen extends ConsumerWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Settings', style: Theme.of(context).textTheme.titleLarge),
+                    Text(l10n.settings,
+                        style: Theme.of(context).textTheme.titleLarge),
                     const SizedBox(height: AppSpacing.md),
                     _SettingsSection(
-                      title: 'Goals',
+                      title: l10n.goals,
                       children: [
                         _GoalSelector(user: user, ref: ref),
                       ],
                     ),
                     const SizedBox(height: AppSpacing.md),
                     _SettingsSection(
-                      title: 'Personal Details',
+                      title: l10n.personalDetails,
                       children: [
                         _PersonalDetailsSelector(user: user, ref: ref),
                       ],
                     ),
                     const SizedBox(height: AppSpacing.md),
                     _SettingsSection(
-                      title: 'Training',
+                      title: l10n.training,
                       children: [
                         _WeeklyTargetSelector(user: user, ref: ref),
                       ],
                     ),
                     const SizedBox(height: AppSpacing.md),
                     _SettingsSection(
-                      title: 'Subscription',
+                      title: l10n.subscription,
                       children: [
                         Consumer(
                           builder: (context, ref, child) {
@@ -74,12 +78,14 @@ class ProfileScreen extends ConsumerWidget {
                                       ? Icons.access_time
                                       : Icons.lock_outline,
                               label: isActive
-                                  ? 'Pro subscription'
+                                  ? l10n.proSubscription
                                   : isTrial
-                                      ? 'Trial ($daysLeft day${daysLeft == 1 ? '' : 's'} left)'
-                                      : 'Subscription required',
-                              trailing: const Icon(Icons.chevron_right, color: AppColors.onSurfaceMuted),
-                              onTap: () => context.push(AppRoutes.subscriptionManage),
+                                      ? l10n.trialDaysLeft(daysLeft)
+                                      : l10n.subscriptionRequired,
+                              trailing: const Icon(Icons.chevron_right,
+                                  color: AppColors.onSurfaceMuted),
+                              onTap: () =>
+                                  context.push(AppRoutes.subscriptionManage),
                             );
                           },
                         ),
@@ -87,12 +93,13 @@ class ProfileScreen extends ConsumerWidget {
                     ),
                     const SizedBox(height: AppSpacing.md),
                     _SettingsSection(
-                      title: 'Account',
+                      title: l10n.account,
                       children: [
                         _NotificationToggle(),
+                        _LanguageSelector(),
                         _SettingsTile(
                           icon: Icons.info_outline,
-                          label: 'About shredMembers',
+                          label: l10n.aboutApp,
                           onTap: () => _showAbout(context),
                         ),
                       ],
@@ -106,11 +113,15 @@ class ProfileScreen extends ConsumerWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Icon(Icons.logout_rounded, color: AppColors.error, size: 20),
+                          const Icon(Icons.logout_rounded,
+                              color: AppColors.error, size: 20),
                           const SizedBox(width: AppSpacing.sm),
                           Text(
-                            'Sign Out',
-                            style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                            l10n.signOut,
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleSmall
+                                ?.copyWith(
                                   color: AppColors.error,
                                 ),
                           ),
@@ -278,11 +289,14 @@ class _NotificationToggleState extends State<_NotificationToggle> {
   Widget build(BuildContext context) {
     return ListTile(
       leading: Icon(
-        _enabled ? Icons.notifications_active_outlined : Icons.notifications_off_outlined,
+        _enabled
+            ? Icons.notifications_active_outlined
+            : Icons.notifications_off_outlined,
         color: AppColors.onSurface,
         size: 22,
       ),
-      title: Text('Workout reminders', style: Theme.of(context).textTheme.bodyMedium),
+      title: Text(AppLocalizations.of(context)!.workoutReminders,
+          style: Theme.of(context).textTheme.bodyMedium),
       trailing: Switch(
         value: _enabled,
         onChanged: _toggle,
@@ -311,7 +325,9 @@ class _SettingsTile extends StatelessWidget {
     return ListTile(
       leading: Icon(icon, color: AppColors.onSurface, size: 22),
       title: Text(label, style: Theme.of(context).textTheme.bodyMedium),
-      trailing: trailing ?? const Icon(Icons.chevron_right, color: AppColors.onSurfaceMuted, size: 20),
+      trailing: trailing ??
+          const Icon(Icons.chevron_right,
+              color: AppColors.onSurfaceMuted, size: 20),
       onTap: onTap,
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
     );
@@ -333,10 +349,12 @@ class _GoalSelector extends StatelessWidget {
         children: [
           Row(
             children: [
-              const Icon(Icons.flag_outlined, color: AppColors.onSurface, size: 22),
+              const Icon(Icons.flag_outlined,
+                  color: AppColors.onSurface, size: 22),
               const SizedBox(width: AppSpacing.md),
               Expanded(
-                child: Text('Fitness Goal', style: Theme.of(context).textTheme.bodyMedium),
+                child: Text(AppLocalizations.of(context)!.fitnessGoal,
+                    style: Theme.of(context).textTheme.bodyMedium),
               ),
             ],
           ),
@@ -352,20 +370,26 @@ class _GoalSelector extends StatelessWidget {
                     .updateUser(user.copyWith(goal: goal)),
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 200),
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
                   decoration: BoxDecoration(
-                    color: isSelected ? AppColors.primaryContainer : AppColors.surfaceVariant,
+                    color: isSelected
+                        ? AppColors.primaryContainer
+                        : AppColors.surfaceVariant,
                     borderRadius: AppRadius.fullRadius,
                     border: Border.all(
-                      color: isSelected ? AppColors.primary : Colors.transparent,
+                      color:
+                          isSelected ? AppColors.primary : Colors.transparent,
                     ),
                   ),
                   child: Text(
                     goal.label,
                     style: TextStyle(
-                      color: isSelected ? AppColors.primary : AppColors.onSurface,
+                      color:
+                          isSelected ? AppColors.primary : AppColors.onSurface,
                       fontSize: 13,
-                      fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                      fontWeight:
+                          isSelected ? FontWeight.w600 : FontWeight.w400,
                     ),
                   ),
                 ),
@@ -385,7 +409,8 @@ class _PersonalDetailsSelector extends StatefulWidget {
   const _PersonalDetailsSelector({required this.user, required this.ref});
 
   @override
-  State<_PersonalDetailsSelector> createState() => _PersonalDetailsSelectorState();
+  State<_PersonalDetailsSelector> createState() =>
+      _PersonalDetailsSelectorState();
 }
 
 class _PersonalDetailsSelectorState extends State<_PersonalDetailsSelector> {
@@ -404,7 +429,7 @@ class _PersonalDetailsSelectorState extends State<_PersonalDetailsSelector> {
       text: widget.user.weightKg?.toStringAsFixed(1) ?? '',
     );
     _selectedGender = widget.user.gender ?? Gender.preferNotToSay;
-    
+
     // Add listeners to track changes
     _heightCtrl.addListener(_checkChanges);
     _weightCtrl.addListener(_checkChanges);
@@ -420,11 +445,11 @@ class _PersonalDetailsSelectorState extends State<_PersonalDetailsSelector> {
   void _checkChanges() {
     final height = double.tryParse(_heightCtrl.text);
     final weight = double.tryParse(_weightCtrl.text);
-    
+
     final hasHeightChanged = height != widget.user.heightCm;
     final hasWeightChanged = weight != widget.user.weightKg;
     final hasGenderChanged = _selectedGender != widget.user.gender;
-    
+
     setState(() {
       _hasChanges = hasHeightChanged || hasWeightChanged || hasGenderChanged;
     });
@@ -433,18 +458,18 @@ class _PersonalDetailsSelectorState extends State<_PersonalDetailsSelector> {
   void _save() async {
     final height = double.tryParse(_heightCtrl.text);
     final weight = double.tryParse(_weightCtrl.text);
-    
+
     try {
       await widget.ref.read(authProvider.notifier).updateUser(
-        widget.user.copyWith(
-          gender: _selectedGender,
-          heightCm: height,
-          weightKg: weight,
-        ),
-      );
-      
+            widget.user.copyWith(
+              gender: _selectedGender,
+              heightCm: height,
+              weightKg: weight,
+            ),
+          );
+
       setState(() => _hasChanges = false);
-      
+
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -452,13 +477,14 @@ class _PersonalDetailsSelectorState extends State<_PersonalDetailsSelector> {
               children: [
                 const Icon(Icons.check_circle, color: Colors.white, size: 20),
                 const SizedBox(width: 12),
-                const Text('Profile updated successfully!'),
+                Text(AppLocalizations.of(context)!.profileUpdated),
               ],
             ),
             backgroundColor: const Color(0xFF2E7D32),
             duration: const Duration(seconds: 2),
             behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
             margin: const EdgeInsets.all(16),
           ),
         );
@@ -471,13 +497,16 @@ class _PersonalDetailsSelectorState extends State<_PersonalDetailsSelector> {
               children: [
                 const Icon(Icons.error_outline, color: Colors.white, size: 20),
                 const SizedBox(width: 12),
-                Expanded(child: Text('Failed to update profile')),
+                Expanded(
+                    child: Text(
+                        AppLocalizations.of(context)!.profileUpdateFailed)),
               ],
             ),
             backgroundColor: const Color(0xFFD32F2F),
             duration: const Duration(seconds: 3),
             behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
             margin: const EdgeInsets.all(16),
           ),
         );
@@ -495,10 +524,12 @@ class _PersonalDetailsSelectorState extends State<_PersonalDetailsSelector> {
           // Gender
           Row(
             children: [
-              const Icon(Icons.person_outline, color: AppColors.onSurface, size: 22),
+              const Icon(Icons.person_outline,
+                  color: AppColors.onSurface, size: 22),
               const SizedBox(width: AppSpacing.md),
               Expanded(
-                child: Text('Gender', style: Theme.of(context).textTheme.bodyMedium),
+                child: Text(AppLocalizations.of(context)!.gender,
+                    style: Theme.of(context).textTheme.bodyMedium),
               ),
             ],
           ),
@@ -515,46 +546,56 @@ class _PersonalDetailsSelectorState extends State<_PersonalDetailsSelector> {
                 },
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 200),
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
                   decoration: BoxDecoration(
-                    color: isSelected ? AppColors.primaryContainer : AppColors.surfaceVariant,
+                    color: isSelected
+                        ? AppColors.primaryContainer
+                        : AppColors.surfaceVariant,
                     borderRadius: AppRadius.fullRadius,
                     border: Border.all(
-                      color: isSelected ? AppColors.primary : Colors.transparent,
+                      color:
+                          isSelected ? AppColors.primary : Colors.transparent,
                     ),
                   ),
                   child: Text(
                     gender.label,
                     style: TextStyle(
-                      color: isSelected ? AppColors.primary : AppColors.onSurface,
+                      color:
+                          isSelected ? AppColors.primary : AppColors.onSurface,
                       fontSize: 13,
-                      fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                      fontWeight:
+                          isSelected ? FontWeight.w600 : FontWeight.w400,
                     ),
                   ),
                 ),
               );
             }).toList(),
           ),
-          
+
           const SizedBox(height: AppSpacing.lg),
-          
+
           // Height
           Row(
             children: [
-              const Icon(Icons.height_outlined, color: AppColors.onSurface, size: 22),
+              const Icon(Icons.height_outlined,
+                  color: AppColors.onSurface, size: 22),
               const SizedBox(width: AppSpacing.md),
               Expanded(
-                child: Text('Height', style: Theme.of(context).textTheme.bodyMedium),
+                child: Text(AppLocalizations.of(context)!.height,
+                    style: Theme.of(context).textTheme.bodyMedium),
               ),
               SizedBox(
                 width: 80,
                 child: TextField(
                   controller: _heightCtrl,
-                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                  decoration: const InputDecoration(
-                    hintText: 'cm',
+                  keyboardType:
+                      const TextInputType.numberWithOptions(decimal: true),
+                  decoration: InputDecoration(
+                    hintText: AppLocalizations.of(context)!.heightHint,
                     isDense: true,
-                    contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                    contentPadding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                   ),
                   textAlign: TextAlign.center,
                   style: const TextStyle(fontSize: 14),
@@ -566,26 +607,30 @@ class _PersonalDetailsSelectorState extends State<_PersonalDetailsSelector> {
               ),
             ],
           ),
-          
+
           const SizedBox(height: AppSpacing.lg),
-          
+
           // Weight
           Row(
             children: [
-              const Icon(Icons.monitor_weight_outlined, color: AppColors.onSurface, size: 22),
+              const Icon(Icons.monitor_weight_outlined,
+                  color: AppColors.onSurface, size: 22),
               const SizedBox(width: AppSpacing.md),
               Expanded(
-                child: Text('Weight', style: Theme.of(context).textTheme.bodyMedium),
+                child: Text(AppLocalizations.of(context)!.weight,
+                    style: Theme.of(context).textTheme.bodyMedium),
               ),
               SizedBox(
                 width: 80,
                 child: TextField(
                   controller: _weightCtrl,
-                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                  decoration: const InputDecoration(
-                    hintText: 'kg',
+                  keyboardType:
+                      const TextInputType.numberWithOptions(decimal: true),
+                  decoration: InputDecoration(
+                    hintText: AppLocalizations.of(context)!.weightHint,
                     isDense: true,
-                    contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                    contentPadding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                   ),
                   textAlign: TextAlign.center,
                   style: const TextStyle(fontSize: 14),
@@ -596,17 +641,17 @@ class _PersonalDetailsSelectorState extends State<_PersonalDetailsSelector> {
               ),
             ],
           ),
-          
+
           if (_hasChanges) ...[
             const SizedBox(height: AppSpacing.lg),
-            
+
             // Save Button
             SizedBox(
               width: double.infinity,
               child: ElevatedButton.icon(
                 onPressed: _save,
                 icon: const Icon(Icons.save_outlined, size: 18),
-                label: const Text('Save Details'),
+                label: Text(AppLocalizations.of(context)!.saveDetails),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,
                   foregroundColor: Colors.black,
@@ -636,10 +681,12 @@ class _WeeklyTargetSelector extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       child: Row(
         children: [
-          const Icon(Icons.repeat_rounded, color: AppColors.onSurface, size: 22),
+          const Icon(Icons.repeat_rounded,
+              color: AppColors.onSurface, size: 22),
           const SizedBox(width: AppSpacing.md),
           Expanded(
-            child: Text('Weekly Target', style: Theme.of(context).textTheme.bodyMedium),
+            child: Text(AppLocalizations.of(context)!.weeklyTarget,
+                style: Theme.of(context).textTheme.bodyMedium),
           ),
           Row(
             mainAxisSize: MainAxisSize.min,
@@ -656,7 +703,9 @@ class _WeeklyTargetSelector extends StatelessWidget {
                   height: 32,
                   margin: const EdgeInsets.only(left: 4),
                   decoration: BoxDecoration(
-                    color: isSelected ? AppColors.primary : AppColors.surfaceVariant,
+                    color: isSelected
+                        ? AppColors.primary
+                        : AppColors.surfaceVariant,
                     shape: BoxShape.circle,
                   ),
                   child: Center(
@@ -674,6 +723,50 @@ class _WeeklyTargetSelector extends StatelessWidget {
             }),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _LanguageSelector extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
+    final locale = ref.watch(localeProvider);
+
+    final options = [
+      (const Locale('en'), l10n.languageEnglish),
+      (const Locale('de'), l10n.languageGerman),
+      (const Locale('fr'), l10n.languageFrench),
+      (const Locale('it'), l10n.languageItalian),
+      (const Locale('es'), l10n.languageSpanish),
+    ];
+
+    return ListTile(
+      leading: const Icon(Icons.language_outlined,
+          color: AppColors.onSurface, size: 22),
+      title: Text(l10n.language, style: Theme.of(context).textTheme.bodyMedium),
+      trailing: DropdownButton<Locale>(
+        value: locale,
+        underline: const SizedBox(),
+        dropdownColor: AppColors.surface,
+        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: AppColors.primary,
+              fontWeight: FontWeight.w600,
+            ),
+        iconEnabledColor: AppColors.primary,
+        icon: const Icon(Icons.arrow_drop_down),
+        onChanged: (value) {
+          if (value != null) {
+            ref.read(localeProvider.notifier).setLocale(value);
+          }
+        },
+        items: options.map((option) {
+          return DropdownMenuItem<Locale>(
+            value: option.$1,
+            child: Text(option.$2),
+          );
+        }).toList(),
       ),
     );
   }

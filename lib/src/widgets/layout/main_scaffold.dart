@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../l10n/app_localizations.dart';
 import '../../routing/app_router.dart';
 import '../../theme/app_colors.dart';
 
@@ -45,6 +46,22 @@ const _navItems = [
     route: AppRoutes.profile,
   ),
 ];
+
+String _localizedNavLabel(BuildContext context, String route) {
+  final l10n = AppLocalizations.of(context)!;
+  switch (route) {
+    case AppRoutes.home:
+      return l10n.homeTitle;
+    case AppRoutes.plans:
+      return l10n.plansTitle;
+    case AppRoutes.progress:
+      return l10n.progressTitle;
+    case AppRoutes.profile:
+      return l10n.profileTitle;
+    default:
+      return '';
+  }
+}
 
 class MainScaffold extends ConsumerWidget {
   final Widget child;
@@ -101,7 +118,7 @@ class _BottomNav extends StatelessWidget {
             (item) => NavigationDestination(
               icon: Icon(item.icon),
               selectedIcon: Icon(item.activeIcon),
-              label: item.label,
+              label: _localizedNavLabel(context, item.route),
             ),
           )
           .toList(),
@@ -135,7 +152,8 @@ class _SideNav extends StatelessWidget {
                       gradient: AppColors.primaryGradient,
                       shape: BoxShape.circle,
                     ),
-                    child: const Icon(Icons.bolt_rounded, color: Colors.black, size: 20),
+                    child: const Icon(Icons.bolt_rounded,
+                        color: Colors.black, size: 20),
                   ),
                   const SizedBox(width: 10),
                   Text(
@@ -188,15 +206,19 @@ class _SideNavItem extends StatelessWidget {
               children: [
                 Icon(
                   isSelected ? item.activeIcon : item.icon,
-                  color: isSelected ? AppColors.primary : AppColors.onSurfaceMuted,
+                  color:
+                      isSelected ? AppColors.primary : AppColors.onSurfaceMuted,
                   size: 22,
                 ),
                 const SizedBox(width: 12),
                 Text(
-                  item.label,
+                  _localizedNavLabel(context, item.route),
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: isSelected ? AppColors.primary : AppColors.onSurfaceMuted,
-                        fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                        color: isSelected
+                            ? AppColors.primary
+                            : AppColors.onSurfaceMuted,
+                        fontWeight:
+                            isSelected ? FontWeight.w600 : FontWeight.w400,
                       ),
                 ),
               ],

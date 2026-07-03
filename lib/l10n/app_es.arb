@@ -1,0 +1,312 @@
+{
+  "@@locale": "es",
+  "appTitle": "shredMembers",
+  "@appTitle": {
+    "description": "App title shown in the task switcher"
+  },
+
+  "progressTitle": "Progreso",
+  "@progressTitle": {
+    "description": "Title of the progress screen"
+  },
+  "progressSubtitle": "Sigue tu progreso fitness",
+  "@progressSubtitle": {
+    "description": "Subtitle of the progress screen"
+  },
+  "totalSessions": "Sesiones totales",
+  "@totalSessions": {
+    "description": "Label for total sessions summary card"
+  },
+  "totalVolume": "Volumen total",
+  "@totalVolume": {
+    "description": "Label for total volume summary card"
+  },
+  "thisWeek": "Esta semana",
+  "@thisWeek": {
+    "description": "Label for this week summary card"
+  },
+  "weeklyVolume": "Volumen semanal",
+  "@weeklyVolume": {
+    "description": "Title of the weekly volume chart"
+  },
+  "strengthKg": "Fuerza (kg)",
+  "@strengthKg": {
+    "description": "Legend label for strength volume in kilograms"
+  },
+  "cardioMin": "Cardio (min)",
+  "@cardioMin": {
+    "description": "Legend label for cardio minutes"
+  },
+  "cardioScaledNotice": "Los minutos de cardio se escalan para visibilidad",
+  "@cardioScaledNotice": {
+    "description": "Notice that cardio minutes are scaled in the chart"
+  },
+  "personalRecordHistory": "Historial de récords personales",
+  "@personalRecordHistory": {
+    "description": "Title of the personal record history section"
+  },
+  "loadAll": "Cargar todo",
+  "@loadAll": {
+    "description": "Button to load all personal records"
+  },
+  "recentSessions": "Sesiones recientes",
+  "@recentSessions": {
+    "description": "Title of the recent sessions section"
+  },
+  "deleteWorkoutTitle": "¿Eliminar entrenamiento?",
+  "@deleteWorkoutTitle": {
+    "description": "Title of the delete workout confirmation dialog"
+  },
+  "deleteWorkoutMessage": "Esta entrada se eliminará permanentemente.",
+  "@deleteWorkoutMessage": {
+    "description": "Message of the delete workout confirmation dialog"
+  },
+  "cancel": "Cancelar",
+  "@cancel": {
+    "description": "Cancel button label"
+  },
+  "delete": "Eliminar",
+  "@delete": {
+    "description": "Delete button label"
+  },
+  "tooltipStrengthKg": "Fuerza: {value} kg",
+  "@tooltipStrengthKg": {
+    "description": "Tooltip showing strength volume in kilograms",
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "tooltipCardioMin": "Cardio: {value} min",
+  "@tooltipCardioMin": {
+    "description": "Tooltip showing cardio minutes",
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+
+  "homeTitle": "Inicio",
+  "@homeTitle": {
+    "description": "Bottom navigation label for home screen"
+  },
+  "plansTitle": "Planes",
+  "@plansTitle": {
+    "description": "Bottom navigation label for plans screen"
+  },
+  "goodMorning": "Buenos días",
+  "@goodMorning": {
+    "description": "Morning greeting"
+  },
+  "goodAfternoon": "Buenas tardes",
+  "@goodAfternoon": {
+    "description": "Afternoon greeting"
+  },
+  "goodEvening": "Buenas noches",
+  "@goodEvening": {
+    "description": "Evening greeting"
+  },
+  "athlete": "Atleta",
+  "@athlete": {
+    "description": "Default user name when no name is set"
+  },
+  "liftingThisWeek": "Levantamiento\nesta semana",
+  "@liftingThisWeek": {
+    "description": "Label for lifting sessions this week"
+  },
+  "cardioThisWeek": "Cardio\nesta semana",
+  "@cardioThisWeek": {
+    "description": "Label for cardio sessions this week"
+  },
+  "weeklyTarget": "Objetivo\nsemanal",
+  "@weeklyTarget": {
+    "description": "Label for weekly workout target"
+  },
+  "todaysWorkout": "Entrenamiento de hoy",
+  "@todaysWorkout": {
+    "description": "Title of the today's workout section"
+  },
+  "allPlans": "Todos los planes",
+  "@allPlans": {
+    "description": "Action label to view all plans"
+  },
+  "noActivePlan": "Ningún plan activo",
+  "@noActivePlan": {
+    "description": "Message shown when no workout plan is active"
+  },
+  "noActivePlanDescription": "Explora nuestros planes de entrenamiento y empieza a entrenar.",
+  "@noActivePlanDescription": {
+    "description": "Description shown when no workout plan is active"
+  },
+  "browsePlans": "Explorar planes",
+  "@browsePlans": {
+    "description": "Button label to browse workout plans"
+  },
+  "logCardio": "Registrar cardio",
+  "@logCardio": {
+    "description": "Button label to log a cardio session"
+  },
+  "recentActivity": "Actividad reciente",
+  "@recentActivity": {
+    "description": "Title of the recent activity section"
+  },
+  "seeAll": "Ver todo",
+  "@seeAll": {
+    "description": "Action label to see all entries"
+  },
+  "noWorkoutsYet": "Aún no hay entrenamientos",
+  "@noWorkoutsYet": {
+    "description": "Message shown when there are no workouts"
+  },
+  "noWorkoutsYetDescription": "¡Completa tu primer entrenamiento para verlo aquí!",
+  "@noWorkoutsYetDescription": {
+    "description": "Description shown when there are no workouts"
+  },
+  "targetHitTitle": "¡Objetivo {type} semanal alcanzado!",
+  "@targetHitTitle": {
+    "description": "Title of the weekly target hit dialog",
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "targetHitMessage": "Gran trabajo – has alcanzado tu objetivo {type} para esta semana! 🎉",
+  "@targetHitMessage": {
+    "description": "Message of the weekly target hit dialog",
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "keepItUp": "¡Sigue así! 💪",
+  "@keepItUp": {
+    "description": "Button label in the weekly target hit dialog"
+  },
+
+  "profileTitle": "Perfil",
+  "@profileTitle": {
+    "description": "Bottom navigation label for profile screen"
+  },
+  "settings": "Ajustes",
+  "@settings": {
+    "description": "Title of the settings section"
+  },
+  "goals": "Objetivos",
+  "@goals": {
+    "description": "Title of the goals settings section"
+  },
+  "personalDetails": "Detalles personales",
+  "@personalDetails": {
+    "description": "Title of the personal details section"
+  },
+  "training": "Entrenamiento",
+  "@training": {
+    "description": "Title of the training settings section"
+  },
+  "subscription": "Suscripción",
+  "@subscription": {
+    "description": "Title of the subscription section"
+  },
+  "proSubscription": "Suscripción Pro",
+  "@proSubscription": {
+    "description": "Label shown when user has active pro subscription"
+  },
+  "trialDaysLeft": "Prueba ({daysLeft} {daysLeft, plural, =1{día restante} other{días restantes}})",
+  "@trialDaysLeft": {
+    "description": "Label shown during trial period",
+    "placeholders": {
+      "daysLeft": {
+        "type": "int"
+      }
+    }
+  },
+  "subscriptionRequired": "Suscripción requerida",
+  "@subscriptionRequired": {
+    "description": "Label shown when subscription is required"
+  },
+  "account": "Cuenta",
+  "@account": {
+    "description": "Title of the account section"
+  },
+  "aboutApp": "Acerca de shredMembers",
+  "@aboutApp": {
+    "description": "Label for the about dialog"
+  },
+  "signOut": "Cerrar sesión",
+  "@signOut": {
+    "description": "Button label for signing out"
+  },
+  "workoutReminders": "Recordatorios de entrenamiento",
+  "@workoutReminders": {
+    "description": "Label for workout reminders toggle"
+  },
+  "fitnessGoal": "Objetivo fitness",
+  "@fitnessGoal": {
+    "description": "Label for fitness goal selector"
+  },
+  "profileUpdated": "¡Perfil actualizado con éxito!",
+  "@profileUpdated": {
+    "description": "Success message after profile update"
+  },
+  "profileUpdateFailed": "Error al actualizar el perfil",
+  "@profileUpdateFailed": {
+    "description": "Error message when profile update fails"
+  },
+  "gender": "Género",
+  "@gender": {
+    "description": "Label for gender selector"
+  },
+  "height": "Altura",
+  "@height": {
+    "description": "Label for height input"
+  },
+  "heightHint": "cm",
+  "@heightHint": {
+    "description": "Hint text for height input in centimeters"
+  },
+  "weight": "Peso",
+  "@weight": {
+    "description": "Label for weight input"
+  },
+  "weightHint": "kg",
+  "@weightHint": {
+    "description": "Hint text for weight input in kilograms"
+  },
+  "saveDetails": "Guardar detalles",
+  "@saveDetails": {
+    "description": "Button label to save personal details"
+  },
+  "weeklyTarget": "Objetivo semanal",
+  "@weeklyTarget": {
+    "description": "Label for weekly target selector"
+  },
+
+  "language": "Idioma",
+  "@language": {
+    "description": "Label for language selector"
+  },
+  "languageEnglish": "Inglés",
+  "@languageEnglish": {
+    "description": "English language name"
+  },
+  "languageGerman": "Alemán",
+  "@languageGerman": {
+    "description": "German language name"
+  },
+  "languageFrench": "Francés",
+  "@languageFrench": {
+    "description": "French language name"
+  },
+  "languageItalian": "Italiano",
+  "@languageItalian": {
+    "description": "Italian language name"
+  },
+  "languageSpanish": "Español",
+  "@languageSpanish": {
+    "description": "Spanish language name"
+  }
+}

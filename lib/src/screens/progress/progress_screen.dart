@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
+import '../../../l10n/app_localizations.dart';
 import '../../providers/workout_provider.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/personal_records_provider.dart';
@@ -99,11 +100,11 @@ class _ProgressScreenState extends ConsumerState<ProgressScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Progress',
+                    Text(AppLocalizations.of(context)!.progressTitle,
                         style: Theme.of(context).textTheme.headlineMedium),
                     const SizedBox(height: AppSpacing.xs),
                     Text(
-                      'Track your fitness journey',
+                      AppLocalizations.of(context)!.progressSubtitle,
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
                     const SizedBox(height: AppSpacing.xl),
@@ -113,7 +114,7 @@ class _ProgressScreenState extends ConsumerState<ProgressScreen> {
                       children: [
                         Expanded(
                           child: _SummaryCard(
-                            label: 'Total Sessions',
+                            label: AppLocalizations.of(context)!.totalSessions,
                             value: sessions.length.toString(),
                             icon: Icons.fitness_center_rounded,
                           ),
@@ -121,7 +122,7 @@ class _ProgressScreenState extends ConsumerState<ProgressScreen> {
                         const SizedBox(width: AppSpacing.md),
                         Expanded(
                           child: _SummaryCard(
-                            label: 'Total Volume',
+                            label: AppLocalizations.of(context)!.totalVolume,
                             value:
                                 '${(totalVolume / 1000).toStringAsFixed(1)}t',
                             icon: Icons.monitor_weight_outlined,
@@ -130,7 +131,7 @@ class _ProgressScreenState extends ConsumerState<ProgressScreen> {
                         const SizedBox(width: AppSpacing.md),
                         Expanded(
                           child: _SummaryCard(
-                            label: 'This Week',
+                            label: AppLocalizations.of(context)!.thisWeek,
                             value: sessions
                                 .where((s) => s.startedAt.isAfter(DateTime.now()
                                     .toUtc()
@@ -145,7 +146,8 @@ class _ProgressScreenState extends ConsumerState<ProgressScreen> {
                     const SizedBox(height: AppSpacing.xl),
 
                     // ── Weekly Volume Chart ──
-                    const SectionHeader(title: 'Weekly Volume'),
+                    SectionHeader(
+                        title: AppLocalizations.of(context)!.weeklyVolume),
                     const SizedBox(height: AppSpacing.md),
                   ],
                 ),
@@ -172,7 +174,7 @@ class _ProgressScreenState extends ConsumerState<ProgressScreen> {
                                   final strength = data['strength'] as int;
                                   final cardio = data['cardio'] as int;
                                   return BarTooltipItem(
-                                    'Strength: $strength kg\nCardio: $cardio min',
+                                    '${AppLocalizations.of(context)!.tooltipStrengthKg(strength)}\n${AppLocalizations.of(context)!.tooltipCardioMin(cardio)}',
                                     const TextStyle(
                                       color: Colors.white,
                                       fontSize: 12,
@@ -263,15 +265,17 @@ class _ProgressScreenState extends ConsumerState<ProgressScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         _LegendDot(
-                            color: AppColors.primary, label: 'Strength (kg)'),
+                            color: AppColors.primary,
+                            label: AppLocalizations.of(context)!.strengthKg),
                         const SizedBox(width: AppSpacing.md),
                         _LegendDot(
-                            color: Colors.blueAccent, label: 'Cardio (min)'),
+                            color: Colors.blueAccent,
+                            label: AppLocalizations.of(context)!.cardioMin),
                       ],
                     ),
                     const SizedBox(height: AppSpacing.sm),
                     Text(
-                      'Cardio minutes are scaled for visibility',
+                      AppLocalizations.of(context)!.cardioScaledNotice,
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
                             color: AppColors.onSurfaceMuted,
                             fontSize: 11,
@@ -291,11 +295,13 @@ class _ProgressScreenState extends ConsumerState<ProgressScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const SectionHeader(title: 'Personal Record History'),
+                        SectionHeader(
+                            title: AppLocalizations.of(context)!
+                                .personalRecordHistory),
                         if (!_showAllPRs)
                           TextButton(
                             onPressed: () => setState(() => _showAllPRs = true),
-                            child: const Text('Load All'),
+                            child: Text(AppLocalizations.of(context)!.loadAll),
                           ),
                       ],
                     ),
@@ -314,7 +320,8 @@ class _ProgressScreenState extends ConsumerState<ProgressScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SectionHeader(title: 'Recent Sessions'),
+                    SectionHeader(
+                        title: AppLocalizations.of(context)!.recentSessions),
                     const SizedBox(height: AppSpacing.md),
                   ],
                 ),
@@ -574,17 +581,17 @@ class _SessionTile extends ConsumerWidget {
           context: context,
           builder: (ctx) => AlertDialog(
             backgroundColor: AppColors.surface,
-            title: const Text('Delete workout?'),
-            content: const Text('This entry will be permanently deleted.'),
+            title: Text(AppLocalizations.of(context)!.deleteWorkoutTitle),
+            content: Text(AppLocalizations.of(context)!.deleteWorkoutMessage),
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(ctx, false),
-                child: const Text('Cancel'),
+                child: Text(AppLocalizations.of(context)!.cancel),
               ),
               TextButton(
                 onPressed: () => Navigator.pop(ctx, true),
-                child: const Text('Delete',
-                    style: TextStyle(color: Colors.redAccent)),
+                child: Text(AppLocalizations.of(context)!.delete,
+                    style: const TextStyle(color: Colors.redAccent)),
               ),
             ],
           ),

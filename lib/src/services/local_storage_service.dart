@@ -50,6 +50,17 @@ abstract final class LocalStorageService {
     await _prefs?.remove(_activeSessionKey);
   }
 
+  // ─── Locale Preference ──────────────────────────────────────────────────────
+  static const _localeKey = 'app_locale';
+
+  static String? getLocale() {
+    return _prefs?.getString(_localeKey);
+  }
+
+  static Future<void> setLocale(String locale) async {
+    await _prefs?.setString(_localeKey, locale);
+  }
+
   // ─── Generic Helpers ───────────────────────────────────────────────────────
   static Future<void> setString(String key, String value) async {
     await _prefs?.setString(key, value);

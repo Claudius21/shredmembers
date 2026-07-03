@@ -1,0 +1,312 @@
+{
+  "@@locale": "en",
+  "appTitle": "shredMembers",
+  "@appTitle": {
+    "description": "App title shown in the task switcher"
+  },
+
+  "progressTitle": "Progress",
+  "@progressTitle": {
+    "description": "Title of the progress screen"
+  },
+  "progressSubtitle": "Track your fitness journey",
+  "@progressSubtitle": {
+    "description": "Subtitle of the progress screen"
+  },
+  "totalSessions": "Total Sessions",
+  "@totalSessions": {
+    "description": "Label for total sessions summary card"
+  },
+  "totalVolume": "Total Volume",
+  "@totalVolume": {
+    "description": "Label for total volume summary card"
+  },
+  "thisWeek": "This Week",
+  "@thisWeek": {
+    "description": "Label for this week summary card"
+  },
+  "weeklyVolume": "Weekly Volume",
+  "@weeklyVolume": {
+    "description": "Title of the weekly volume chart"
+  },
+  "strengthKg": "Strength (kg)",
+  "@strengthKg": {
+    "description": "Legend label for strength volume in kilograms"
+  },
+  "cardioMin": "Cardio (min)",
+  "@cardioMin": {
+    "description": "Legend label for cardio minutes"
+  },
+  "cardioScaledNotice": "Cardio minutes are scaled for visibility",
+  "@cardioScaledNotice": {
+    "description": "Notice that cardio minutes are scaled in the chart"
+  },
+  "personalRecordHistory": "Personal Record History",
+  "@personalRecordHistory": {
+    "description": "Title of the personal record history section"
+  },
+  "loadAll": "Load All",
+  "@loadAll": {
+    "description": "Button to load all personal records"
+  },
+  "recentSessions": "Recent Sessions",
+  "@recentSessions": {
+    "description": "Title of the recent sessions section"
+  },
+  "deleteWorkoutTitle": "Delete workout?",
+  "@deleteWorkoutTitle": {
+    "description": "Title of the delete workout confirmation dialog"
+  },
+  "deleteWorkoutMessage": "This entry will be permanently deleted.",
+  "@deleteWorkoutMessage": {
+    "description": "Message of the delete workout confirmation dialog"
+  },
+  "cancel": "Cancel",
+  "@cancel": {
+    "description": "Cancel button label"
+  },
+  "delete": "Delete",
+  "@delete": {
+    "description": "Delete button label"
+  },
+  "tooltipStrengthKg": "Strength: {value} kg",
+  "@tooltipStrengthKg": {
+    "description": "Tooltip showing strength volume in kilograms",
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "tooltipCardioMin": "Cardio: {value} min",
+  "@tooltipCardioMin": {
+    "description": "Tooltip showing cardio minutes",
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+
+  "homeTitle": "Home",
+  "@homeTitle": {
+    "description": "Bottom navigation label for home screen"
+  },
+  "plansTitle": "Plans",
+  "@plansTitle": {
+    "description": "Bottom navigation label for plans screen"
+  },
+  "goodMorning": "Good Morning",
+  "@goodMorning": {
+    "description": "Morning greeting"
+  },
+  "goodAfternoon": "Good Afternoon",
+  "@goodAfternoon": {
+    "description": "Afternoon greeting"
+  },
+  "goodEvening": "Good Evening",
+  "@goodEvening": {
+    "description": "Evening greeting"
+  },
+  "athlete": "Athlete",
+  "@athlete": {
+    "description": "Default user name when no name is set"
+  },
+  "liftingThisWeek": "Lifting\nthis week",
+  "@liftingThisWeek": {
+    "description": "Label for lifting sessions this week"
+  },
+  "cardioThisWeek": "Cardio\nthis week",
+  "@cardioThisWeek": {
+    "description": "Label for cardio sessions this week"
+  },
+  "weeklyTarget": "Weekly\nTarget",
+  "@weeklyTarget": {
+    "description": "Label for weekly workout target"
+  },
+  "todaysWorkout": "Today's Workout",
+  "@todaysWorkout": {
+    "description": "Title of the today's workout section"
+  },
+  "allPlans": "All Plans",
+  "@allPlans": {
+    "description": "Action label to view all plans"
+  },
+  "noActivePlan": "No active plan",
+  "@noActivePlan": {
+    "description": "Message shown when no workout plan is active"
+  },
+  "noActivePlanDescription": "Browse our workout plans and start training.",
+  "@noActivePlanDescription": {
+    "description": "Description shown when no workout plan is active"
+  },
+  "browsePlans": "Browse Plans",
+  "@browsePlans": {
+    "description": "Button label to browse workout plans"
+  },
+  "logCardio": "Log Cardio",
+  "@logCardio": {
+    "description": "Button label to log a cardio session"
+  },
+  "recentActivity": "Recent Activity",
+  "@recentActivity": {
+    "description": "Title of the recent activity section"
+  },
+  "seeAll": "See All",
+  "@seeAll": {
+    "description": "Action label to see all entries"
+  },
+  "noWorkoutsYet": "No workouts yet",
+  "@noWorkoutsYet": {
+    "description": "Message shown when there are no workouts"
+  },
+  "noWorkoutsYetDescription": "Complete your first workout to see it here!",
+  "@noWorkoutsYetDescription": {
+    "description": "Description shown when there are no workouts"
+  },
+  "targetHitTitle": "Weekly {type} Target Hit!",
+  "@targetHitTitle": {
+    "description": "Title of the weekly target hit dialog",
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "targetHitMessage": "Amazing work – you've reached your {type} goal for this week! 🎉",
+  "@targetHitMessage": {
+    "description": "Message of the weekly target hit dialog",
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "keepItUp": "Keep it up! 💪",
+  "@keepItUp": {
+    "description": "Button label in the weekly target hit dialog"
+  },
+
+  "profileTitle": "Profile",
+  "@profileTitle": {
+    "description": "Bottom navigation label for profile screen"
+  },
+  "settings": "Settings",
+  "@settings": {
+    "description": "Title of the settings section"
+  },
+  "goals": "Goals",
+  "@goals": {
+    "description": "Title of the goals settings section"
+  },
+  "personalDetails": "Personal Details",
+  "@personalDetails": {
+    "description": "Title of the personal details section"
+  },
+  "training": "Training",
+  "@training": {
+    "description": "Title of the training settings section"
+  },
+  "subscription": "Subscription",
+  "@subscription": {
+    "description": "Title of the subscription section"
+  },
+  "proSubscription": "Pro subscription",
+  "@proSubscription": {
+    "description": "Label shown when user has active pro subscription"
+  },
+  "trialDaysLeft": "Trial ({daysLeft} day{daysLeft, plural, =1{} other{s}} left)",
+  "@trialDaysLeft": {
+    "description": "Label shown during trial period",
+    "placeholders": {
+      "daysLeft": {
+        "type": "int"
+      }
+    }
+  },
+  "subscriptionRequired": "Subscription required",
+  "@subscriptionRequired": {
+    "description": "Label shown when subscription is required"
+  },
+  "account": "Account",
+  "@account": {
+    "description": "Title of the account section"
+  },
+  "aboutApp": "About shredMembers",
+  "@aboutApp": {
+    "description": "Label for the about dialog"
+  },
+  "signOut": "Sign Out",
+  "@signOut": {
+    "description": "Button label for signing out"
+  },
+  "workoutReminders": "Workout reminders",
+  "@workoutReminders": {
+    "description": "Label for workout reminders toggle"
+  },
+  "fitnessGoal": "Fitness Goal",
+  "@fitnessGoal": {
+    "description": "Label for fitness goal selector"
+  },
+  "profileUpdated": "Profile updated successfully!",
+  "@profileUpdated": {
+    "description": "Success message after profile update"
+  },
+  "profileUpdateFailed": "Failed to update profile",
+  "@profileUpdateFailed": {
+    "description": "Error message when profile update fails"
+  },
+  "gender": "Gender",
+  "@gender": {
+    "description": "Label for gender selector"
+  },
+  "height": "Height",
+  "@height": {
+    "description": "Label for height input"
+  },
+  "heightHint": "cm",
+  "@heightHint": {
+    "description": "Hint text for height input in centimeters"
+  },
+  "weight": "Weight",
+  "@weight": {
+    "description": "Label for weight input"
+  },
+  "weightHint": "kg",
+  "@weightHint": {
+    "description": "Hint text for weight input in kilograms"
+  },
+  "saveDetails": "Save Details",
+  "@saveDetails": {
+    "description": "Button label to save personal details"
+  },
+  "weeklyTarget": "Weekly Target",
+  "@weeklyTarget": {
+    "description": "Label for weekly target selector"
+  },
+
+  "language": "Language",
+  "@language": {
+    "description": "Label for language selector"
+  },
+  "languageEnglish": "English",
+  "@languageEnglish": {
+    "description": "English language name"
+  },
+  "languageGerman": "German",
+  "@languageGerman": {
+    "description": "German language name"
+  },
+  "languageFrench": "French",
+  "@languageFrench": {
+    "description": "French language name"
+  },
+  "languageItalian": "Italian",
+  "@languageItalian": {
+    "description": "Italian language name"
+  },
+  "languageSpanish": "Spanish",
+  "@languageSpanish": {
+    "description": "Spanish language name"
+  }
+}

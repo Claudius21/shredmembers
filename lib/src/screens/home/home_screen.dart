@@ -12,6 +12,7 @@ import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../../../l10n/app_localizations.dart';
 import '../../models/exercise.dart';
 import '../../models/workout_plan.dart';
 import '../../models/workout_session.dart';
@@ -138,11 +139,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     final now = DateTime.now();
     final today = DateFormat('EEEE, MMM d').format(now);
+    final l10n = AppLocalizations.of(context)!;
     final greeting = now.hour < 12
-        ? 'Good Morning'
+        ? l10n.goodMorning
         : now.hour < 18
-            ? 'Good Afternoon'
-            : 'Good Evening';
+            ? l10n.goodAfternoon
+            : l10n.goodEvening;
 
     return Stack(
       children: [
@@ -179,7 +181,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                           ),
                                     ),
                                     Text(
-                                      user?.name ?? 'Athlete',
+                                      user?.name ?? l10n.athlete,
                                       style: Theme.of(context)
                                           .textTheme
                                           .headlineMedium,
@@ -225,7 +227,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               Expanded(
                                 child: _StatCard(
                                   value: '$thisWeekLifting',
-                                  label: 'Lifting\nthis week',
+                                  label: l10n.liftingThisWeek,
                                   icon: Icons.fitness_center_rounded,
                                 ),
                               ),
@@ -233,7 +235,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               Expanded(
                                 child: _StatCard(
                                   value: '$thisWeekCardio',
-                                  label: 'Cardio\nthis week',
+                                  label: l10n.cardioThisWeek,
                                   icon: Icons.directions_run,
                                 ),
                               ),
@@ -241,7 +243,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               Expanded(
                                 child: _StatCard(
                                   value: '${user?.weeklyTargetDays ?? 4}',
-                                  label: 'Weekly\nTarget',
+                                  label: l10n.weeklyTarget,
                                   icon: Icons.flag_rounded,
                                 ),
                               ),
@@ -251,8 +253,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
                           // ── Today's Workout card ──
                           SectionHeader(
-                            title: "Today's Workout",
-                            actionLabel: 'All Plans',
+                            title: l10n.todaysWorkout,
+                            actionLabel: l10n.allPlans,
                             onAction: () => context.go(AppRoutes.plans),
                           ),
                           const SizedBox(height: AppSpacing.md),
@@ -283,18 +285,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   color: AppColors.primary, size: 40),
                               const SizedBox(height: AppSpacing.md),
                               Text(
-                                'No active plan',
+                                l10n.noActivePlan,
                                 style: Theme.of(context).textTheme.titleMedium,
                               ),
                               const SizedBox(height: AppSpacing.sm),
                               Text(
-                                'Browse our workout plans and start training.',
+                                l10n.noActivePlanDescription,
                                 style: Theme.of(context).textTheme.bodySmall,
                                 textAlign: TextAlign.center,
                               ),
                               const SizedBox(height: AppSpacing.lg),
                               AppButton(
-                                label: 'Browse Plans',
+                                label: l10n.browsePlans,
                                 onPressed: () => context.go(AppRoutes.plans),
                                 width: 180,
                                 height: 44,
@@ -310,7 +312,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       child: OutlinedButton.icon(
                         onPressed: () => _showLogCardio(context, ref),
                         icon: const Icon(Icons.directions_run, size: 18),
-                        label: const Text('Log Cardio'),
+                        label: Text(l10n.logCardio),
                         style: OutlinedButton.styleFrom(
                           foregroundColor: AppColors.primary,
                           side: BorderSide(
@@ -327,8 +329,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           SectionHeader(
-                            title: 'Recent Activity',
-                            actionLabel: 'See All',
+                            title: l10n.recentActivity,
+                            actionLabel: l10n.seeAll,
                             onAction: () => context.go(AppRoutes.progress),
                           ),
                           const SizedBox(height: AppSpacing.md),
@@ -347,7 +349,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   color: AppColors.onSurfaceMuted, size: 40),
                               const SizedBox(height: AppSpacing.md),
                               Text(
-                                'No workouts yet',
+                                l10n.noWorkoutsYet,
                                 style: Theme.of(context)
                                     .textTheme
                                     .titleMedium
@@ -357,7 +359,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               ),
                               const SizedBox(height: AppSpacing.sm),
                               Text(
-                                'Complete your first workout to see it here!',
+                                l10n.noWorkoutsYetDescription,
                                 style: Theme.of(context).textTheme.bodySmall,
                                 textAlign: TextAlign.center,
                               ),
@@ -411,6 +413,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   void _showTargetDialog(String type) {
+    final l10n = AppLocalizations.of(context)!;
     final icon = type == 'Lifting' ? '🏋️' : '🏃';
     showDialog(
       context: context,
@@ -424,7 +427,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             Text(icon, style: const TextStyle(fontSize: 56)),
             const SizedBox(height: 12),
             Text(
-              'Weekly $type Target Hit!',
+              l10n.targetHitTitle(type),
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
                     fontWeight: FontWeight.w700,
                   ),
@@ -432,7 +435,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             ),
             const SizedBox(height: 8),
             Text(
-              'Amazing work – you\'ve reached your $type goal for this week! 🎉',
+              l10n.targetHitMessage(type),
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: AppColors.onSurfaceMuted,
                   ),
@@ -451,8 +454,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   ),
                   padding: const EdgeInsets.symmetric(vertical: 14),
                 ),
-                child: const Text('Keep it up! 💪',
-                    style: TextStyle(fontWeight: FontWeight.w700)),
+                child: Text(l10n.keepItUp,
+                    style: const TextStyle(fontWeight: FontWeight.w700)),
               ),
             ),
           ],
