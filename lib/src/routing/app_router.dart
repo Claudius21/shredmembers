@@ -16,6 +16,8 @@ import '../screens/progress/personal_records_screen.dart';
 import '../screens/progress/pr_diary_screen.dart';
 import '../screens/profile/profile_screen.dart';
 import '../screens/subscription/paywall_screen.dart';
+import '../screens/subscription/payment_success_screen.dart';
+import '../screens/subscription/payment_cancel_screen.dart';
 import '../screens/subscription/subscription_management_screen.dart';
 import '../widgets/layout/main_scaffold.dart';
 import '../models/workout_plan.dart';
@@ -36,6 +38,8 @@ abstract final class AppRoutes {
   static const String profile = '/profile';
   static const String paywall = '/subscription/paywall';
   static const String subscriptionManage = '/subscription/manage';
+  static const String paymentSuccess = '/payment/success';
+  static const String paymentCancel = '/payment/cancel';
 }
 
 class _RouterNotifier extends ChangeNotifier {
@@ -53,6 +57,18 @@ final routerProvider = Provider<GoRouter>((ref) {
     initialLocation: AppRoutes.onboarding,
     refreshListenable: notifier,
     redirect: (context, state) {
+      // Normalize custom scheme deep links (e.g. shredmembers://payment/success?session_id=...)
+      final uri = state.uri;
+      if (uri.scheme == 'shredmembers' && uri.host.isNotEmpty) {
+        final deepLinkPath = '/${uri.host}${uri.path}';
+        if (deepLinkPath != state.matchedLocation) {
+          return Uri(
+            path: deepLinkPath,
+            queryParameters: uri.queryParameters.isNotEmpty ? uri.queryParameters : null,
+          ).toString();
+        }
+      }
+
       final authState = ref.read(authProvider);
 
       // Still restoring session – don't redirect yet
@@ -157,6 +173,16 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: AppRoutes.subscriptionManage,
         builder: (context, state) => const SubscriptionManagementScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.paymentSuccess,
+        builder: (context, state) => PaymentSuccessScreen(
+          sessionId: state.uri.queryParameters['session_id'],
+        ),
+      ),
+      GoRoute(
+        path: AppRoutes.paymentCancel,
+        builder: (context, state) => const PaymentCancelScreen(),
       ),
     ],
     errorBuilder: (context, state) => Scaffold(

@@ -51,7 +51,7 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
             SliverToBoxAdapter(
               child: _buildHeader(trialDays, isExpired),
             ),
-            
+
             // Features
             SliverPadding(
               padding: const EdgeInsets.all(AppSpacing.lg),
@@ -192,9 +192,9 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
           ),
           const SizedBox(height: AppSpacing.md),
           ...features.map((feature) => _FeatureItem(
-            icon: feature.$2,
-            text: feature.$1,
-          )),
+                icon: feature.$2,
+                text: feature.$1,
+              )),
         ],
       ),
     );
@@ -207,7 +207,6 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
 
     final plan = state.plans.first;
     final hasDiscount = state.appliedDiscount != null;
-    final discountPercent = state.appliedDiscount?.discountPercent ?? 0;
 
     double monthlyPrice = plan.priceMonthly;
     double yearlyPrice = plan.priceYearly;
@@ -229,7 +228,8 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
           badge: '3 months free',
           isSelected: _selectedPlan == 'yearly',
           onTap: () => setState(() => _selectedPlan = 'yearly'),
-          originalPrice: hasDiscount ? '${plan.priceYearly.toStringAsFixed(2)}€' : null,
+          originalPrice:
+              hasDiscount ? '${plan.priceYearly.toStringAsFixed(2)}€' : null,
         ),
         const SizedBox(height: AppSpacing.md),
         // Monatsplan
@@ -240,7 +240,8 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
           period: '/month',
           isSelected: _selectedPlan == 'monthly',
           onTap: () => setState(() => _selectedPlan = 'monthly'),
-          originalPrice: hasDiscount ? '${plan.priceMonthly.toStringAsFixed(2)}€' : null,
+          originalPrice:
+              hasDiscount ? '${plan.priceMonthly.toStringAsFixed(2)}€' : null,
         ),
       ],
     );
@@ -446,15 +447,16 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
 
   Future<void> _validateDiscount() async {
     setState(() => _isValidatingDiscount = true);
-    
+
     final code = _discountController.text.trim();
     if (code.isEmpty) {
       setState(() => _isValidatingDiscount = false);
       return;
     }
 
-    final isValid = await ref.read(subscriptionProvider.notifier).applyDiscountCode(code);
-    
+    final isValid =
+        await ref.read(subscriptionProvider.notifier).applyDiscountCode(code);
+
     setState(() => _isValidatingDiscount = false);
 
     if (!isValid && mounted) {
@@ -468,25 +470,46 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
   }
 
   Future<void> _startCheckout() async {
+    debugPrint('[PAYWALL] _startCheckout tapped, plan: $_selectedPlan');
     setState(() => _isStartingCheckout = true);
 
     final result = await ref.read(subscriptionProvider.notifier).startCheckout(
-      priceType: _selectedPlan,
-    );
+          priceType: _selectedPlan,
+        );
+
+    debugPrint('[PAYWALL] checkout result: $result');
 
     setState(() => _isStartingCheckout = false);
 
     if (result != null && result['url'] != null) {
       // Open Stripe Checkout URL
       final url = Uri.parse(result['url'] as String);
-      if (await canLaunchUrl(url)) {
-        await launchUrl(url, mode: LaunchMode.externalApplication);
+      debugPrint('[PAYWALL] opening url: $url');
+      try {
+        await launchUrl(
+          url,
+          mode: LaunchMode.platformDefault,
+        );
+      } catch (e) {
+        debugPrint('[PAYWALL] launchUrl error: $e');
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Could not open checkout: $e'),
+              backgroundColor: AppColors.error,
+            ),
+          );
+        }
       }
     } else if (mounted) {
+      final error = result?['error'] as String? ??
+          'Failed to start checkout. Please try again.';
+      debugPrint('[PAYWALL] showing error: $error');
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Failed to start checkout. Please try again.'),
+        SnackBar(
+          content: Text(error),
           backgroundColor: AppColors.error,
+          duration: const Duration(seconds: 5),
         ),
       );
     }
@@ -563,13 +586,15 @@ class _PlanCard extends StatelessWidget {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 border: Border.all(
-                  color: isSelected ? AppColors.primary : AppColors.onSurfaceMuted,
+                  color:
+                      isSelected ? AppColors.primary : AppColors.onSurfaceMuted,
                   width: 2,
                 ),
                 color: isSelected ? AppColors.primary : Colors.transparent,
               ),
               child: isSelected
-                  ? const Icon(Icons.check, color: AppColors.onPrimary, size: 16)
+                  ? const Icon(Icons.check,
+                      color: AppColors.onPrimary, size: 16)
                   : null,
             ),
             const SizedBox(width: AppSpacing.md),
@@ -582,10 +607,11 @@ class _PlanCard extends StatelessWidget {
                     children: [
                       Text(
                         title,
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                              color: AppColors.onBackground,
-                              fontWeight: FontWeight.bold,
-                            ),
+                        style:
+                            Theme.of(context).textTheme.titleMedium?.copyWith(
+                                  color: AppColors.onBackground,
+                                  fontWeight: FontWeight.bold,
+                                ),
                       ),
                       if (badge != null) ...[
                         const SizedBox(width: AppSpacing.sm),
@@ -600,7 +626,10 @@ class _PlanCard extends StatelessWidget {
                           ),
                           child: Text(
                             badge!,
-                            style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                            style: Theme.of(context)
+                                .textTheme
+                                .labelSmall
+                                ?.copyWith(
                                   color: AppColors.onPrimary,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -633,7 +662,9 @@ class _PlanCard extends StatelessWidget {
                 Text(
                   price,
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        color: isSelected ? AppColors.primary : AppColors.onBackground,
+                        color: isSelected
+                            ? AppColors.primary
+                            : AppColors.onBackground,
                         fontWeight: FontWeight.bold,
                       ),
                 ),

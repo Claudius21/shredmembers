@@ -52,7 +52,8 @@ class SubscriptionRepository {
         'plan_id': plan['id'],
         'status': 'trial',
         'trial_started_at': DateTime.now().toIso8601String(),
-        'trial_ends_at': DateTime.now().add(const Duration(days: 30)).toIso8601String(),
+        'trial_ends_at':
+            DateTime.now().add(const Duration(days: 30)).toIso8601String(),
       }, onConflict: 'user_id');
     } catch (e) {
       debugPrint('Error creating trial subscription: $e');
@@ -77,7 +78,9 @@ class SubscriptionRepository {
         params: {'p_user_id': user.id},
       );
 
-      final data = response is List ? response.first as Map<String, dynamic> : response as Map<String, dynamic>;
+      final data = response is List
+          ? response.first as Map<String, dynamic>
+          : response as Map<String, dynamic>;
       return TrialStatus.fromJson(data);
     } catch (e) {
       debugPrint('Error checking trial status: $e');
@@ -100,7 +103,8 @@ class SubscriptionRepository {
           .order('price_monthly');
 
       return (response as List)
-          .map((json) => SubscriptionPlan.fromJson(json as Map<String, dynamic>))
+          .map(
+              (json) => SubscriptionPlan.fromJson(json as Map<String, dynamic>))
           .toList();
     } catch (e) {
       debugPrint('Error fetching subscription plans: $e');
@@ -127,6 +131,7 @@ class SubscriptionRepository {
   }
 
   /// Erstellt eine Stripe Checkout Session (Web)
+  /// Gibt bei Fehlern ein Map mit `error` statt `url` zurück.
   Future<Map<String, dynamic>?> createCheckoutSession({
     required String priceType, // 'monthly' oder 'yearly'
     String? discountCode,
@@ -134,7 +139,9 @@ class SubscriptionRepository {
     String? cancelUrl,
   }) async {
     final user = _client.auth.currentUser;
-    if (user == null) return null;
+    if (user == null) {
+      return {'error': 'User not signed in'};
+    }
 
     try {
       final response = await _client.functions.invoke(
@@ -147,15 +154,46 @@ class SubscriptionRepository {
         },
       );
 
-      if (response.status != 200) {
+      final data = response.data as Map<String, dynamic>?;
+      if (response.status != 200 || data == null) {
         debugPrint('Checkout error: ${response.data}');
-        return null;
+        return {
+          'error': data?['error'] as String? ??
+              'Checkout failed (${response.status})',
+        };
       }
 
-      return response.data as Map<String, dynamic>;
+      return data;
     } catch (e) {
       debugPrint('Error creating checkout session: $e');
-      return null;
+      return {'error': 'Network error: $e'};
+    }
+  }
+
+  /// Bestätigt eine Stripe Checkout-Zahlung in der App
+  /// (als Alternative zu Webhooks, falls diese nicht erreichbar sind).
+  Future<Map<String, dynamic>?> confirmPayment(String sessionId) async {
+    final user = _client.auth.currentUser;
+    if (user == null) return {'error': 'User not signed in'};
+
+    try {
+      final response = await _client.functions.invoke(
+        'stripe-confirm-payment',
+        body: {'sessionId': sessionId},
+      );
+
+      final data = response.data as Map<String, dynamic>?;
+      if (response.status != 200 || data == null) {
+        debugPrint('Confirm payment error: ${response.data}');
+        return {
+          'error': data?['error'] as String? ?? 'Confirm payment failed (${response.status})',
+        };
+      }
+
+      return data;
+    } catch (e) {
+      debugPrint('Error confirming payment: $e');
+      return {'error': 'Network error: $e'};
     }
   }
 
@@ -167,8 +205,7 @@ class SubscriptionRepository {
     try {
       await _client
           .from('subscriptions')
-          .update({'cancel_at_period_end': true})
-          .eq('user_id', user.id);
+          .update({'cancel_at_period_end': true}).eq('user_id', user.id);
 
       return true;
     } catch (e) {
@@ -185,8 +222,7 @@ class SubscriptionRepository {
     try {
       await _client
           .from('subscriptions')
-          .update({'cancel_at_period_end': false})
-          .eq('user_id', user.id);
+          .update({'cancel_at_period_end': false}).eq('user_id', user.id);
 
       return true;
     } catch (e) {

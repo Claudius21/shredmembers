@@ -104,10 +104,10 @@ class SubscriptionManagementScreen extends ConsumerWidget {
                     ),
                     const SizedBox(width: AppSpacing.sm),
                     Text(
-                      isInTrial
-                          ? 'Trial active'
-                          : isActive
-                              ? 'Subscription active'
+                      isActive
+                          ? 'Subscription active'
+                          : isInTrial
+                              ? 'Trial active'
                               : subscription.status.label,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                             color: Colors.white,
@@ -117,20 +117,7 @@ class SubscriptionManagementScreen extends ConsumerWidget {
                   ],
                 ),
                 const SizedBox(height: AppSpacing.md),
-                if (isInTrial) ...[
-                  Text(
-                    '$trialDays day${trialDays == 1 ? '' : 's'} remaining',
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          color: Colors.white.withOpacity(0.9),
-                        ),
-                  ),
-                  Text(
-                    'Trial ends on ${_formatDate(subscription.trialEndsAt)}',
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Colors.white.withOpacity(0.7),
-                        ),
-                  ),
-                ] else if (isActive && subscription.currentPeriodEnd != null) ...[
+                if (isActive && subscription.currentPeriodEnd != null) ...[
                   Text(
                     subscription.cancelAtPeriodEnd
                         ? 'Expires on ${_formatDate(subscription.currentPeriodEnd!)}'
@@ -146,6 +133,19 @@ class SubscriptionManagementScreen extends ConsumerWidget {
                             color: Colors.white.withOpacity(0.7),
                           ),
                     ),
+                ] else if (isInTrial) ...[
+                  Text(
+                    '$trialDays day${trialDays == 1 ? '' : 's'} remaining',
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          color: Colors.white.withOpacity(0.9),
+                        ),
+                  ),
+                  Text(
+                    'Trial ends on ${_formatDate(subscription.trialEndsAt)}',
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: Colors.white.withOpacity(0.7),
+                        ),
+                  ),
                 ],
               ],
             ),

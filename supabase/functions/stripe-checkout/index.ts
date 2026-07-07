@@ -1,3 +1,4 @@
+// @ts-nocheck
 // Supabase Edge Function: Stripe Checkout Session
 // Erstellt eine Checkout-Session für Web-Zahlungen (Store-Gebühren umgehen)
 
@@ -120,7 +121,7 @@ serve(async (req) => {
 
     if (!priceId) {
       return new Response(
-        JSON.stringify({ error: 'Price not configured' }),
+        JSON.stringify({ error: `Stripe price ID not configured for ${priceType} plan. Add it to subscription_plans in Supabase.` }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       )
     }
@@ -133,8 +134,8 @@ serve(async (req) => {
         quantity: 1,
       }],
       mode: 'subscription',
-      success_url: successUrl || `${Deno.env.get('APP_URL')}/payment/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: cancelUrl || `${Deno.env.get('APP_URL')}/payment/cancel`,
+      success_url: successUrl || 'shredmembers://payment/success?session_id={CHECKOUT_SESSION_ID}',
+      cancel_url: cancelUrl || 'shredmembers://payment/cancel',
       metadata: {
         supabase_user_id: userId,
         discount_code_id: discountCodeId || '',

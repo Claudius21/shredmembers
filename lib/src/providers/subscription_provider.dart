@@ -186,6 +186,11 @@ class SubscriptionNotifier extends Notifier<SubscriptionState> {
     return success;
   }
 
+  /// Bestätigt eine Stripe Checkout-Zahlung direkt in der App
+  Future<Map<String, dynamic>?> confirmPayment(String sessionId) async {
+    return await _repo.confirmPayment(sessionId);
+  }
+
   /// Prüft ob User Zugriff hat (für Paywall)
   Future<bool> checkAccess() async {
     await refreshTrialStatus();
