@@ -181,7 +181,7 @@ class AuthNotifier extends Notifier<AuthState> {
     } catch (e) {
       state = AuthState(
         status: AuthStatus.unauthenticated,
-        errorMessage: _parseError(e),
+        errorMessage: _parseError(e, isSignUp: true),
       );
       return false;
     }
@@ -213,7 +213,7 @@ class AuthNotifier extends Notifier<AuthState> {
     }
   }
 
-  String _parseError(Object e) {
+  String _parseError(Object e, {bool isSignUp = false}) {
     final msg = e.toString().toLowerCase();
     if (msg.contains('invalid login') ||
         msg.contains('invalid credentials') ||
@@ -231,7 +231,9 @@ class AuthNotifier extends Notifier<AuthState> {
     if (msg.contains('email not confirmed') || msg.contains('confirmation')) {
       return 'Please confirm your email address first.';
     }
-    return 'Sign in failed. Please try again.';
+    return isSignUp
+        ? 'Sign up failed. Please try again.'
+        : 'Sign in failed. Please try again.';
   }
 }
 

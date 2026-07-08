@@ -338,7 +338,7 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
           width: double.infinity,
           height: 56,
           child: ElevatedButton(
-            onPressed: _isStartingCheckout ? null : _startCheckout,
+            onPressed: _isStartingCheckout ? null : _openWebCheckout,
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.primary,
               foregroundColor: AppColors.onPrimary,
@@ -356,7 +356,7 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
                     ),
                   )
                 : Text(
-                    'Upgrade now',
+                    'Upgrade on shredmember.app',
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
                           color: AppColors.onPrimary,
                           fontWeight: FontWeight.bold,
@@ -469,49 +469,29 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
     }
   }
 
-  Future<void> _startCheckout() async {
-    debugPrint('[PAYWALL] _startCheckout tapped, plan: $_selectedPlan');
+  Future<void> _openWebCheckout() async {
+    debugPrint('[PAYWALL] opening web checkout');
     setState(() => _isStartingCheckout = true);
 
-    final result = await ref.read(subscriptionProvider.notifier).startCheckout(
-          priceType: _selectedPlan,
-        );
+    final url = Uri.parse('https://shredmember.app/?plan=$_selectedPlan');
 
-    debugPrint('[PAYWALL] checkout result: $result');
-
-    setState(() => _isStartingCheckout = false);
-
-    if (result != null && result['url'] != null) {
-      // Open Stripe Checkout URL
-      final url = Uri.parse(result['url'] as String);
-      debugPrint('[PAYWALL] opening url: $url');
-      try {
-        await launchUrl(
-          url,
-          mode: LaunchMode.platformDefault,
-        );
-      } catch (e) {
-        debugPrint('[PAYWALL] launchUrl error: $e');
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Could not open checkout: $e'),
-              backgroundColor: AppColors.error,
-            ),
-          );
-        }
-      }
-    } else if (mounted) {
-      final error = result?['error'] as String? ??
-          'Failed to start checkout. Please try again.';
-      debugPrint('[PAYWALL] showing error: $error');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(error),
-          backgroundColor: AppColors.error,
-          duration: const Duration(seconds: 5),
-        ),
+    try {
+      await launchUrl(
+        url,
+        mode: LaunchMode.externalApplication,
       );
+    } catch (e) {
+      debugPrint('[PAYWALL] launchUrl error: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Could not open checkout page: $e'),
+            backgroundColor: AppColors.error,
+          ),
+        );
+      }
+    } finally {
+      setState(() => _isStartingCheckout = false);
     }
   }
 }
