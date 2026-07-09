@@ -59,6 +59,29 @@ class AuthRepository {
 
   Future<void> signOut() => _client.auth.signOut();
 
+  Future<bool> verifyMagicLink(String token, String type) async {
+    try {
+      await _client.auth.verifyOTP(
+        token: token,
+        type: type == 'magiclink' ? OtpType.magiclink : OtpType.signup,
+      );
+      return true;
+    } catch (e) {
+      debugPrint('Error verifying magic link: $e');
+      return false;
+    }
+  }
+
+  Future<bool> setSession(String accessToken, String refreshToken) async {
+    try {
+      await _client.auth.setSession(refreshToken);
+      return true;
+    } catch (e) {
+      debugPrint('Error setting session: $e');
+      return false;
+    }
+  }
+
   Future<void> resetPassword(String email) async {
     await _client.auth.resetPasswordForEmail(email);
   }
