@@ -110,6 +110,7 @@ class Subscription extends Equatable {
   final String? discountCodeId;
   final bool discountApplied;
   final SubscriptionPlan? plan;
+  final String priceType; // 'monthly' or 'yearly'
 
   const Subscription({
     required this.id,
@@ -127,6 +128,7 @@ class Subscription extends Equatable {
     this.discountCodeId,
     this.discountApplied = false,
     this.plan,
+    this.priceType = 'monthly',
   });
 
   bool get isInTrial => status == SubscriptionStatus.trial && !isTrialExpired;
@@ -169,6 +171,7 @@ class Subscription extends Equatable {
       plan: json['plan'] != null
           ? SubscriptionPlan.fromJson(json['plan'] as Map<String, dynamic>)
           : null,
+      priceType: json['price_type'] as String? ?? 'monthly',
     );
   }
 
@@ -177,7 +180,7 @@ class Subscription extends Equatable {
         id, userId, planId, status, trialStartedAt, trialEndsAt,
         subscribedAt, currentPeriodStart, currentPeriodEnd,
         cancelAtPeriodEnd, stripeCustomerId, stripeSubscriptionId,
-        discountCodeId, discountApplied, plan,
+        discountCodeId, discountApplied, plan, priceType,
       ];
 }
 

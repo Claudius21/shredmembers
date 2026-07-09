@@ -70,10 +70,34 @@ serve(async (req) => {
         if (!userId) break
 
         // Subscription-Details holen
-        const subscription = await new Stripe(Deno.env.get('STRIPE_SECRET_KEY') ?? '', {
+        const stripe = new Stripe(Deno.env.get('STRIPE_SECRET_KEY') ?? '', {
           apiVersion: '2023-10-16',
           httpClient: Stripe.createFetchHttpClient(),
-        }).subscriptions.retrieve(session.subscription as string)
+        })
+        const subscription = await stripe.subscriptions.retrieve(session.subscription as string)
+
+        // Price-ID holen (aus dem ersten Item der Subscription)
+        const priceId = subscription.items.data[0]?.price.id
+        let planId: string | null = null
+        let priceType: 'monthly' | 'yearly' = 'monthly'
+
+        // Plan anhand der Price-ID finden
+        if (priceId) {
+          const { data: plans } = await supabaseAdmin
+            .from('subscription_plans')
+            .select('id, stripe_monthly_price_id, stripe_yearly_price_id')
+            .eq('is_active', true)
+          
+          const matchingPlan = plans?.find(plan => 
+            plan.stripe_monthly_price_id === priceId || 
+            plan.stripe_yearly_price_id === priceId
+          )
+          
+          if (matchingPlan) {
+            planId = matchingPlan.id
+            priceType = matchingPlan.stripe_yearly_price_id === priceId ? 'yearly' : 'monthly'
+          }
+        }
 
         // Subscription in Datenbank aktualisieren
         const { error: updateError } = await supabaseAdmin
@@ -86,6 +110,8 @@ serve(async (req) => {
             current_period_end: new Date(subscription.current_period_end * 1000).toISOString(),
             discount_code_id: discountCodeId || null,
             discount_applied: !!discountCodeId,
+            plan_id: planId,
+            price_type: priceType,
           })
           .eq('user_id', userId)
 
