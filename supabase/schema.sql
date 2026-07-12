@@ -261,12 +261,16 @@ create policy "Users insert own sub"     on public.subscriptions for insert with
 create policy "Users update own sub"     on public.subscriptions for update using (auth.uid() = user_id);
 create policy "Anyone can read codes"    on public.discount_codes for select using (true);
 
--- Auto-create free subscription on signup
+-- Auto-create trial subscription on signup
 create or replace function public.handle_new_subscription()
 returns trigger language plpgsql security definer as $$
 begin
-  insert into public.subscriptions (user_id, status)
-  values (new.id, 'free')
+  insert into public.subscriptions (user_id, plan_id, status)
+  values (
+    new.id,
+    (select id from public.subscription_plans limit 1),
+    'trial'
+  )
   on conflict (user_id) do nothing;
   return new;
 end;
