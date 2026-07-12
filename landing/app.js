@@ -27,6 +27,9 @@ var TRANSLATIONS = {
     alreadyActiveBtn: 'Bereits aktiv',
     appStore: 'Im App Store herunterladen',
     playStore: 'Bei Google Play herunterladen',
+    linkPlayStore: 'Weiter zu Google Play',
+    linkAppStore: 'Weiter zu App Store',
+    linkWebApp: 'Weiter zur Web App',
     checkoutError: 'Checkout konnte nicht gestartet werden',
     notLoggedIn: 'Nicht angemeldet',
     noUrl: 'Keine Checkout-URL erhalten',
@@ -57,6 +60,9 @@ var TRANSLATIONS = {
     alreadyActiveBtn: 'Already active',
     appStore: 'Download on the App Store',
     playStore: 'Get it on Google Play',
+    linkPlayStore: 'Continue to Google Play',
+    linkAppStore: 'Continue to App Store',
+    linkWebApp: 'Continue to Web App',
     checkoutError: 'Could not start checkout',
     notLoggedIn: 'Not logged in',
     noUrl: 'No checkout URL received',
@@ -87,6 +93,9 @@ var TRANSLATIONS = {
     alreadyActiveBtn: 'Déjà actif',
     appStore: 'Télécharger sur l\'App Store',
     playStore: 'Disponible sur Google Play',
+    linkPlayStore: 'Continuer vers Google Play',
+    linkAppStore: "Continuer vers l'App Store",
+    linkWebApp: "Continuer vers l'app web",
     checkoutError: 'Impossible de démarrer le paiement',
     notLoggedIn: 'Non connecté',
     noUrl: 'Aucune URL de paiement reçue',
@@ -117,6 +126,9 @@ var TRANSLATIONS = {
     alreadyActiveBtn: 'Già attivo',
     appStore: 'Scarica su App Store',
     playStore: 'Disponibile su Google Play',
+    linkPlayStore: 'Continua su Google Play',
+    linkAppStore: "Continua sull'App Store",
+    linkWebApp: "Continua sulla Web App",
     checkoutError: 'Impossibile avviare il checkout',
     notLoggedIn: 'Non connesso',
     noUrl: 'Nessun URL di checkout ricevuto',
@@ -172,11 +184,29 @@ function applyTranslations() {
   if (trialSuffix) trialSuffix.textContent = t.trialLinkSuffix;
   const btnTrial = document.getElementById('btn-trial');
   if (btnTrial) btnTrial.textContent = t.trialLink(30);
+  const linkPlayStore = document.getElementById('link-playstore');
+  const linkAppStore = document.getElementById('link-appstore');
+  const linkWebApp = document.getElementById('link-webapp');
+  if (linkPlayStore) linkPlayStore.textContent = '▶ ' + t.linkPlayStore;
+  if (linkAppStore) linkAppStore.textContent = ' ' + t.linkAppStore;
+  if (linkWebApp) linkWebApp.textContent = '🌐 ' + t.linkWebApp;
 }
+
+var STORE_URLS = {
+  playStore: 'https://play.google.com/store/apps/details?id=com.shredmembers.app',
+  appStore: 'https://apps.apple.com/app/shredmembers/id0000000000',
+  webApp: 'https://shredmember.app',
+};
 
 async function init() {
   console.log('[WEB] init started');
   applyTranslations();
+  const lps = document.getElementById('link-playstore');
+  const las = document.getElementById('link-appstore');
+  const lwa = document.getElementById('link-webapp');
+  if (lps) lps.href = STORE_URLS.playStore;
+  if (las) las.href = STORE_URLS.appStore;
+  if (lwa) { lwa.href = STORE_URLS.webApp; lwa.removeAttribute('target'); }
   try {
     const { data, error } = await supabaseClient.auth.getSession();
     console.log('[WEB] session data:', data, 'error:', error);
