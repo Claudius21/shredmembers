@@ -122,11 +122,11 @@
   <div class="container">
     <div class="logo">S</div>
     <h1>shredMembers Pro</h1>
-    <p>Voller Zugriff auf alle Trainingspläne, Progress-Tracking und Premium-Features.</p>
+    <p class="subtitle">Voller Zugriff auf alle Trainingspläne, Progress-Tracking und Premium-Features.</p>
 
     <!-- Step 1: Email -->
     <div id="step-email" class="card">
-      <label style="display:block; margin-bottom:8px; color:#b0b0b0;">E-Mail-Adresse</label>
+      <label for="email" style="display:block; margin-bottom:8px; color:#b0b0b0;">E-Mail-Adresse</label>
       <input type="email" id="email" placeholder="deine@email.com" />
       <button class="btn" id="btn-email">Magic Link senden</button>
       <div class="message" id="msg-email"></div>
@@ -135,6 +135,7 @@
     <!-- Step 2: Plan selection -->
     <div id="step-plan" class="card hidden">
       <p style="margin-bottom:16px; color:#b0b0b0;">Angemeldet als <strong id="user-email" style="color:#fff;"></strong></p>
+      <p id="trial-info" style="display:none; margin-bottom:16px; font-size:13px; color:#00e676; text-align:center;"></p>
       <div class="plans" id="plans">
         <div class="plan" data-price="monthly">
           <div class="plan-title">Monatlich</div>
@@ -148,6 +149,7 @@
         </div>
       </div>
       <button class="btn" id="btn-checkout">Jetzt upgraden</button>
+      <p style="text-align:center; margin-top:12px; font-size:13px; color:#b0b0b0;">oder <a id="btn-trial" href="#" style="color:#00e676; text-decoration:underline;">30 Tage kostenlos testen</a><span id="trial-link-suffix"> – kein Abo nötig</span></p>
       <button class="btn btn-secondary" id="btn-logout">Andere E-Mail verwenden</button>
       <div class="message" id="msg-plan"></div>
       <div class="stores hidden" id="store-links">

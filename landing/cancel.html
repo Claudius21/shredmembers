@@ -35,9 +35,23 @@
 <body>
   <div class="container">
     <div class="icon">❌</div>
-    <h1>Zahlung abgebrochen</h1>
-    <p>Du hast den Checkout-Vorgang abgebrochen. Dein Test- oder Kundenkonto bleibt unverändert.</p>
-    <a class="btn" href="/">Zurück zur Startseite</a>
+    <h1 id="title"></h1>
+    <p id="subtitle"></p>
+    <a class="btn" href="/" id="btn-back"></a>
   </div>
+
+  <script>
+    var T = {
+      de: { title: 'Zahlung abgebrochen', subtitle: 'Du hast den Checkout-Vorgang abgebrochen. Dein Test- oder Kundenkonto bleibt unverändert.', btn: 'Zurück zur Startseite' },
+      en: { title: 'Payment cancelled', subtitle: 'You cancelled the checkout. Your trial or account remains unchanged.', btn: 'Back to home' },
+      fr: { title: 'Paiement annulé', subtitle: 'Tu as annulé le paiement. Ton essai ou compte reste inchangé.', btn: 'Retour à l\'accueil' },
+      it: { title: 'Pagamento annullato', subtitle: 'Hai annullato il pagamento. Il tuo account di prova rimane invariato.', btn: 'Torna alla home' },
+    };
+    var lang = (navigator.language || 'de').toLowerCase().substring(0, 2);
+    var t = T[lang] || T['de'];
+    document.getElementById('title').textContent = t.title;
+    document.getElementById('subtitle').textContent = t.subtitle;
+    document.getElementById('btn-back').textContent = t.btn;
+  </script>
 </body>
 </html>

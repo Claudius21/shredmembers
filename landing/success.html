@@ -48,18 +48,33 @@
 <body>
   <div class="container">
     <div class="icon">✅</div>
-    <h1>Zahlung erfolgreich!</h1>
-    <p>Danke für dein Vertrauen. Dein shredMembers Pro Abonnement ist jetzt aktiv.</p>
-    <p>Öffne die App, um alle Premium-Features zu nutzen.</p>
-    <a class="btn" href="shredmembers://">App öffnen</a>
+    <h1 id="title"></h1>
+    <p id="subtitle"></p>
+    <p id="open-hint"></p>
+    <a class="btn" href="shredmembers://" id="btn-open"></a>
     <div class="stores">
-      <a class="store-link" href="#" id="ios-link">Im App Store herunterladen</a>
-      <a class="store-link" href="#" id="android-link">Bei Google Play herunterladen</a>
+      <a class="store-link" href="#" id="ios-link"></a>
+      <a class="store-link" href="#" id="android-link"></a>
     </div>
     <div class="error" id="error"></div>
   </div>
 
   <script>
+    var T = {
+      de: { title: 'Zahlung erfolgreich!', subtitle: 'Danke für dein Vertrauen. Dein shredMembers Pro Abonnement ist jetzt aktiv.', hint: 'Öffne die App, um alle Premium-Features zu nutzen.', btn: 'App öffnen', ios: 'Im App Store herunterladen', android: 'Bei Google Play herunterladen', err: 'Fehler beim Aktivieren: ' },
+      en: { title: 'Payment successful!', subtitle: 'Thank you for your trust. Your shredMembers Pro subscription is now active.', hint: 'Open the app to use all premium features.', btn: 'Open app', ios: 'Download on the App Store', android: 'Get it on Google Play', err: 'Activation error: ' },
+      fr: { title: 'Paiement réussi !', subtitle: 'Merci pour ta confiance. Ton abonnement shredMembers Pro est maintenant actif.', hint: 'Ouvre l\'app pour accéder à toutes les fonctionnalités premium.', btn: 'Ouvrir l\'app', ios: 'Télécharger sur l\'App Store', android: 'Disponible sur Google Play', err: 'Erreur d\'activation: ' },
+      it: { title: 'Pagamento riuscito!', subtitle: 'Grazie per la tua fiducia. Il tuo abbonamento shredMembers Pro è ora attivo.', hint: 'Apri l\'app per utilizzare tutte le funzionalità premium.', btn: 'Apri l\'app', ios: 'Scarica su App Store', android: 'Disponibile su Google Play', err: 'Errore di attivazione: ' },
+    };
+    var lang = (navigator.language || 'de').toLowerCase().substring(0, 2);
+    var t = T[lang] || T['de'];
+    document.getElementById('title').textContent = t.title;
+    document.getElementById('subtitle').textContent = t.subtitle;
+    document.getElementById('open-hint').textContent = t.hint;
+    document.getElementById('btn-open').textContent = t.btn;
+    document.getElementById('ios-link').textContent = t.ios;
+    document.getElementById('android-link').textContent = t.android;
+
     var SUPABASE_URL = 'https://xcgfzunpvremqdlamvbw.supabase.co';
     var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhjZ2Z6dW5wdnJlbXFkbGFtdmJ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA2OTI4MTYsImV4cCI6MjA5NjI2ODgxNn0.AOI3_v-HJp2DpAd2uLv-4cvqUYKJ8wVMPQBqJFQ3mj4';
     var supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -74,7 +89,7 @@
       });
 
       if (error) {
-        document.getElementById('error').textContent = 'Fehler beim Aktivieren: ' + error.message;
+        document.getElementById('error').textContent = t.err + error.message;
       }
     }
 
