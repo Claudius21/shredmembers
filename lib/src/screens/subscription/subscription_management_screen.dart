@@ -81,11 +81,12 @@ class SubscriptionManagementScreen extends ConsumerWidget {
     final isActive = state.isActiveSubscription;
     final trialDays = state.trialDaysRemaining;
 
-    return Padding(
-      padding: const EdgeInsets.all(AppSpacing.lg),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(AppSpacing.lg),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
           // Status Card
           AppCard(
             backgroundColor: _getStatusColor(isInTrial, isActive),
@@ -174,7 +175,10 @@ class SubscriptionManagementScreen extends ConsumerWidget {
                   label: 'Price',
                   value: () {
                     final plan = subscription.plan ?? (state.plans.isNotEmpty ? state.plans.first : null);
-                    return plan != null ? '${plan.priceMonthly.toStringAsFixed(2)}€/month' : '-';
+                    if (plan == null) return '-';
+                    final price = subscription.priceType == 'yearly' ? plan.priceYearly : plan.priceMonthly;
+                    final period = subscription.priceType == 'yearly' ? '/year' : '/month';
+                    return '${price.toStringAsFixed(2)}€$period';
                   }(),
                 ),
                 if (subscription.discountApplied) ...[
@@ -217,8 +221,6 @@ class SubscriptionManagementScreen extends ConsumerWidget {
               ),
             ),
           ],
-
-          const Spacer(),
 
           // Actions
           if (isActive) ...[
@@ -291,7 +293,8 @@ class SubscriptionManagementScreen extends ConsumerWidget {
                 child: const Text('Upgrade now (30% off)'),
               ),
             ),
-        ],
+          ],
+        ),
       ),
     );
   }

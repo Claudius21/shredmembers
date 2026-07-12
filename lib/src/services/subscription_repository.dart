@@ -197,34 +197,62 @@ class SubscriptionRepository {
     }
   }
 
-  /// Kündigt das Abonnement (am Ende der Periode)
+  /// Kündigt das Abonnement (am Ende der Periode) über Stripe
   Future<bool> cancelSubscription() async {
     final user = _client.auth.currentUser;
     if (user == null) return false;
 
     try {
-      await _client
+      // Zuerst Subscription-ID aus Supabase holen
+      final subscription = await _client
           .from('subscriptions')
-          .update({'cancel_at_period_end': true}).eq('user_id', user.id);
+          .select('id')
+          .eq('user_id', user.id)
+          .single();
 
-      return true;
+      if (subscription == null) return false;
+
+      // Stripe Edge Function aufrufen
+      final response = await _client.functions.invoke(
+        'stripe-cancel-subscription',
+        body: {
+          'action': 'cancel',
+          'subscriptionId': subscription['id'],
+        },
+      );
+
+      return response.status == 200;
     } catch (e) {
       debugPrint('Error canceling subscription: $e');
       return false;
     }
   }
 
-  /// Reaktiviert eine Kündigung
+  /// Reaktiviert eine Kündigung über Stripe
   Future<bool> reactivateSubscription() async {
     final user = _client.auth.currentUser;
     if (user == null) return false;
 
     try {
-      await _client
+      // Zuerst Subscription-ID aus Supabase holen
+      final subscription = await _client
           .from('subscriptions')
-          .update({'cancel_at_period_end': false}).eq('user_id', user.id);
+          .select('id')
+          .eq('user_id', user.id)
+          .single();
 
-      return true;
+      if (subscription == null) return false;
+
+      // Stripe Edge Function aufrufen
+      final response = await _client.functions.invoke(
+        'stripe-cancel-subscription',
+        body: {
+          'action': 'reactivate',
+          'subscriptionId': subscription['id'],
+        },
+      );
+
+      return response.status == 200;
     } catch (e) {
       debugPrint('Error reactivating subscription: $e');
       return false;

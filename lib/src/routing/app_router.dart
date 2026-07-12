@@ -19,6 +19,7 @@ import '../screens/subscription/paywall_screen.dart';
 import '../screens/subscription/payment_success_screen.dart';
 import '../screens/subscription/payment_cancel_screen.dart';
 import '../screens/subscription/subscription_management_screen.dart';
+import '../screens/auth/auth_callback_screen.dart';
 import '../widgets/layout/main_scaffold.dart';
 import '../models/workout_plan.dart';
 import '../providers/subscription_provider.dart';
@@ -40,6 +41,7 @@ abstract final class AppRoutes {
   static const String subscriptionManage = '/subscription/manage';
   static const String paymentSuccess = '/payment/success';
   static const String paymentCancel = '/payment/cancel';
+  static const String authCallback = '/auth/callback';
 }
 
 class _RouterNotifier extends ChangeNotifier {
@@ -60,7 +62,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       // Normalize custom scheme deep links (e.g. shredmembers://payment/success?session_id=...)
       final uri = state.uri;
       if (uri.scheme == 'shredmembers' && uri.host.isNotEmpty) {
-        final deepLinkPath = '/${uri.host}${uri.path}';
+        final deepLinkPath = '/${uri.host}${uri.path.isEmpty ? '' : uri.path}';
         if (deepLinkPath != state.matchedLocation) {
           return Uri(
             path: deepLinkPath,
@@ -183,6 +185,15 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: AppRoutes.paymentCancel,
         builder: (context, state) => const PaymentCancelScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.authCallback,
+        builder: (context, state) => AuthCallbackScreen(
+          token: state.uri.queryParameters['token'],
+          type: state.uri.queryParameters['type'],
+          accessToken: state.uri.queryParameters['access_token'],
+          refreshToken: state.uri.queryParameters['refresh_token'],
+        ),
       ),
     ],
     errorBuilder: (context, state) => Scaffold(

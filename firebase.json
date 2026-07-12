@@ -3,7 +3,8 @@
     "public": "landing",
     "ignore": [
       "firebase.json",
-      ".*",
+      ".firebaserc",
+      "**/.*",
       "**/node_modules/**"
     ],
     "rewrites": [
@@ -14,6 +15,14 @@
       {
         "source": "/cancel",
         "destination": "/cancel.html"
+      },
+      {
+        "source": "/privacy-policy",
+        "destination": "/privacy-policy.html"
+      },
+      {
+        "source": "/auth/callback",
+        "destination": "/auth-callback.html"
       },
       {
         "source": "**",

@@ -204,6 +204,56 @@ class AuthNotifier extends Notifier<AuthState> {
     }
   }
 
+  Future<bool> verifyMagicLink(String token, String type) async {
+    state = const AuthState(status: AuthStatus.loading);
+    try {
+      final success = await _repo.verifyMagicLink(token, type);
+      if (!success) {
+        state = const AuthState(status: AuthStatus.unauthenticated);
+        return false;
+      }
+      final user = await _repo.getCurrentUser();
+      if (user != null) {
+        state = AuthState(status: AuthStatus.authenticated, user: user);
+        await ref.read(subscriptionProvider.notifier).loadSubscription();
+        return true;
+      }
+      state = const AuthState(status: AuthStatus.unauthenticated);
+      return false;
+    } catch (e) {
+      state = AuthState(
+        status: AuthStatus.unauthenticated,
+        errorMessage: _parseError(e),
+      );
+      return false;
+    }
+  }
+
+  Future<bool> setSession(String accessToken, String refreshToken) async {
+    state = const AuthState(status: AuthStatus.loading);
+    try {
+      final success = await _repo.setSession(accessToken, refreshToken);
+      if (!success) {
+        state = const AuthState(status: AuthStatus.unauthenticated);
+        return false;
+      }
+      final user = await _repo.getCurrentUser();
+      if (user != null) {
+        state = AuthState(status: AuthStatus.authenticated, user: user);
+        await ref.read(subscriptionProvider.notifier).loadSubscription();
+        return true;
+      }
+      state = const AuthState(status: AuthStatus.unauthenticated);
+      return false;
+    } catch (e) {
+      state = AuthState(
+        status: AuthStatus.unauthenticated,
+        errorMessage: _parseError(e),
+      );
+      return false;
+    }
+  }
+
   Future<void> updateUser(AppUser updated) async {
     try {
       await _repo.updateProfile(updated);
