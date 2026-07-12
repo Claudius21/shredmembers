@@ -13,6 +13,11 @@
 - [x] Privacy Policy page
 - [x] Magic link authentication flow
 - [x] Deep link handling (shredmembers://)
+- [x] Resend SMTP für transaktionale E-Mails eingerichtet
+- [x] Supabase signup trigger (free → trial + plan_id) gefixt
+- [x] Web Checkout mit i18n (DE/EN/FR/IT)
+- [x] Trial-Tage Anzeige auf Web Checkout
+- [x] Store-Links auf Web Checkout (Platzhalter)
 
 ### Web Assets
 - [x] Landing page (index.html)
@@ -80,6 +85,11 @@
 - App metadata setup
 - Pricing and availability
 - Review guidelines compliance
+
+### 5. Store URLs in Web Checkout aktualisieren
+Nach App Store Einreichung in `landing/app.js` → `STORE_URLS` eintragen:
+- [ ] Google Play URL (`https://play.google.com/store/apps/details?id=...`)
+- [ ] App Store URL (`https://apps.apple.com/app/shredmembers/id...`)
 
 ## 📋 Final Pre-Deploy Checklist
 
