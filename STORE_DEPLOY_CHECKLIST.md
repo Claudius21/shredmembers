@@ -138,3 +138,38 @@ Nach App Store Einreichung in `landing/app.js` → `STORE_URLS` eintragen:
 - Respond to user reviews and feedback
 - Plan for regular updates and feature additions
 - Track subscription metrics and revenue
+
+## 🗺️ Roadmap
+
+### A – App in die Stores bringen
+- [ ] iOS Developer Program kaufen ($99/Jahr)
+- [ ] App Store Connect App erstellen
+- [ ] Distribution Certificate + Provisioning Profile
+- [ ] Xcode Archive + Upload
+- [ ] Google Play Console Account ($25 einmalig)
+- [ ] AAB Build erstellen und hochladen
+- [ ] Screenshots für beide Stores (alle Größen)
+- [ ] Store-Listings auf DE/EN/FR/IT schreiben
+- [ ] Store-URLs in `landing/app.js` → `STORE_URLS` eintragen
+- [ ] Einreichung und Review abwarten
+
+### B – App weiterbauen
+- [ ] Workout-Tracking verbessern
+- [ ] Push-Notifications implementieren
+- [ ] Apple HealthKit / Google Fit Integration
+- [ ] Fortschritts-Charts und Statistiken
+- [ ] Social Features (Challenges, Leaderboard)
+
+### C – Erste zahlende Kunden gewinnen
+- [ ] Onboarding-Flow verbessern (Tutorial, Willkommens-Screen)
+- [ ] Referral/Invite-System
+- [ ] Discount Codes für Beta-User
+- [ ] E-Mail-Marketing Setup (Onboarding-Sequenz)
+- [ ] Analytics einbauen (Mixpanel/PostHog)
+
+### D – Technische Schulden abbauen
+- [ ] `l10n.yaml` synthetic-package Warning entfernen
+- [ ] `flutter_local_notifications` auf Swift Package Manager updaten
+- [ ] Unit Tests für kritische Services (Auth, Subscription)
+- [ ] Widget Tests für PaywallScreen
+- [ ] CI/CD Pipeline (GitHub Actions)
