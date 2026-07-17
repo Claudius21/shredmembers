@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>shredMembers Magic Link</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #0d0d0d;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      color: #ffffff;
+    }
+    .container {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 40px 24px;
+    }
+    .logo {
+      width: 64px;
+      height: 64px;
+      background: #00e676;
+      border-radius: 16px;
+      margin: 0 auto 24px;
+      text-align: center;
+      line-height: 64px;
+      font-size: 32px;
+      font-weight: bold;
+      color: #0d0d0d;
+    }
+    h1 {
+      font-size: 22px;
+      margin: 0 0 8px;
+      text-align: center;
+    }
+    .lang-section {
+      margin-bottom: 32px;
+      padding-bottom: 32px;
+      border-bottom: 1px solid #333;
+    }
+    .lang-section:last-of-type {
+      border-bottom: none;
+      margin-bottom: 0;
+    }
+    .lang-label {
+      color: #00e676;
+      font-size: 12px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+    p {
+      font-size: 15px;
+      line-height: 1.6;
+      color: #b0b0b0;
+      text-align: center;
+      margin: 0 0 20px;
+    }
+    .button-wrapper {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .button {
+      display: inline-block;
+      padding: 14px 28px;
+      background: #00e676;
+      color: #0d0d0d !important;
+      text-decoration: none;
+      border-radius: 12px;
+      font-weight: bold;
+      font-size: 15px;
+    }
+    .link-fallback {
+      word-break: break-all;
+      color: #00e676;
+      text-decoration: underline;
+      font-size: 13px;
+    }
+    .note {
+      background: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 12px;
+      padding: 14px;
+      margin-top: 20px;
+      font-size: 13px;
+      color: #b0b0b0;
+      text-align: center;
+    }
+    .note a {
+      color: #00e676;
+    }
+    .footer {
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: 1px solid #333;
+      text-align: center;
+      font-size: 13px;
+      color: #888888;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo">S</div>
+
+    <!-- German -->
+    <div class="lang-section">
+      <div class="lang-label">Deutsch</div>
+      <h1>Dein Login-Link für shredMembers</h1>
+      <p>Klicke auf den Button, um dich in der App anzumelden und deine kostenlose Testphase zu starten.</p>
+      <div class="button-wrapper">
+        <a class="button" href="{{ .ConfirmationURL }}">Jetzt anmelden</a>
+      </div>
+      <p style="font-size: 13px;">Falls der Button nicht funktioniert, kopiere diesen Link:<br>
+        <a class="link-fallback" href="{{ .ConfirmationURL }}">{{ .ConfirmationURL }}</a>
+      </p>
+      <div class="note">
+        Möchtest du alle Premium-Features freischalten? Verwalte dein Abo unter <a href="https://shredmember.app/billing">shredmember.app/billing</a>.
+      </div>
+    </div>
+
+    <!-- English -->
+    <div class="lang-section">
+      <div class="lang-label">English</div>
+      <h1>Your shredMembers login link</h1>
+      <p>Tap the button to sign in to the app and start your free trial.</p>
+      <div class="button-wrapper">
+        <a class="button" href="{{ .ConfirmationURL }}">Sign in now</a>
+      </div>
+      <p style="font-size: 13px;">If the button does not work, copy this link:<br>
+        <a class="link-fallback" href="{{ .ConfirmationURL }}">{{ .ConfirmationURL }}</a>
+      </p>
+      <div class="note">
+        Want to unlock all premium features? Manage your subscription at <a href="https://shredmember.app/billing">shredmember.app/billing</a>.
+      </div>
+    </div>
+
+    <!-- French -->
+    <div class="lang-section">
+      <div class="lang-label">Français</div>
+      <h1>Ton lien de connexion shredMembers</h1>
+      <p>Clique sur le bouton pour te connecter à l'application et commencer ton essai gratuit.</p>
+      <div class="button-wrapper">
+        <a class="button" href="{{ .ConfirmationURL }}">Se connecter</a>
+      </div>
+      <p style="font-size: 13px;">Si le bouton ne fonctionne pas, copie ce lien:<br>
+        <a class="link-fallback" href="{{ .ConfirmationURL }}">{{ .ConfirmationURL }}</a>
+      </p>
+      <div class="note">
+        Tu veux débloquer toutes les fonctionnalités premium ? Gère ton abonnement sur <a href="https://shredmember.app/billing">shredmember.app/billing</a>.
+      </div>
+    </div>
+
+    <!-- Italian -->
+    <div class="lang-section">
+      <div class="lang-label">Italiano</div>
+      <h1>Il tuo link di accesso a shredMembers</h1>
+      <p>Clicca sul pulsante per accedere all'app e iniziare la tua prova gratuita.</p>
+      <div class="button-wrapper">
+        <a class="button" href="{{ .ConfirmationURL }}">Accedi ora</a>
+      </div>
+      <p style="font-size: 13px;">Se il pulsante non funziona, copia questo link:<br>
+        <a class="link-fallback" href="{{ .ConfirmationURL }}">{{ .ConfirmationURL }}</a>
+      </p>
+      <div class="note">
+        Vuoi sbloccare tutte le funzioni premium? Gestisci il tuo abbonamento su <a href="https://shredmember.app/billing">shredmember.app/billing</a>.
+      </div>
+    </div>
+
+    <div class="footer">
+      <p>You received this email because you requested a login link for shredMembers.</p>
+      <p>&copy; 2025 shredMembers. All rights reserved.</p>
+    </div>
+  </div>
+</body>
+</html>
