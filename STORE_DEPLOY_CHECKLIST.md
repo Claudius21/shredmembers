@@ -96,11 +96,15 @@
 - Review guidelines compliance
 
 ### 6. Custom Domain für Web App verknüpfen
+**Status:** Code vorbereitet, muss in Firebase Console fertiggestellt werden.
+
 **Schritte:**
-1. Firebase Console → Hosting → Site `web-shredmembers`
-2. **Custom Domain** → `web.shredmember.app` hinzufügen
-3. DNS-Eintrag (A-Record / CNAME) beim Domain-Provider setzen
-4. SSL-Zertifikat von Firebase ausstellen lassen (kann bis zu 24h dauern)
+1. Firebase Console → **Build → Hosting**
+2. Site **`web-shredmembers`** auswählen
+3. Tab **Custom Domain** → `web.shredmember.app` hinzufügen
+4. DNS-Eintrag (A-Record / CNAME) beim Domain-Provider setzen
+5. SSL-Zertifikat von Firebase ausstellen lassen (kann bis zu 24h dauern)
+6. Danach ist `https://web.shredmember.app` die offizielle Web-App-URL
 
 ### 7. Store URLs in Web Checkout aktualisieren
 Nach App Store Einreichung in `landing/app.js` → `STORE_URLS` eintragen:

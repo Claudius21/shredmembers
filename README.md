@@ -80,7 +80,7 @@ flutter run                   # iOS Simulator / Android Emulator
 | Landing Page | https://shredmember.app | ✅ Live |
 | Web App | https://web-shredmembers.web.app | ✅ Live |
 | Billing / Upgrade | https://shredmember.app/billing | ✅ Live |
-| Web App (Custom Domain) | https://web.shredmember.app | ⏳ DNS pending |
+| Web App (Custom Domain) | https://web.shredmember.app | ⏳ Firebase Console pending |
 
 ## Next Steps
 

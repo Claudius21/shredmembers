@@ -297,7 +297,7 @@ async function showPlanStep(email) {
     openAppBtn.addEventListener('click', (e) => {
       e.preventDefault();
       // Web App als primärer Einstieg (web-first Strategie)
-      window.location.href = 'https://web-shredmembers.web.app';
+      window.location.href = 'https://web.shredmember.app';
     });
   }
 
