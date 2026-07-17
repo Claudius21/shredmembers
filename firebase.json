@@ -1,48 +1,78 @@
 {
-  "hosting": {
-    "public": "landing",
-    "ignore": [
-      "firebase.json",
-      ".firebaserc",
-      "**/.*",
-      "**/node_modules/**"
-    ],
-    "rewrites": [
-      {
-        "source": "/success",
-        "destination": "/success.html"
-      },
-      {
-        "source": "/cancel",
-        "destination": "/cancel.html"
-      },
-      {
-        "source": "/privacy-policy",
-        "destination": "/privacy-policy.html"
-      },
-      {
-        "source": "/auth/callback",
-        "destination": "/auth-callback.html"
-      },
-      {
-        "source": "/billing",
-        "destination": "/billing.html"
-      },
-      {
-        "source": "**",
-        "destination": "/index.html"
-      }
-    ],
-    "headers": [
-      {
-        "source": "**",
-        "headers": [
-          {
-            "key": "Cache-Control",
-            "value": "max-age=0, no-cache, no-store, must-revalidate"
-          }
-        ]
-      }
-    ]
-  }
+  "hosting": [
+    {
+      "site": "shredmembers",
+      "public": "landing",
+      "ignore": [
+        "firebase.json",
+        ".firebaserc",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [
+        {
+          "source": "/success",
+          "destination": "/success.html"
+        },
+        {
+          "source": "/cancel",
+          "destination": "/cancel.html"
+        },
+        {
+          "source": "/privacy-policy",
+          "destination": "/privacy-policy.html"
+        },
+        {
+          "source": "/auth/callback",
+          "destination": "/auth-callback.html"
+        },
+        {
+          "source": "/billing",
+          "destination": "/billing.html"
+        },
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ],
+      "headers": [
+        {
+          "source": "**",
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "max-age=0, no-cache, no-store, must-revalidate"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "site": "web-shredmembers",
+      "public": "build/web",
+      "ignore": [
+        "firebase.json",
+        ".firebaserc",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ],
+      "headers": [
+        {
+          "source": "**",
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "max-age=0, no-cache, no-store, must-revalidate"
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }
