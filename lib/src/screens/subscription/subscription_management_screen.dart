@@ -6,7 +6,6 @@ import '../../providers/subscription_provider.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_spacing.dart';
 import '../../widgets/common/app_card.dart';
-import '../../routing/app_router.dart';
 
 class SubscriptionManagementScreen extends ConsumerWidget {
   const SubscriptionManagementScreen({super.key});
@@ -59,12 +58,12 @@ class SubscriptionManagementScreen extends ConsumerWidget {
           ),
           const SizedBox(height: AppSpacing.lg),
           ElevatedButton(
-            onPressed: () => context.go(AppRoutes.paywall),
+            onPressed: () => context.pop(),
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.primary,
               foregroundColor: AppColors.onPrimary,
             ),
-            child: const Text('Upgrade jetzt'),
+            child: const Text('Zurück'),
           ),
         ],
       ),
@@ -256,43 +255,10 @@ class SubscriptionManagementScreen extends ConsumerWidget {
                   child: const Text('Cancel subscription'),
                 ),
               ),
-          ] else if (!isInTrial) ...[
-            SizedBox(
-              width: double.infinity,
-              height: 56,
-              child: ElevatedButton(
-                onPressed: () => context.go(AppRoutes.paywall),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
-                  foregroundColor: AppColors.onPrimary,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                ),
-                child: const Text('Upgrade now'),
-              ),
-            ),
           ],
 
           const SizedBox(height: AppSpacing.md),
 
-          // Upgrade option during trial
-          if (isInTrial)
-            SizedBox(
-              width: double.infinity,
-              height: 56,
-              child: ElevatedButton(
-                onPressed: () => context.go(AppRoutes.paywall),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primaryContainer,
-                  foregroundColor: AppColors.primary,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                ),
-                child: const Text('Upgrade now (30% off)'),
-              ),
-            ),
           ],
         ),
       ),

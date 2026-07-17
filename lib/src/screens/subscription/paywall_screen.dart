@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:url_launcher/url_launcher.dart';
 import '../../providers/subscription_provider.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_spacing.dart';
@@ -16,11 +15,6 @@ class PaywallScreen extends ConsumerStatefulWidget {
 }
 
 class _PaywallScreenState extends ConsumerState<PaywallScreen> {
-  String _selectedPlan = 'yearly'; // 'monthly' oder 'yearly'
-  final _discountController = TextEditingController();
-  bool _isValidatingDiscount = false;
-  bool _isStartingCheckout = false;
-
   @override
   void initState() {
     super.initState();
@@ -32,7 +26,6 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
 
   @override
   void dispose() {
-    _discountController.dispose();
     super.dispose();
   }
 
@@ -57,22 +50,6 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
               padding: const EdgeInsets.all(AppSpacing.lg),
               sliver: SliverToBoxAdapter(
                 child: _buildFeatures(),
-              ),
-            ),
-
-            // Plan Auswahl
-            SliverPadding(
-              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
-              sliver: SliverToBoxAdapter(
-                child: _buildPlanSelection(subState),
-              ),
-            ),
-
-            // Discount Code
-            SliverPadding(
-              padding: const EdgeInsets.all(AppSpacing.lg),
-              sliver: SliverToBoxAdapter(
-                child: _buildDiscountCode(subState),
               ),
             ),
 
@@ -200,180 +177,27 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
     );
   }
 
-  Widget _buildPlanSelection(SubscriptionState state) {
-    if (state.plans.isEmpty) {
-      return const Center(child: CircularProgressIndicator());
-    }
-
-    final plan = state.plans.first;
-    final hasDiscount = state.appliedDiscount != null;
-
-    double monthlyPrice = plan.priceMonthly;
-    double yearlyPrice = plan.priceYearly;
-
-    if (hasDiscount && state.appliedDiscount != null) {
-      final discount = state.appliedDiscount!.discountPercent / 100;
-      monthlyPrice = monthlyPrice * (1 - discount);
-      yearlyPrice = yearlyPrice * (1 - discount);
-    }
-
-    return Column(
-      children: [
-        // Jahresplan (Best Value)
-        _PlanCard(
-          title: 'Yearly',
-          subtitle: 'Best value',
-          price: '${yearlyPrice.toStringAsFixed(2)}€',
-          period: '/year',
-          badge: '3 months free',
-          isSelected: _selectedPlan == 'yearly',
-          onTap: () => setState(() => _selectedPlan = 'yearly'),
-          originalPrice:
-              hasDiscount ? '${plan.priceYearly.toStringAsFixed(2)}€' : null,
-        ),
-        const SizedBox(height: AppSpacing.md),
-        // Monatsplan
-        _PlanCard(
-          title: 'Monthly',
-          subtitle: 'Cancel anytime',
-          price: '${monthlyPrice.toStringAsFixed(2)}€',
-          period: '/month',
-          isSelected: _selectedPlan == 'monthly',
-          onTap: () => setState(() => _selectedPlan = 'monthly'),
-          originalPrice:
-              hasDiscount ? '${plan.priceMonthly.toStringAsFixed(2)}€' : null,
-        ),
-      ],
-    );
-  }
-
-  Widget _buildDiscountCode(SubscriptionState state) {
-    final hasDiscount = state.appliedDiscount != null;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Discount code',
-          style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                color: AppColors.onSurfaceMuted,
-              ),
-        ),
-        const SizedBox(height: AppSpacing.sm),
-        Row(
-          children: [
-            Expanded(
-              child: TextField(
-                controller: _discountController,
-                enabled: !hasDiscount,
-                style: const TextStyle(color: AppColors.onBackground),
-                decoration: InputDecoration(
-                  hintText: 'Enter code',
-                  hintStyle: const TextStyle(color: AppColors.onSurfaceMuted),
-                  filled: true,
-                  fillColor: AppColors.surface,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide.none,
-                  ),
-                  suffixIcon: hasDiscount
-                      ? const Icon(Icons.check_circle, color: AppColors.success)
-                      : null,
-                ),
-                textCapitalization: TextCapitalization.characters,
-              ),
-            ),
-            const SizedBox(width: AppSpacing.sm),
-            if (!hasDiscount)
-              SizedBox(
-                width: 110,
-                child: ElevatedButton(
-                  onPressed: _isValidatingDiscount ? null : _validateDiscount,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.surfaceVariant,
-                    foregroundColor: AppColors.onSurface,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                  child: _isValidatingDiscount
-                      ? const SizedBox(
-                          width: 20,
-                          height: 20,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            color: AppColors.onSurface,
-                          ),
-                        )
-                      : const Text('Apply'),
-                ),
-              )
-            else
-              TextButton(
-                onPressed: () {
-                  ref.read(subscriptionProvider.notifier).clearDiscount();
-                  _discountController.clear();
-                },
-                child: const Text('Remove'),
-              ),
-          ],
-        ),
-        if (hasDiscount) ...[
-          const SizedBox(height: AppSpacing.sm),
-          Text(
-            '${state.appliedDiscount!.discountPercent}% discount applied!',
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: AppColors.success,
-                ),
-          ),
-        ],
-      ],
-    );
-  }
-
   Widget _buildCTAButton(SubscriptionState state) {
-    return Column(
-      children: [
-        SizedBox(
-          width: double.infinity,
-          height: 56,
-          child: ElevatedButton(
-            onPressed: _isStartingCheckout ? null : _openWebCheckout,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primary,
-              foregroundColor: AppColors.onPrimary,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-              ),
-            ),
-            child: _isStartingCheckout
-                ? const SizedBox(
-                    width: 24,
-                    height: 24,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      color: AppColors.onPrimary,
-                    ),
-                  )
-                : Text(
-                    'Upgrade on shredmember.app',
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          color: AppColors.onPrimary,
-                          fontWeight: FontWeight.bold,
-                        ),
-                  ),
+    return SizedBox(
+      width: double.infinity,
+      height: 56,
+      child: ElevatedButton(
+        onPressed: () => context.go(AppRoutes.home),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: AppColors.primary,
+          foregroundColor: AppColors.onPrimary,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
           ),
         ),
-        if (state.appliedDiscount != null) ...[
-          const SizedBox(height: AppSpacing.sm),
-          Text(
-            'Discount will be applied at checkout',
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: AppColors.onSurfaceMuted,
-                ),
-          ),
-        ],
-      ],
+        child: Text(
+          'Continue to app',
+          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                color: AppColors.onPrimary,
+                fontWeight: FontWeight.bold,
+              ),
+        ),
+      ),
     );
   }
 
@@ -433,67 +257,10 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
                   ),
             ),
           ),
-        const SizedBox(height: AppSpacing.sm),
-        Text(
-          'Secure payment via Stripe. Cancel anytime.',
-          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: AppColors.onSurfaceMuted,
-              ),
-          textAlign: TextAlign.center,
-        ),
       ],
     );
   }
 
-  Future<void> _validateDiscount() async {
-    setState(() => _isValidatingDiscount = true);
-
-    final code = _discountController.text.trim();
-    if (code.isEmpty) {
-      setState(() => _isValidatingDiscount = false);
-      return;
-    }
-
-    final isValid =
-        await ref.read(subscriptionProvider.notifier).applyDiscountCode(code);
-
-    setState(() => _isValidatingDiscount = false);
-
-    if (!isValid && mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Invalid or expired discount code'),
-          backgroundColor: AppColors.error,
-        ),
-      );
-    }
-  }
-
-  Future<void> _openWebCheckout() async {
-    debugPrint('[PAYWALL] opening web checkout');
-    setState(() => _isStartingCheckout = true);
-
-    final url = Uri.parse('https://shredmember.app/?plan=$_selectedPlan');
-
-    try {
-      await launchUrl(
-        url,
-        mode: LaunchMode.externalApplication,
-      );
-    } catch (e) {
-      debugPrint('[PAYWALL] launchUrl error: $e');
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Could not open checkout page: $e'),
-            backgroundColor: AppColors.error,
-          ),
-        );
-      }
-    } finally {
-      setState(() => _isStartingCheckout = false);
-    }
-  }
 }
 
 class _FeatureItem extends StatelessWidget {
@@ -517,147 +284,6 @@ class _FeatureItem extends StatelessWidget {
                 ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _PlanCard extends StatelessWidget {
-  final String title;
-  final String subtitle;
-  final String price;
-  final String period;
-  final String? badge;
-  final bool isSelected;
-  final VoidCallback onTap;
-  final String? originalPrice;
-
-  const _PlanCard({
-    required this.title,
-    required this.subtitle,
-    required this.price,
-    required this.period,
-    required this.isSelected,
-    required this.onTap,
-    this.badge,
-    this.originalPrice,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.all(AppSpacing.md),
-        decoration: BoxDecoration(
-          color: isSelected ? AppColors.primaryContainer : AppColors.surface,
-          border: Border.all(
-            color: isSelected ? AppColors.primary : AppColors.divider,
-            width: 2,
-          ),
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Row(
-          children: [
-            // Radio indicator
-            Container(
-              width: 24,
-              height: 24,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(
-                  color:
-                      isSelected ? AppColors.primary : AppColors.onSurfaceMuted,
-                  width: 2,
-                ),
-                color: isSelected ? AppColors.primary : Colors.transparent,
-              ),
-              child: isSelected
-                  ? const Icon(Icons.check,
-                      color: AppColors.onPrimary, size: 16)
-                  : null,
-            ),
-            const SizedBox(width: AppSpacing.md),
-            // Info
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Text(
-                        title,
-                        style:
-                            Theme.of(context).textTheme.titleMedium?.copyWith(
-                                  color: AppColors.onBackground,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                      ),
-                      if (badge != null) ...[
-                        const SizedBox(width: AppSpacing.sm),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 2,
-                          ),
-                          decoration: BoxDecoration(
-                            color: AppColors.primary,
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                          child: Text(
-                            badge!,
-                            style: Theme.of(context)
-                                .textTheme
-                                .labelSmall
-                                ?.copyWith(
-                                  color: AppColors.onPrimary,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                          ),
-                        ),
-                      ],
-                    ],
-                  ),
-                  Text(
-                    subtitle,
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: AppColors.onSurfaceMuted,
-                        ),
-                  ),
-                ],
-              ),
-            ),
-            // Price
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                if (originalPrice != null)
-                  Text(
-                    originalPrice!,
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: AppColors.onSurfaceMuted,
-                          decoration: TextDecoration.lineThrough,
-                        ),
-                  ),
-                Text(
-                  price,
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        color: isSelected
-                            ? AppColors.primary
-                            : AppColors.onBackground,
-                        fontWeight: FontWeight.bold,
-                      ),
-                ),
-                Text(
-                  period,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: AppColors.onSurfaceMuted,
-                      ),
-                ),
-              ],
-            ),
-          ],
-        ),
       ),
     );
   }
