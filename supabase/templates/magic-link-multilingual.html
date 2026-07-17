@@ -170,6 +170,22 @@
       </div>
     </div>
 
+    <!-- Spanish -->
+    <div class="lang-section">
+      <div class="lang-label">Español</div>
+      <h1>Tu enlace de inicio de sesión de shredMembers</h1>
+      <p>Toca el botón para iniciar sesión en la app y comenzar tu prueba gratuita.</p>
+      <div class="button-wrapper">
+        <a class="button" href="{{ .ConfirmationURL }}">Iniciar sesión</a>
+      </div>
+      <p style="font-size: 13px;">Si el botón no funciona, copia este enlace:<br>
+        <a class="link-fallback" href="{{ .ConfirmationURL }}">{{ .ConfirmationURL }}</a>
+      </p>
+      <div class="note">
+        ¿Quieres desbloquear todas las funciones premium? Gestiona tu suscripción en <a href="https://shredmember.app/billing">shredmember.app/billing</a>.
+      </div>
+    </div>
+
     <div class="footer">
       <p>You received this email because you requested a login link for shredMembers.</p>
       <p>&copy; 2025 shredMembers. All rights reserved.</p>
