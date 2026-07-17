@@ -19,12 +19,17 @@ jobs:
           channel: stable
 
       - name: Generate Supabase config from secrets
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
         run: |
           mkdir -p lib/src/services
-          cat > lib/src/services/supabase_config.dart << 'EOF'
+          URL=$(printf '%s' "$SUPABASE_URL" | tr -d '[:space:]')
+          ANON=$(printf '%s' "$SUPABASE_ANON_KEY" | tr -d '[:space:]')
+          cat > lib/src/services/supabase_config.dart <<EOF
           abstract final class SupabaseConfig {
-            static const String url = '${{ secrets.SUPABASE_URL }}';
-            static const String anonKey = '${{ secrets.SUPABASE_ANON_KEY }}';
+            static const String url = '${URL}';
+            static const String anonKey = '${ANON}';
           }
           EOF
 
