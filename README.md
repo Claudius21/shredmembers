@@ -73,6 +73,10 @@ flutter run                   # iOS Simulator / Android Emulator
 
 ---
 
+## Deployment & Versioning
+
+See [DEPLOYMENT.md](DEPLOYMENT.md) for the full strategy covering web, iOS, Android and CI/CD.
+
 ## Live Deployments
 
 | Service | URL | Status |
