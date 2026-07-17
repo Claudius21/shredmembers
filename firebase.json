@@ -25,6 +25,10 @@
         "destination": "/auth-callback.html"
       },
       {
+        "source": "/billing",
+        "destination": "/billing.html"
+      },
+      {
         "source": "**",
         "destination": "/index.html"
       }

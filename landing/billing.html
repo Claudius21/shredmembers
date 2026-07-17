@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>shredMembers - Abo verwalten</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #0d0d0d;
+      color: #ffffff;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      text-align: center;
+    }
+    .container { max-width: 420px; width: 100%; }
+    .logo { width: 64px; height: 64px; background: #00e676; border-radius: 16px; margin: 0 auto 24px; display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: bold; color: #0d0d0d; }
+    h1 { font-size: 28px; margin-bottom: 12px; }
+    p { color: #b0b0b0; margin-bottom: 32px; line-height: 1.5; }
+    .card { background: #1a1a1a; border: 1px solid #333; border-radius: 16px; padding: 24px; text-align: left; }
+    input { width: 100%; padding: 14px; border-radius: 12px; border: 1px solid #333; background: #0d0d0d; color: #fff; font-size: 16px; margin-bottom: 16px; }
+    .btn { width: 100%; padding: 16px; border: none; border-radius: 12px; background: #00e676; color: #0d0d0d; font-size: 16px; font-weight: bold; cursor: pointer; }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-secondary { background: transparent; border: 1px solid #00e676; color: #00e676; margin-top: 12px; }
+    .message { margin-top: 16px; font-size: 14px; color: #ff5252; text-align: center; }
+    .success { color: #00e676; }
+    .hidden { display: none; }
+    .plans { display: flex; flex-direction: column; gap: 16px; margin-bottom: 16px; }
+    .plan { background: #0d0d0d; border: 2px solid #333; border-radius: 12px; padding: 16px; cursor: pointer; }
+    .plan.active { border-color: #00e676; }
+    .plan-title { font-weight: bold; margin-bottom: 4px; }
+    .plan-price { color: #00e676; font-size: 22px; font-weight: bold; }
+    .plan-period { color: #b0b0b0; font-size: 14px; }
+    .spinner { display: inline-block; width: 18px; height: 18px; border: 2px solid #0d0d0d; border-top-color: transparent; border-radius: 50%; animation: spin 0.8s linear infinite; vertical-align: middle; margin-right: 8px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .billing-links { margin-top: 16px; text-align: center; font-size: 14px; }
+    .billing-links a { color: #00e676; text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo">S</div>
+    <h1>shredMembers Pro</h1>
+    <p class="subtitle">Wähle dein Abo und starte mit vollem Zugriff.</p>
+
+    <div id="step-email" class="card">
+      <label for="email" style="display:block; margin-bottom:8px; color:#b0b0b0;">E-Mail-Adresse</label>
+      <input type="email" id="email" placeholder="deine@email.com" />
+      <button class="btn" id="btn-email">Anmelden</button>
+      <div class="message" id="msg-email"></div>
+    </div>
+
+    <div id="step-plan" class="card hidden">
+      <p style="margin-bottom:16px; color:#b0b0b0;">Angemeldet als <strong id="user-email" style="color:#fff;"></strong></p>
+      <div class="plans" id="plans">
+        <div class="plan" data-price="monthly">
+          <div class="plan-title">Monatlich</div>
+          <div class="plan-price">9,99 €</div>
+          <div class="plan-period">pro Monat</div>
+        </div>
+        <div class="plan active" data-price="yearly">
+          <div class="plan-title">Jährlich</div>
+          <div class="plan-price">89,99 €</div>
+          <div class="plan-period">pro Jahr · 30% günstiger</div>
+        </div>
+      </div>
+      <button class="btn" id="btn-checkout">Jetzt upgraden</button>
+      <div class="billing-links">
+        <a href="/">Zurück zur Startseite</a>
+      </div>
+      <button class="btn btn-secondary" id="btn-logout">Andere E-Mail verwenden</button>
+      <div class="message" id="msg-plan"></div>
+    </div>
+  </div>
+
+  <script src="billing.js"></script>
+</body>
+</html>

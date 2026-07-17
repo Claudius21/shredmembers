@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>shredMembers - Upgrade</title>
+  <title>shredMembers - Kostenlos starten</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -132,29 +132,17 @@
       <div class="message" id="msg-email"></div>
     </div>
 
-    <!-- Step 2: Plan selection -->
+    <!-- Step 2: Download app / start free -->
     <div id="step-plan" class="card hidden">
       <p style="margin-bottom:16px; color:#b0b0b0;">Angemeldet als <strong id="user-email" style="color:#fff;"></strong></p>
       <p id="trial-info" style="display:none; margin-bottom:16px; font-size:13px; color:#00e676; text-align:center;"></p>
-      <div class="plans" id="plans">
-        <div class="plan" data-price="monthly">
-          <div class="plan-title">Monatlich</div>
-          <div class="plan-price">9,99 €</div>
-          <div class="plan-period">pro Monat</div>
-        </div>
-        <div class="plan active" data-price="yearly">
-          <div class="plan-title">Jährlich</div>
-          <div class="plan-price">89,99 €</div>
-          <div class="plan-period">pro Jahr · 30% günstiger</div>
-        </div>
-      </div>
-      <button class="btn" id="btn-checkout">Jetzt upgraden</button>
-      <p style="text-align:center; margin-top:12px; font-size:13px; color:#b0b0b0;">oder <a id="btn-trial" href="#" style="color:#00e676; text-decoration:underline;">30 Tage kostenlos testen</a><span id="trial-link-suffix"> – kein Abo nötig</span></p>
+      <p id="start-free-msg" style="margin-bottom:16px; font-size:15px; line-height:1.5;"></p>
+      <a id="btn-open-app" class="btn" href="shredmembers://" style="display:block; text-align:center; text-decoration:none;">App öffnen</a>
       <div id="download-links" style="margin-top:16px; display:flex; flex-direction:column; gap:10px;">
         <a id="link-playstore" href="#" target="_blank" rel="noopener" style="display:block; text-align:center; padding:12px; border-radius:12px; border:1px solid #333; color:#fff; text-decoration:none; font-size:14px;">▶ Weiter zu Google Play</a>
         <a id="link-appstore" href="#" target="_blank" rel="noopener" style="display:block; text-align:center; padding:12px; border-radius:12px; border:1px solid #333; color:#fff; text-decoration:none; font-size:14px;"> Weiter zu App Store</a>
-        <a id="link-webapp" href="#" style="display:block; text-align:center; padding:12px; border-radius:12px; border:1px solid #333; color:#fff; text-decoration:none; font-size:14px;">🌐 Weiter zur Web App</a>
       </div>
+      <p style="text-align:center; margin-top:16px; font-size:13px; color:#b0b0b0;">Abo verwalten: <a href="/billing" style="color:#00e676; text-decoration:underline;">shredmember.app/billing</a></p>
       <button class="btn btn-secondary" id="btn-logout">Andere E-Mail verwenden</button>
       <div class="message" id="msg-plan"></div>
       <div class="stores hidden" id="store-links">

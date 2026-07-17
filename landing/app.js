@@ -21,18 +21,16 @@ var TRANSLATIONS = {
     upgrade: 'Jetzt upgraden',
     trialDays: (d) => `Dein kostenloser Test läuft noch ${d} Tag${d !== 1 ? 'e' : ''}.`,
     trialLink: (d) => `Noch ${d} Tag${d !== 1 ? 'e' : ''} kostenlos testen`,
-    trialLinkSuffix: ' – kein Abo nötig',
     otherEmail: 'Andere E-Mail verwenden',
+    openApp: 'App öffnen',
+    startFreeMsg: 'Starte jetzt deine 30-tägige kostenlose Testphase. Lade die App herunter oder öffne sie direkt.',
+    manageSubscription: 'Abo verwalten',
     alreadyActive: 'Du hast bereits ein aktives Abonnement. Öffne die App, um Premium zu nutzen.',
     alreadyActiveBtn: 'Bereits aktiv',
     appStore: 'Im App Store herunterladen',
     playStore: 'Bei Google Play herunterladen',
     linkPlayStore: 'Weiter zu Google Play',
     linkAppStore: 'Weiter zu App Store',
-    linkWebApp: 'Weiter zur Web App',
-    checkoutError: 'Checkout konnte nicht gestartet werden',
-    notLoggedIn: 'Nicht angemeldet',
-    noUrl: 'Keine Checkout-URL erhalten',
     loading: 'Bitte warten',
   },
   en: {
@@ -54,18 +52,16 @@ var TRANSLATIONS = {
     upgrade: 'Upgrade now',
     trialDays: (d) => `Your free trial has ${d} day${d !== 1 ? 's' : ''} remaining.`,
     trialLink: (d) => `Try free for ${d} more day${d !== 1 ? 's' : ''}`,
-    trialLinkSuffix: ' – no subscription needed',
     otherEmail: 'Use a different email',
+    openApp: 'Open app',
+    startFreeMsg: 'Start your 30-day free trial now. Download the app or open it directly.',
+    manageSubscription: 'Manage subscription',
     alreadyActive: 'You already have an active subscription. Open the app to use Premium.',
     alreadyActiveBtn: 'Already active',
     appStore: 'Download on the App Store',
     playStore: 'Get it on Google Play',
     linkPlayStore: 'Continue to Google Play',
     linkAppStore: 'Continue to App Store',
-    linkWebApp: 'Continue to Web App',
-    checkoutError: 'Could not start checkout',
-    notLoggedIn: 'Not logged in',
-    noUrl: 'No checkout URL received',
     loading: 'Please wait',
   },
   fr: {
@@ -87,18 +83,16 @@ var TRANSLATIONS = {
     upgrade: 'Passer à Pro',
     trialDays: (d) => `Il reste ${d} jour${d !== 1 ? 's' : ''} à ton essai gratuit.`,
     trialLink: (d) => `Encore ${d} jour${d !== 1 ? 's' : ''} d'essai gratuit`,
-    trialLinkSuffix: ' – sans abonnement',
     otherEmail: 'Utiliser un autre e-mail',
+    openApp: "Ouvrir l'app",
+    startFreeMsg: "Commence maintenant ton essai gratuit de 30 jours. Télécharge l'app ou ouvre-la directement.",
+    manageSubscription: 'Gérer mon abonnement',
     alreadyActive: 'Tu as déjà un abonnement actif. Ouvre l\'app pour utiliser Premium.',
     alreadyActiveBtn: 'Déjà actif',
     appStore: 'Télécharger sur l\'App Store',
     playStore: 'Disponible sur Google Play',
     linkPlayStore: 'Continuer vers Google Play',
     linkAppStore: "Continuer vers l'App Store",
-    linkWebApp: "Continuer vers l'app web",
-    checkoutError: 'Impossible de démarrer le paiement',
-    notLoggedIn: 'Non connecté',
-    noUrl: 'Aucune URL de paiement reçue',
     loading: 'Veuillez patienter',
   },
   it: {
@@ -120,18 +114,16 @@ var TRANSLATIONS = {
     upgrade: 'Passa a Pro',
     trialDays: (d) => `Il tuo periodo di prova scade tra ${d} giorn${d !== 1 ? 'i' : 'o'}.`,
     trialLink: (d) => `Ancora ${d} giorn${d !== 1 ? 'i' : 'o'} di prova gratuita`,
-    trialLinkSuffix: ' – nessun abbonamento',
     otherEmail: 'Usa un\'altra e-mail',
+    openApp: "Apri l'app",
+    startFreeMsg: "Inizia subito la tua prova gratuita di 30 giorni. Scarica l'app o aprila direttamente.",
+    manageSubscription: 'Gestisci abbonamento',
     alreadyActive: 'Hai già un abbonamento attivo. Apri l\'app per utilizzare Premium.',
     alreadyActiveBtn: 'Già attivo',
     appStore: 'Scarica su App Store',
     playStore: 'Disponibile su Google Play',
     linkPlayStore: 'Continua su Google Play',
     linkAppStore: "Continua sull'App Store",
-    linkWebApp: "Continua sulla Web App",
-    checkoutError: 'Impossibile avviare il checkout',
-    notLoggedIn: 'Non connesso',
-    noUrl: 'Nessun URL di checkout ricevuto',
     loading: 'Attendere prego',
   },
 };
@@ -157,12 +149,10 @@ const checkoutSection = document.getElementById('step-plan');
 const emailInput = document.getElementById('email');
 const btnEmail = document.getElementById('btn-email');
 const msgEmail = document.getElementById('msg-email');
-const btnCheckout = document.getElementById('btn-checkout');
 const btnLogout = document.getElementById('btn-logout');
 const msgPlan = document.getElementById('msg-plan');
 const storeLinks = document.getElementById('store-links');
 const userEmailEl = document.getElementById('user-email');
-const planEls = document.querySelectorAll('.plan');
 
 function applyTranslations() {
   document.querySelector('h1').textContent = t.title;
@@ -170,32 +160,22 @@ function applyTranslations() {
   document.querySelector('label[for="email"]') && (document.querySelector('label[for="email"]').textContent = t.emailLabel);
   emailInput.placeholder = t.emailPlaceholder;
   btnEmail.textContent = t.sendLink;
-  btnCheckout.textContent = t.upgrade;
   btnLogout.textContent = t.otherEmail;
   const iosLink = document.getElementById('ios-link');
   const androidLink = document.getElementById('android-link');
   if (iosLink) iosLink.textContent = t.appStore;
   if (androidLink) androidLink.textContent = t.playStore;
-  document.querySelectorAll('.plan')[0].querySelector('.plan-title').textContent = t.monthly;
-  document.querySelectorAll('.plan')[0].querySelector('.plan-period').textContent = t.monthlyPeriod;
-  document.querySelectorAll('.plan')[1].querySelector('.plan-title').textContent = t.yearly;
-  document.querySelectorAll('.plan')[1].querySelector('.plan-period').textContent = t.yearlyPeriod;
-  const trialSuffix = document.getElementById('trial-link-suffix');
-  if (trialSuffix) trialSuffix.textContent = t.trialLinkSuffix;
-  const btnTrial = document.getElementById('btn-trial');
-  if (btnTrial) btnTrial.textContent = t.trialLink(30);
+  const openApp = document.getElementById('btn-open-app');
+  if (openApp) openApp.textContent = t.openApp;
   const linkPlayStore = document.getElementById('link-playstore');
   const linkAppStore = document.getElementById('link-appstore');
-  const linkWebApp = document.getElementById('link-webapp');
   if (linkPlayStore) linkPlayStore.textContent = '▶ ' + t.linkPlayStore;
   if (linkAppStore) linkAppStore.textContent = ' ' + t.linkAppStore;
-  if (linkWebApp) linkWebApp.textContent = '🌐 ' + t.linkWebApp;
 }
 
 var STORE_URLS = {
   playStore: 'https://play.google.com/store/apps/details?id=com.shredmembers.app',
   appStore: 'https://apps.apple.com/app/shredmembers/id0000000000',
-  webApp: 'https://shredmember.app',
 };
 
 async function init() {
@@ -203,10 +183,8 @@ async function init() {
   applyTranslations();
   const lps = document.getElementById('link-playstore');
   const las = document.getElementById('link-appstore');
-  const lwa = document.getElementById('link-webapp');
   if (lps) lps.href = STORE_URLS.playStore;
   if (las) las.href = STORE_URLS.appStore;
-  if (lwa) { lwa.href = STORE_URLS.webApp; lwa.removeAttribute('target'); }
   try {
     const { data, error } = await supabaseClient.auth.getSession();
     console.log('[WEB] session data:', data, 'error:', error);
@@ -302,7 +280,6 @@ async function showPlanStep(email) {
   console.log('[WEB] showing plan step for', email);
   stepEmail.classList.add('hidden');
   checkoutSection.classList.remove('hidden');
-  planEls.forEach(p => p.style.display = 'block');
   userEmailEl.textContent = email;
 
   btnLogout.addEventListener('click', async () => {
@@ -310,14 +287,24 @@ async function showPlanStep(email) {
     window.location.reload();
   });
 
+  const startFreeMsg = document.getElementById('start-free-msg');
+  if (startFreeMsg) {
+    startFreeMsg.textContent = t.startFreeMsg;
+  }
+
+  const openAppBtn = document.getElementById('btn-open-app');
+  if (openAppBtn) {
+    openAppBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.location.href = 'shredmembers://';
+    });
+  }
+
   const trialStatus = await checkTrialStatus();
 
   if (trialStatus?.subscription_status === 'active') {
     showMessage(msgPlan, t.alreadyActive, true);
-    btnCheckout.disabled = true;
-    btnCheckout.textContent = t.alreadyActiveBtn;
-    planEls.forEach(p => p.style.pointerEvents = 'none');
-    storeLinks.classList.remove('hidden');
+    if (openAppBtn) openAppBtn.textContent = t.alreadyActiveBtn;
     return;
   }
 
@@ -328,76 +315,6 @@ async function showPlanStep(email) {
       trialInfo.textContent = t.trialDays(days);
       trialInfo.style.display = 'block';
     }
-    const btnTrial = document.getElementById('btn-trial');
-    if (btnTrial) {
-      btnTrial.textContent = t.trialLink(days);
-    }
-  }
-
-  planEls.forEach(plan => {
-    const isSelected = plan.dataset.price === selectedPrice;
-    if (isSelected) plan.classList.add('active');
-    else plan.classList.remove('active');
-
-    plan.addEventListener('click', () => {
-      planEls.forEach(p => p.classList.remove('active'));
-      plan.classList.add('active');
-      selectedPrice = plan.dataset.price;
-      console.log('[WEB] selected plan:', selectedPrice);
-    });
-  });
-
-  btnCheckout.addEventListener('click', startCheckout);
-
-  const btnTrial = document.getElementById('btn-trial');
-  if (btnTrial) {
-    btnTrial.addEventListener('click', (e) => {
-      e.preventDefault();
-      window.location.href = 'shredmembers://';
-    });
-  }
-}
-
-async function startCheckout() {
-  console.log('[WEB] startCheckout', selectedPrice);
-  setLoading(btnCheckout, true);
-  showMessage(msgPlan, '');
-
-  try {
-    const token = currentSession?.access_token;
-    if (!token) {
-      throw new Error(t.notLoggedIn);
-    }
-
-    const response = await fetch(`${SUPABASE_URL}/functions/v1/stripe-checkout`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        priceType: selectedPrice,
-        successUrl: `${window.location.origin}/success.html?session_id={CHECKOUT_SESSION_ID}`,
-        cancelUrl: `${window.location.origin}/cancel.html`,
-      }),
-    });
-
-    const data = await response.json();
-    console.log('[WEB] stripe-checkout response:', data);
-
-    if (!response.ok || data.error) {
-      throw new Error(data.error || t.checkoutError);
-    }
-
-    if (data.url) {
-      window.location.href = data.url;
-    } else {
-      throw new Error(t.noUrl);
-    }
-  } catch (e) {
-    console.error('[WEB] checkout error:', e);
-    showMessage(msgPlan, 'Fehler: ' + e.message);
-    setLoading(btnCheckout, false);
   }
 }
 
@@ -407,8 +324,6 @@ function setLoading(btn, loading) {
     btn.innerHTML = `<span class="spinner"></span>${t.loading}`;
   } else if (btn === btnEmail) {
     btn.textContent = t.sendLink;
-  } else {
-    btn.textContent = t.upgrade;
   }
 }
 
