@@ -73,9 +73,18 @@ flutter run                   # iOS Simulator / Android Emulator
 
 ---
 
+## Live Deployments
+
+| Service | URL | Status |
+|---|---|---|
+| Landing Page | https://shredmember.app | ✅ Live |
+| Web App | https://web-shredmembers.web.app | ✅ Live |
+| Billing / Upgrade | https://shredmember.app/billing | ✅ Live |
+| Web App (Custom Domain) | https://web.shredmember.app | ⏳ DNS pending |
+
 ## Next Steps
 
-- [ ] Wire up Supabase auth in `AuthNotifier`
+- [x] Wire up Supabase auth via Magic Link
 - [ ] Replace `MockData` with Supabase/REST calls in service layer
 - [ ] Add rest timer between sets
 - [ ] Personal records tracking
@@ -99,8 +108,12 @@ flutter run -d "iPad von Claudio"
 # Android App
 flutter build apk --release && flutter install -d 00048145N001861
 
-# Web App
+# Web App (local)
 flutter build web --release
+
+# Web App (deploy to Firebase)
+flutter build web --release
+firebase deploy --only hosting:web-shredmembers
 
 # macOS App
 flutter run -d macos

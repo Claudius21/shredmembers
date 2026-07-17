@@ -23,10 +23,11 @@
 
 ### Web Assets
 - [x] Landing page (index.html) – kostenlos starten
+- [x] Flutter Web App auf Firebase Hosting (`web-shredmembers.web.app`)
 - [x] Billing page (billing.html) – Upgrade via Stripe
 - [x] Privacy Policy (privacy-policy.html)
 - [x] Auth callback handler (auth-callback.html)
-- [x] firebase.json rewrites für `/billing`
+- [x] firebase.json Multi-Site Config für Landing + Web App
 
 ## 🔲 Remaining Tasks
 
@@ -94,7 +95,14 @@
 - Pricing and availability
 - Review guidelines compliance
 
-### 6. Store URLs in Web Checkout aktualisieren
+### 6. Custom Domain für Web App verknüpfen
+**Schritte:**
+1. Firebase Console → Hosting → Site `web-shredmembers`
+2. **Custom Domain** → `web.shredmember.app` hinzufügen
+3. DNS-Eintrag (A-Record / CNAME) beim Domain-Provider setzen
+4. SSL-Zertifikat von Firebase ausstellen lassen (kann bis zu 24h dauern)
+
+### 7. Store URLs in Web Checkout aktualisieren
 Nach App Store Einreichung in `landing/app.js` → `STORE_URLS` eintragen:
 - [ ] Google Play URL (`https://play.google.com/store/apps/details?id=...`)
 - [ ] App Store URL (`https://apps.apple.com/app/shredmembers/id...`)
