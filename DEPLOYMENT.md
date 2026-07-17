@@ -88,6 +88,27 @@ A GitHub Actions workflow can automate the following:
 
 Store submission itself (Google Play Console, App Store Connect) must still be done manually or via fastlane with appropriate credentials.
 
+## GitHub Actions Setup
+
+The workflow is defined in `.github/workflows/deploy-web.yml`.
+
+### Required Secret
+
+Create a Firebase service account and add it as a GitHub secret named `FIREBASE_SERVICE_ACCOUNT`:
+
+1. Open [Google Cloud Console → IAM & Admin → Service Accounts](https://console.cloud.google.com/iam-admin/serviceaccounts).
+2. Select the Firebase project `shredmembers`.
+3. Click **Create Service Account**.
+4. Name it `github-actions`.
+5. Grant the role **Firebase Hosting Admin**.
+6. Create a JSON key and download it.
+7. Open the GitHub repository → **Settings → Secrets and variables → Actions**.
+8. Click **New repository secret**.
+9. Name it `FIREBASE_SERVICE_ACCOUNT`.
+10. Paste the full JSON key content.
+
+After the secret is saved, every push to `main` will build and deploy the web app and landing page automatically.
+
 ## Manual Fallback
 
 If the pipeline is not ready, the manual commands are:
