@@ -15,24 +15,32 @@
 - [x] Deep link handling (shredmembers://)
 - [x] Resend SMTP für transaktionale E-Mails eingerichtet
 - [x] Supabase signup trigger (free → trial + plan_id) gefixt
-- [x] Web Checkout mit i18n (DE/EN/FR/IT)
-- [x] Trial-Tage Anzeige auf Web Checkout
-- [x] Store-Links auf Web Checkout (Platzhalter)
+- [x] Web Checkout mit i18n (DE/EN/FR/IT/ES)
+- [x] Landing Page auf "kostenlos starten" umgebaut (kein Checkout)
+- [x] Separate `/billing` Seite für Upgrades
+- [x] App Paywall/Upgrade-Buttons entfernt (Store-Richtlinien)
+- [x] Mehrsprachiges Magic Link E-Mail Template (DE/EN/FR/IT/ES)
 
 ### Web Assets
-- [x] Landing page (index.html)
+- [x] Landing page (index.html) – kostenlos starten
+- [x] Billing page (billing.html) – Upgrade via Stripe
 - [x] Privacy Policy (privacy-policy.html)
 - [x] Auth callback handler (auth-callback.html)
+- [x] firebase.json rewrites für `/billing`
 
 ## 🔲 Remaining Tasks
 
-### 1. iOS Signing (Apple Developer Program)
+### 1. App als kostenlose App einreichen
+**Wichtig:** App muss in beiden Stores als **Free App** deklariert werden. Premium-Features werden ausschließlich über `shredmember.app/billing` verwaltet.
+
+### 2. iOS Signing (Apple Developer Program)
 **Cost:** $99/year
 **Requirements:**
 - Apple Developer Program account
 - Distribution certificate
 - Provisioning profiles
 - App Store Connect app setup
+- App als kostenlose App (Free) mit externem Account-basiertem Abo
 
 **Steps:**
 1. Enroll in Apple Developer Program ($99/year)
@@ -42,7 +50,7 @@
 5. Configure Xcode project settings
 6. Create app in App Store Connect
 
-### 2. Store Screenshots
+### 3. Store Screenshots
 **Requirements:**
 - Android: Various device sizes (phone, tablet, foldable)
 - iOS: iPhone and iPad sizes
@@ -59,7 +67,7 @@
   - iPhone: 1242×2208 (6.5"), 1242×2688 (6.7"), 1170×2532 (6.1")
   - iPad: 2048×2732 (12.9"), 1668×2388 (11")
 
-### 3. Store Descriptions
+### 4. Store Descriptions
 **Required for both stores:**
 - App title (30 characters max)
 - Short description (80 characters max)
@@ -73,7 +81,7 @@
 - Target audience description
 - Key benefits and differentiators
 
-### 4. Store Accounts Setup
+### 5. Store Accounts Setup
 **Google Play Console:**
 - Cost: $25 (one-time)
 - Account registration
@@ -86,7 +94,7 @@
 - Pricing and availability
 - Review guidelines compliance
 
-### 5. Store URLs in Web Checkout aktualisieren
+### 6. Store URLs in Web Checkout aktualisieren
 Nach App Store Einreichung in `landing/app.js` → `STORE_URLS` eintragen:
 - [ ] Google Play URL (`https://play.google.com/store/apps/details?id=...`)
 - [ ] App Store URL (`https://apps.apple.com/app/shredmembers/id...`)
@@ -95,16 +103,18 @@ Nach App Store Einreichung in `landing/app.js` → `STORE_URLS` eintragen:
 
 ### Technical Requirements
 - [ ] Test release build on physical devices
-- [ ] Verify all deep links work correctly
-- [ ] Test subscription flow end-to-end
+- [ ] Verify all deep links work correctly (Magic Link → App)
+- [ ] Test subscription flow end-to-end (Web Checkout + App-Zugriff)
 - [ ] Verify privacy policy is accessible
 - [ ] Test on different screen sizes/orientations
+- [ ] Bestätigen: App enthält keine externen Bezahl-Links
 
 ### Store Compliance
 - [ ] Review store guidelines (Google Play + App Store)
 - [ ] Ensure app rating is appropriate
-- [ ] Verify no policy violations
+- [ ] Verify no policy violations (keine externen Zahlungslinks, keine Preisvergleiche)
 - [ ] Test all required permissions
+- [ ] App als **Free** deklarieren (keine In-App-Käufe nötig)
 
 ### Marketing Materials
 - [ ] Final app icon (512×512 for stores)
@@ -151,6 +161,7 @@ Nach App Store Einreichung in `landing/app.js` → `STORE_URLS` eintragen:
 - [ ] Screenshots für beide Stores (alle Größen)
 - [ ] Store-Listings auf DE/EN/FR/IT schreiben
 - [ ] Store-URLs in `landing/app.js` → `STORE_URLS` eintragen
+- [ ] App in Google Play & App Store als **Free App** einreichen
 - [ ] Einreichung und Review abwarten
 
 ### B – App weiterbauen
@@ -171,5 +182,5 @@ Nach App Store Einreichung in `landing/app.js` → `STORE_URLS` eintragen:
 - [ ] `l10n.yaml` synthetic-package Warning entfernen
 - [ ] `flutter_local_notifications` auf Swift Package Manager updaten
 - [ ] Unit Tests für kritische Services (Auth, Subscription)
-- [ ] Widget Tests für PaywallScreen
+- [ ] Widget Tests für Info-PaywallScreen
 - [ ] CI/CD Pipeline (GitHub Actions)

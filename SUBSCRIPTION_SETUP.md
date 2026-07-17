@@ -3,9 +3,10 @@
 ## Übersicht
 Das Subscription System bietet:
 - **30-Tage kostenlosen Testzugang** für neue User
-- **Stripe-Zahlung** direkt auf der Webseite (keine Store-Gebühren)
-- **Rabattcode-System** für Promotions
-- **Automatische Paywall** nach Ablauf der Testphase
+- **App ist kostenlos** in Google Play & App Store eingereicht
+- **Stripe-Zahlung** ausschließlich über `shredmember.app/billing` (Web, außerhalb der App)
+- **Rabattcode-System** für Promotions (nur Web-Checkout)
+- **Info-Paywall** in der App ohne externe Bezahlungslinks
 
 ---
 
@@ -79,6 +80,12 @@ supabase functions deploy stripe-webhook
 
 ## 3. Flutter App
 
+### Konfiguration
+- Die App ist für den Store-Einreichungsprozess als **kostenlose App** vorgesehen
+- `PaywallScreen` zeigt Features und Trial-Status, **keine Preise oder Bezahl-Buttons**
+- `SubscriptionManagementScreen` zeigt Abo-Status, **keine Upgrade-Buttons**
+- Bezahlung/Upgrade nur über `shredmember.app/billing` im Browser außerhalb der App
+
 ### Dependencies
 ```yaml
 # pubspec.yaml - bereits hinzugefügt
@@ -123,12 +130,19 @@ VALUES ('VIP50', 50, 'coupon_xxx');
 - Stripe Test API Key verwenden (`sk_test_...`)
 - Test-Kreditkarten: https://stripe.com/docs/testing#cards
 
-### 5.2 Testablauf
+### 5.2 Testablauf Web
 
 1. **Registrierung** → Automatisch 30 Tage Trial
-2. **Paywall** wird angezeigt nach Trial-Ablauf (oder sofort testen via DB)
-3. **Zahlung** über Stripe Checkout
+2. **Landing Page** `shredmember.app` → E-Mail eingeben, Magic Link erhalten
+3. **shredmember.app/billing** → Plan wählen und Stripe Checkout
 4. **Zugriff** automatisch freigeschaltet
+
+### 5.3 Testablauf App
+
+1. **App installieren** (kostenlos im Store)
+2. **Magic Link** in App anfordern
+3. **App nutzen** (Trial oder aktives Abo wird erkannt)
+4. Für Upgrade: E-Mail mit Hinweis auf `shredmember.app/billing` nutzen
 
 ### 5.3 Trial manuell verkürzen (Testing)
 
@@ -148,8 +162,10 @@ WHERE user_id = '...';
 | `lib/src/models/subscription.dart` | Datenmodelle |
 | `lib/src/services/subscription_repository.dart` | API-Zugriff |
 | `lib/src/providers/subscription_provider.dart` | State Management |
-| `lib/src/screens/subscription/paywall_screen.dart` | Zahlungs-UI |
-| `lib/src/screens/subscription/subscription_management_screen.dart` | Verwaltung |
+| `lib/src/screens/subscription/paywall_screen.dart` | Info-Paywall (keine Zahlung) |
+| `lib/src/screens/subscription/subscription_management_screen.dart` | Abo-Verwaltung (keine Upgrades) |
+| `landing/billing.html` | Web-Checkout für Upgrades |
+| `supabase/templates/magic-link-multilingual.html` | Mehrsprachige Magic Link E-Mail |
 | `supabase/migrations/add_subscription_system.sql` | Datenbank-Schema |
 | `supabase/functions/stripe-checkout/index.ts` | Checkout API |
 | `supabase/functions/stripe-webhook/index.ts` | Webhook Handler |
@@ -158,7 +174,7 @@ WHERE user_id = '...';
 
 ## 7. Zugriffsschutz
 
-Die Paywall wird automatisch angezeigt wenn:
+Die Info-Paywall wird automatisch angezeigt wenn:
 - Trial abgelaufen (`trial_ends_at < NOW()`)
 - Kein aktives Abonnement
 
@@ -170,6 +186,8 @@ if (!subState.hasAccess && !isPaywallRoute) {
 }
 ```
 
+Hinweis: `PaywallScreen` enthält keine Bezahl-Buttons. User müssen über `shredmember.app/billing` upgraden.
+
 ---
 
 ## 8. Kündigung & Reaktivierung
@@ -177,12 +195,14 @@ if (!subState.hasAccess && !isPaywallRoute) {
 User können in `SubscriptionManagementScreen`:
 - Abonnement kündigen (läuft bis Period-Ende)
 - Kündigung reaktivieren (vor Period-Ende)
-- Upgrade während Trial durchführen
+
+**Upgrade** ist nur über `shredmember.app/billing` möglich, nicht in der App.
 
 ---
 
 ## Hinweise
 
-- **Store-Gebühren umgehen**: Zahlung läuft direkt über Stripe Web (nicht In-App Purchase)
-- **Rechtlicher Hinweis**: Bei App-Store-Veröffentlichung prüfen ob externe Zahlung erlaubt ist
-- **Web-only**: Diese Implementierung funktioniert am besten für Web-Apps
+- **App ist kostenlos**: Die App wird als Free App in Google Play & App Store eingereicht
+- **Web-Zahlung**: Bezahlung läuft ausschließlich über `shredmember.app/billing`
+- **E-Mail Marketing**: Magic Link E-Mail verweist auf `shredmember.app/billing` (erlaubt, weil außerhalb der App)
+- **Store-Richtlinien**: App enthält keine externen Bezahlungslinks, keine Preisvergleiche, keine "hier günstiger"-Hinweise
