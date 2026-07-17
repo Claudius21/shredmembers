@@ -92,7 +92,9 @@ Store submission itself (Google Play Console, App Store Connect) must still be d
 
 The workflow is defined in `.github/workflows/deploy-web.yml`.
 
-### Required Secret
+### Required Secrets
+
+#### 1. Firebase Service Account
 
 Create a Firebase service account and add it as a GitHub secret named `FIREBASE_SERVICE_ACCOUNT`:
 
@@ -107,7 +109,14 @@ Create a Firebase service account and add it as a GitHub secret named `FIREBASE_
 9. Name it `FIREBASE_SERVICE_ACCOUNT`.
 10. Paste the full JSON key content.
 
-After the secret is saved, every push to `main` will build and deploy the web app and landing page automatically.
+#### 2. Supabase Credentials
+
+The `lib/src/services/supabase_config.dart` file is not committed to Git. The workflow generates it at build time from GitHub secrets. Add these secrets:
+
+- `SUPABASE_URL` → your Supabase project URL, e.g. `https://yourproject.supabase.co`
+- `SUPABASE_ANON_KEY` → your Supabase anon/public key
+
+After these secrets are saved, every push to `main` will build and deploy the web app and landing page automatically.
 
 ## Manual Fallback
 

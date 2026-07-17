@@ -18,6 +18,16 @@ jobs:
         with:
           channel: stable
 
+      - name: Generate Supabase config from secrets
+        run: |
+          mkdir -p lib/src/services
+          cat > lib/src/services/supabase_config.dart << 'EOF'
+          abstract final class SupabaseConfig {
+            static const String url = '${{ secrets.SUPABASE_URL }}';
+            static const String anonKey = '${{ secrets.SUPABASE_ANON_KEY }}';
+          }
+          EOF
+
       - name: Install Flutter dependencies
         run: flutter pub get
 
