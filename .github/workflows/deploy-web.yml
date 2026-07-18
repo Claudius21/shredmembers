@@ -24,14 +24,16 @@ jobs:
           SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
         run: |
           mkdir -p lib/src/services
-          URL=$(printf '%s' "$SUPABASE_URL" | tr -d '[:space:]')
-          ANON=$(printf '%s' "$SUPABASE_ANON_KEY" | tr -d '[:space:]')
-          cat > lib/src/services/supabase_config.dart <<EOF
-          abstract final class SupabaseConfig {
-            static const String url = '${URL}';
-            static const String anonKey = '${ANON}';
-          }
-          EOF
+          python3 - << 'PY'
+          import os
+          url = os.environ['SUPABASE_URL'].strip().replace("'", "\\'")
+          anon = os.environ['SUPABASE_ANON_KEY'].strip().replace("'", "\\'")
+          with open('lib/src/services/supabase_config.dart', 'w') as f:
+              f.write('abstract final class SupabaseConfig {\n')
+              f.write(f"  static const String url = '{url}';\n")
+              f.write(f"  static const String anonKey = '{anon}';\n")
+              f.write('}\n')
+          PY
 
       - name: Install Flutter dependencies
         run: flutter pub get
