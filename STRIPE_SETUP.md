@@ -1,20 +1,22 @@
-# Stripe Test-Setup für shredMembers
+# Stripe Production-Setup für shredMembers
 
-Damit der Kauf-Flow im Paywall-Screen funktioniert, müssen Stripe-Produkte, Preise und Supabase Edge Function Secrets konfiguriert werden.
+Diese Anleitung beschreibt die Stripe-Live-Konfiguration. Für Tests steht weiterhin `supabase/migrations/add_stripe_price_ids.sql` (Test-Price-IDs) und die Verwendung von `sk_test_...` Secrets zur Verfügung.
 
-## 1. Stripe-Konto im Testmodus
+## 1. Stripe-Konto im Livemodus
 
-1. Auf [stripe.com](https://stripe.com) ein Konto erstellen.
-2. Im Dashboard oben rechts auf **Test mode** stellen.
+1. Auf [stripe.com](https://stripe.com) ein Konto erstellen bzw. ein bestehendes Konto öffnen.
+2. Im Dashboard oben rechts den **Test mode**-Schalter deaktivieren, damit Live-Daten angezeigt werden.
 3. Links unter **Developers → API keys** findest du:
-   - **Publishable key** (z. B. `pk_test_...`) – nur für direkte Stripe-UI nötig, hier nicht zwingend.
-   - **Secret key** (z. B. `sk_test_...`) – wird in Supabase benötigt.
+   - **Publishable key** (`pk_live_...`) – nur für direkte Stripe-UI nötig, hier nicht zwingend.
+   - **Secret key** (`sk_live_...`) – wird in Supabase benötigt.
+
+> **Wichtig:** Bewahre den `sk_live_...` sicher auf. Er ermöglicht echte Zahlungen.
 
 ## 2. Produkte & Preise anlegen
 
 1. Im Stripe-Dashboard zu **Products** gehen.
 2. **Add product** → Name z. B. `ShredMembers Pro`.
-3. Zwei Preise anlegen:
+3. Zwei Live-Preise anlegen:
    - **Monthly** → `9.99 EUR`, recurring monthly.
    - **Yearly** → `89.99 EUR`, recurring yearly.
 4. Die **Price IDs** (beginnen mit `price_...`) kopieren.
@@ -23,8 +25,8 @@ Damit der Kauf-Flow im Paywall-Screen funktioniert, müssen Stripe-Produkte, Pre
 
 Führe in der Supabase SQL-Editor folgendes aus:
 
-- Entweder du nutzt die bereitgestellte Migration `supabase/migrations/add_stripe_price_ids.sql`.
-- Oder du führst folgendes SQL manuell aus (ersetze die `price_...` Werte durch deine echten Test-Price IDs):
+- Entweder du nutzt die bereitgestellte Migration `supabase/migrations/add_stripe_price_ids_live.sql`.
+- Oder du führst folgendes SQL manuell aus (ersetze die `price_...` Werte durch deine echten Live-Price IDs):
 
 ```sql
 update public.subscription_plans
@@ -39,13 +41,14 @@ In der Supabase-CLI oder im Dashboard unter **Project Settings → Edge Function
 
 | Secret | Wert | Zwingend |
 |--------|------|----------|
-| `STRIPE_SECRET_KEY` | `sk_test_...` | Ja |
+| `STRIPE_SECRET_KEY` | `sk_live_...` | Ja |
 | `STRIPE_WEBHOOK_SECRET` | `whsec_...` | Nur für Webhook (optional) |
 
 Falls du die Supabase CLI nutzt:
 
 ```bash
-supabase secrets set STRIPE_SECRET_KEY=sk_test_...
+supabase secrets set STRIPE_SECRET_KEY=sk_live_...
+supabase secrets set STRIPE_WEBHOOK_SECRET=whsec_...
 ```
 
 ## 5. Edge Functions deployen
@@ -53,40 +56,31 @@ supabase secrets set STRIPE_SECRET_KEY=sk_test_...
 ```bash
 supabase functions deploy stripe-checkout
 supabase functions deploy stripe-confirm-payment
+supabase functions deploy stripe-webhook
 ```
 
-## 6. App testen
+## 6. App / Web testen
 
 1. App starten und einen Test-User anmelden.
-2. Paywall öffnen (`/subscription/paywall`).
-3. Auf **Upgrade now** tippen.
+2. Paywall öffnen (`/subscription/paywall`) bzw. `shredmember.app/billing` im Browser.
+3. Auf **Upgrade now** tippen / klicken.
 4. Der Browser öffnet Stripe Checkout.
-5. Für Test-Zahlungen kannst du Stripe-Testkarten verwenden, z. B.:
+5. Für den Live-Test verwende eine echte Zahlungsmethode mit einem kleinen Betrag oder Stripe-Testkarten **nur im Testmodus**.
 
-| Karte | Nummer | CVC | Datum |
-|-------|--------|-----|-------|
-| Visa (Erfolg) | `4242 4242 4242 4242` | beliebig | beliebig in Zukunft |
-| Visa (Ablehnung) | `4000 0000 0000 0002` | beliebig | beliebig in Zukunft |
+## 7. Bezahlung erfolgreich bestätigen
 
-Weitere Testkarten: [Stripe Test Cards](https://stripe.com/docs/testing#cards)
+Nach erfolgreicher Zahlung leitet Stripe zu `shredmembers://payment/success?session_id=...` zurück in die App. Die App ruft automatisch die Edge Function `stripe-confirm-payment` auf, die die Checkout-Session prüft und die Subscription in Supabase auf `active` setzt.
 
-## 7. Bezahlung erfolgreich simulieren
+## 8. Stripe Webhook für serverseitige Events (empfohlen)
 
-Nach erfolgreicher Test-Zahlung leitet Stripe zu `shredmembers://payment/success?session_id=...` zurück in die App. Die App ruft automatisch die Edge Function `stripe-confirm-payment` auf, die die Checkout-Session prüft und die Subscription in Supabase auf `active` setzt.
+Für Production empfiehlt sich ein Stripe Webhook, der Events verarbeitet, wenn die App nicht geöffnet ist (z. B. Subscription-Erneuerung, Kündigung).
 
-Falls du die App-Weiterleitung nicht nutzen willst, kannst du die Subscription auch manuell auf aktiv setzen (nur für Tests):
-
-```sql
-update public.subscriptions
-set status = 'active',
-    subscribed_at = now(),
-    current_period_start = now(),
-    current_period_end = now() + interval '1 year'
-where user_id = '<user-id>';
-```
-
-## 8. (Optional) Stripe Webhook für serverseitige Events
-
-Für Production empfiehlt sich ein Stripe Webhook, der auch Events verarbeitet, wenn die App nicht geöffnet ist (z. B. Subscription-Erneuerung, Kündigung). Dieser ist aber nicht zwingend für den Basis-Flow.
-
-Wenn du einen Webhook verwenden willst, deploye die Edge Function `stripe-webhook` und setze `STRIPE_WEBHOOK_SECRET`. Beachte, dass Supabase Edge Functions einen `Authorization` Header verlangen, den Stripe Webhook Endpoints nicht standardmäßig mitliefern. Eine Möglichkeit ist, im Stripe Webhook Endpoint den Header `Authorization: Bearer <supabase-anon-key>` zu konfigurieren.
+1. Im Stripe-Dashboard unter **Developers → Webhooks** einen neuen **Live-Webhook-Endpunkt** anlegen.
+2. URL der Supabase Edge Function `stripe-webhook` eintragen.
+3. Mindestens diese Events abonnieren:
+   - `checkout.session.completed`
+   - `invoice.payment_succeeded`
+   - `customer.subscription.deleted`
+   - `customer.subscription.updated`
+4. Das **Signing secret** (`whsec_...`) kopieren und in Supabase als `STRIPE_WEBHOOK_SECRET` hinterlegen.
+5. Supabase Edge Functions verlangen einen `Authorization`-Header. Konfiguriere im Stripe Webhook Endpoint den Header `Authorization: Bearer <supabase-anon-key>`.

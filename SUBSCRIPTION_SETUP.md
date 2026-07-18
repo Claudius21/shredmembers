@@ -38,11 +38,15 @@ Dies erstellt:
 
 2. Kopiere die **Price IDs** (`price_xxx`) nach Supabase:
 
+- Entweder du nutzt die bereitgestellte Migration `supabase/migrations/add_stripe_price_ids_live.sql`.
+- Oder du führst folgendes SQL manuell aus:
+
 ```sql
-UPDATE subscription_plans 
-SET 
-  stripe_monthly_price_id = 'price_monthly_xxx',
-  stripe_yearly_price_id = 'price_yearly_xxx';
+UPDATE subscription_plans
+SET
+  stripe_monthly_price_id = 'price_1Tk1QKKTz45bhpVhPoKe5s5c',
+  stripe_yearly_price_id = 'price_1Tk2mgKTz45bhpVhVSGFKRti'
+WHERE name = 'ShredMembers Pro';
 ```
 
 ### 2.2 Webhook einrichten

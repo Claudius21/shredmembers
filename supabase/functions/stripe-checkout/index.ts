@@ -99,14 +99,28 @@ serve(async (req) => {
 
     // Stripe Customer erstellen oder aktualisieren
     let customerId = subscription.stripe_customer_id
-    
-    if (!customerId) {
+    let customerExists = false
+
+    // Prüfen ob existierende Customer ID noch gültig ist (z. B. nach Wechsel Test -> Live)
+    if (customerId) {
+      try {
+        const existingCustomer = await stripe.customers.retrieve(customerId)
+        if (!existingCustomer.deleted) {
+          customerExists = true
+        }
+      } catch (err) {
+        console.log(`Existing customer ${customerId} not found, creating new one:`, err.message)
+        customerExists = false
+      }
+    }
+
+    if (!customerExists) {
       const customer = await stripe.customers.create({
         email: userEmail,
         metadata: { supabase_user_id: userId }
       })
       customerId = customer.id
-      
+
       // Customer ID speichern
       await supabaseAdmin
         .from('subscriptions')
