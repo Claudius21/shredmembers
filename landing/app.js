@@ -22,7 +22,7 @@ var TRANSLATIONS = {
     trialDays: (d) => `Dein kostenloser Test läuft noch ${d} Tag${d !== 1 ? 'e' : ''}.`,
     trialLink: (d) => `Noch ${d} Tag${d !== 1 ? 'e' : ''} kostenlos testen`,
     otherEmail: 'Andere E-Mail verwenden',
-    openApp: 'App öffnen',
+    openApp: 'WebApp öffnen',
     startFreeMsg: 'Starte jetzt deine 30-tägige kostenlose Testphase. Lade die App herunter oder öffne sie direkt.',
     manageSubscription: 'Abo verwalten',
     alreadyActive: 'Du hast bereits ein aktives Abonnement. Öffne die App, um Premium zu nutzen.',
