@@ -25,9 +25,9 @@ jobs:
         run: |
           mkdir -p lib/src/services
           python3 - << 'PY'
-          import os
-          url = os.environ['SUPABASE_URL'].strip().strip('"\'').replace("'", "\\'")
-          anon = os.environ['SUPABASE_ANON_KEY'].strip().strip('"\'').replace("'", "\\'")
+          import os, re
+          url = re.sub(r'\s+', '', os.environ['SUPABASE_URL']).strip('"\'')
+          anon = re.sub(r'\s+', '', os.environ['SUPABASE_ANON_KEY']).strip('"\'')
           with open('lib/src/services/supabase_config.dart', 'w') as f:
               f.write('abstract final class SupabaseConfig {\n')
               f.write(f"  static const String url = '{url}';\n")
