@@ -111,10 +111,18 @@ Create a Firebase service account and add it as a GitHub secret named `FIREBASE_
 
 #### 2. Supabase Credentials
 
-The `lib/src/services/supabase_config.dart` file is not committed to Git. The workflow generates it at build time from GitHub secrets. Add these secrets:
+`lib/src/services/supabase_config.dart` reads the Supabase credentials from compile-time environment variables using `--dart-define`. Add these GitHub secrets:
 
 - `SUPABASE_URL` → your Supabase project URL, e.g. `https://yourproject.supabase.co`
 - `SUPABASE_ANON_KEY` → your Supabase anon/public key
+
+Make sure the values do **not** contain surrounding quotes or line breaks.
+
+For local development you can run:
+
+```bash
+flutter run --dart-define=SUPABASE_URL=your-url --dart-define=SUPABASE_ANON_KEY=your-key
+```
 
 After these secrets are saved, every push to `main` will build and deploy the web app and landing page automatically.
 

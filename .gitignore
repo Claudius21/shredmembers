@@ -1,5 +1,4 @@
 # Secrets
-lib/src/services/supabase_config.dart
 
 # Miscellaneous
 *.class

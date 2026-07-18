@@ -18,28 +18,11 @@ jobs:
         with:
           channel: stable
 
-      - name: Generate Supabase config from secrets
-        env:
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
-        run: |
-          mkdir -p lib/src/services
-          python3 - << 'PY'
-          import os, re
-          url = re.sub(r'\s+', '', os.environ['SUPABASE_URL']).strip('"\'')
-          anon = re.sub(r'\s+', '', os.environ['SUPABASE_ANON_KEY']).strip('"\'')
-          with open('lib/src/services/supabase_config.dart', 'w') as f:
-              f.write('abstract final class SupabaseConfig {\n')
-              f.write(f"  static const String url = '{url}';\n")
-              f.write(f"  static const String anonKey = '{anon}';\n")
-              f.write('}\n')
-          PY
-
       - name: Install Flutter dependencies
         run: flutter pub get
 
       - name: Build Flutter web app
-        run: flutter build web --release
+        run: flutter build web --release --dart-define=SUPABASE_URL=${{ secrets.SUPABASE_URL }} --dart-define=SUPABASE_ANON_KEY=${{ secrets.SUPABASE_ANON_KEY }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
