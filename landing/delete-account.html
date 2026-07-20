@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Request deletion of your ShredMembers account and personal data.">
+  <title>Delete Account - ShredMembers</title>
+  <style>
+    :root {
+      --color-bg: #0a0a0a;
+      --color-surface: #111111;
+      --color-text: #f5f5f5;
+      --color-text-muted: #9ca3af;
+      --color-accent: #22c55e;
+      --color-border: #2a2a2a;
+      --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--color-bg);
+      color: var(--color-text);
+      font-family: var(--font-sans);
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 4rem 1.5rem;
+    }
+    .lang-switch {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+    .lang-switch button {
+      background: transparent;
+      border: 1px solid #333;
+      color: var(--color-text-muted);
+      padding: 0.4rem 0.8rem;
+      border-radius: 9999px;
+      cursor: pointer;
+      font-size: 0.875rem;
+    }
+    .lang-switch button.active,
+    .lang-switch button:hover {
+      border-color: var(--color-accent);
+      color: var(--color-accent);
+    }
+    h1 { font-size: 2rem; margin-bottom: 0.5rem; }
+    h2 {
+      color: var(--color-accent);
+      font-size: 1.25rem;
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+    }
+    p, ol, ul { color: var(--color-text-muted); }
+    ol, ul { padding-left: 1.5rem; }
+    li { margin-bottom: 0.65rem; }
+    strong { color: var(--color-text); }
+    a { color: var(--color-accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .subtitle { margin-bottom: 2rem; }
+    .request-card {
+      margin: 2rem 0;
+      padding: 1.5rem;
+      border: 1px solid var(--color-border);
+      border-radius: 0.75rem;
+      background: var(--color-surface);
+    }
+    .request-button {
+      display: inline-block;
+      margin-top: 0.5rem;
+      padding: 0.75rem 1rem;
+      border-radius: 0.5rem;
+      background: var(--color-accent);
+      color: #051b0b;
+      font-weight: 700;
+    }
+    .request-button:hover { text-decoration: none; filter: brightness(1.08); }
+    .footer {
+      margin-top: 4rem;
+      padding-top: 2rem;
+      border-top: 1px solid #222;
+      color: var(--color-text-muted);
+      font-size: 0.875rem;
+    }
+    [data-lang] { display: none; }
+    [data-lang].active { display: block; }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <nav class="lang-switch" aria-label="Language">
+      <button type="button" data-set-lang="de">DE</button>
+      <button type="button" data-set-lang="en">EN</button>
+      <button type="button" data-set-lang="fr">FR</button>
+      <button type="button" data-set-lang="it">IT</button>
+      <button type="button" data-set-lang="es">ES</button>
+    </nav>
+
+    <section data-lang="de">
+      <h1>ShredMembers-Konto löschen</h1>
+      <p class="subtitle">Hier kannst du die Löschung deines ShredMembers-Kontos und der damit verbundenen personenbezogenen Daten beantragen.</p>
+      <h2>So stellst du einen Löschantrag</h2>
+      <ol>
+        <li>Sende eine E-Mail von der Adresse, mit der dein ShredMembers-Konto registriert ist.</li>
+        <li>Verwende den Betreff <strong>„ShredMembers-Konto löschen“</strong>.</li>
+        <li>Bestätige in der Nachricht, dass dein Konto und deine personenbezogenen Daten gelöscht werden sollen.</li>
+      </ol>
+      <div class="request-card">
+        <p><strong>Empfänger:</strong> tim.doodlerino@protonmail.com</p>
+        <a class="request-button" href="mailto:tim.doodlerino@protonmail.com?subject=ShredMembers-Konto%20l%C3%B6schen&body=Bitte%20l%C3%B6scht%20mein%20ShredMembers-Konto%20und%20meine%20damit%20verbundenen%20personenbezogenen%20Daten.%0A%0ARegistrierte%20E-Mail-Adresse%3A%20">Löschantrag per E-Mail senden</a>
+      </div>
+      <p>Wir können dich zur Bestätigung deiner Identität kontaktieren. Du musst die App nicht installiert haben, um die Löschung zu beantragen. Die Bearbeitung erfolgt innerhalb von 30 Tagen.</p>
+      <h2>Gelöschte Daten</h2>
+      <ul>
+        <li>Konto- und Authentifizierungsdaten</li>
+        <li>Profil- und Fitnessdaten</li>
+        <li>Trainingspläne, Trainingseinheiten und Fortschrittsdaten</li>
+        <li>In ShredMembers gespeicherte Abonnementdaten und zugehörige Kennungen</li>
+      </ul>
+      <h2>Aufbewahrte Daten</h2>
+      <p>Daten, die wir zur Erfüllung gesetzlicher, steuerlicher, buchhalterischer oder sicherheitsbezogener Pflichten aufbewahren müssen, können für die gesetzlich erforderliche Dauer gespeichert bleiben. Zahlungsanbieter wie Stripe können Transaktionsdaten gemäß ihren eigenen gesetzlichen Pflichten aufbewahren. Diese Daten werden nicht für andere Zwecke verwendet.</p>
+      <h2>Aktive Abonnements</h2>
+      <p>Gib in deinem Löschantrag an, falls ein aktives Abonnement besteht. Wir stellen sicher, dass es vor Abschluss der Kontolöschung beendet wird. Bereits erfolgte Zahlungen werden durch die Kontolöschung nicht automatisch erstattet.</p>
+      <p><a href="/privacy-policy">Datenschutzerklärung ansehen</a></p>
+    </section>
+
+    <section data-lang="en">
+      <h1>Delete your ShredMembers account</h1>
+      <p class="subtitle">Use this page to request deletion of your ShredMembers account and the personal data associated with it.</p>
+      <h2>How to request deletion</h2>
+      <ol>
+        <li>Send an email from the address registered with your ShredMembers account.</li>
+        <li>Use the subject <strong>“Delete ShredMembers account”</strong>.</li>
+        <li>Confirm in the message that you want your account and personal data deleted.</li>
+      </ol>
+      <div class="request-card">
+        <p><strong>Recipient:</strong> tim.doodlerino@protonmail.com</p>
+        <a class="request-button" href="mailto:tim.doodlerino@protonmail.com?subject=Delete%20ShredMembers%20account&body=Please%20delete%20my%20ShredMembers%20account%20and%20the%20personal%20data%20associated%20with%20it.%0A%0ARegistered%20email%20address%3A%20">Send deletion request by email</a>
+      </div>
+      <p>We may contact you to verify your identity. You do not need to have the app installed to request deletion. Requests are processed within 30 days.</p>
+      <h2>Data that will be deleted</h2>
+      <ul>
+        <li>Account and authentication data</li>
+        <li>Profile and fitness data</li>
+        <li>Workout plans, workout sessions, and progress data</li>
+        <li>Subscription data and related identifiers stored by ShredMembers</li>
+      </ul>
+      <h2>Data that may be retained</h2>
+      <p>Information that must be retained to meet legal, tax, accounting, or security obligations may remain stored for the period required by law. Payment providers such as Stripe may retain transaction records under their own legal obligations. Retained data will not be used for other purposes.</p>
+      <h2>Active subscriptions</h2>
+      <p>Tell us in your deletion request if you have an active subscription. We will ensure it is terminated before completing account deletion. Deleting an account does not automatically refund previous payments.</p>
+      <p><a href="/privacy-policy">View the Privacy Policy</a></p>
+    </section>
+
+    <section data-lang="fr">
+      <h1>Supprimer votre compte ShredMembers</h1>
+      <p class="subtitle">Cette page vous permet de demander la suppression de votre compte ShredMembers et des données personnelles qui y sont associées.</p>
+      <h2>Comment demander la suppression</h2>
+      <ol>
+        <li>Envoyez un e-mail depuis l'adresse associée à votre compte ShredMembers.</li>
+        <li>Utilisez l'objet <strong>« Supprimer le compte ShredMembers »</strong>.</li>
+        <li>Confirmez dans le message que vous souhaitez supprimer votre compte et vos données personnelles.</li>
+      </ol>
+      <div class="request-card">
+        <p><strong>Destinataire :</strong> tim.doodlerino@protonmail.com</p>
+        <a class="request-button" href="mailto:tim.doodlerino@protonmail.com?subject=Supprimer%20le%20compte%20ShredMembers&body=Veuillez%20supprimer%20mon%20compte%20ShredMembers%20et%20les%20donn%C3%A9es%20personnelles%20qui%20y%20sont%20associ%C3%A9es.%0A%0AAdresse%20e-mail%20enregistr%C3%A9e%20%3A%20">Envoyer la demande par e-mail</a>
+      </div>
+      <p>Nous pouvons vous contacter pour vérifier votre identité. L'application ne doit pas être installée pour demander la suppression. Les demandes sont traitées sous 30 jours.</p>
+      <h2>Données supprimées</h2>
+      <ul>
+        <li>Données de compte et d'authentification</li>
+        <li>Données de profil et de fitness</li>
+        <li>Plans, séances d'entraînement et données de progression</li>
+        <li>Données d'abonnement et identifiants associés stockés par ShredMembers</li>
+      </ul>
+      <h2>Données pouvant être conservées</h2>
+      <p>Les informations devant être conservées pour respecter des obligations légales, fiscales, comptables ou de sécurité peuvent rester stockées pendant la durée imposée par la loi. Les prestataires de paiement tels que Stripe peuvent conserver les données de transaction conformément à leurs propres obligations légales. Ces données ne seront pas utilisées à d'autres fins.</p>
+      <h2>Abonnements actifs</h2>
+      <p>Indiquez dans votre demande si vous avez un abonnement actif. Nous veillerons à ce qu'il soit résilié avant la suppression du compte. La suppression du compte n'entraîne pas automatiquement le remboursement des paiements antérieurs.</p>
+      <p><a href="/privacy-policy">Consulter la politique de confidentialité</a></p>
+    </section>
+
+    <section data-lang="it">
+      <h1>Elimina il tuo account ShredMembers</h1>
+      <p class="subtitle">Utilizza questa pagina per richiedere l'eliminazione del tuo account ShredMembers e dei dati personali ad esso associati.</p>
+      <h2>Come richiedere l'eliminazione</h2>
+      <ol>
+        <li>Invia un'e-mail dall'indirizzo registrato nel tuo account ShredMembers.</li>
+        <li>Usa l'oggetto <strong>“Elimina account ShredMembers”</strong>.</li>
+        <li>Conferma nel messaggio che desideri eliminare il tuo account e i tuoi dati personali.</li>
+      </ol>
+      <div class="request-card">
+        <p><strong>Destinatario:</strong> tim.doodlerino@protonmail.com</p>
+        <a class="request-button" href="mailto:tim.doodlerino@protonmail.com?subject=Elimina%20account%20ShredMembers&body=Eliminate%20il%20mio%20account%20ShredMembers%20e%20i%20dati%20personali%20ad%20esso%20associati.%0A%0AIndirizzo%20e-mail%20registrato%3A%20">Invia la richiesta via e-mail</a>
+      </div>
+      <p>Potremmo contattarti per verificare la tua identità. Non è necessario avere l'app installata per richiedere l'eliminazione. Le richieste vengono elaborate entro 30 giorni.</p>
+      <h2>Dati eliminati</h2>
+      <ul>
+        <li>Dati dell'account e di autenticazione</li>
+        <li>Dati del profilo e di fitness</li>
+        <li>Piani e sessioni di allenamento e dati sui progressi</li>
+        <li>Dati dell'abbonamento e relativi identificativi memorizzati da ShredMembers</li>
+      </ul>
+      <h2>Dati che possono essere conservati</h2>
+      <p>Le informazioni che devono essere conservate per adempiere a obblighi legali, fiscali, contabili o di sicurezza possono rimanere archiviate per il periodo previsto dalla legge. I fornitori di servizi di pagamento come Stripe possono conservare i dati delle transazioni in base ai propri obblighi legali. Questi dati non saranno utilizzati per altri scopi.</p>
+      <h2>Abbonamenti attivi</h2>
+      <p>Indica nella richiesta se hai un abbonamento attivo. Ci assicureremo che venga terminato prima di completare l'eliminazione dell'account. L'eliminazione dell'account non rimborsa automaticamente i pagamenti precedenti.</p>
+      <p><a href="/privacy-policy">Visualizza l'Informativa sulla privacy</a></p>
+    </section>
+
+    <section data-lang="es">
+      <h1>Elimina tu cuenta de ShredMembers</h1>
+      <p class="subtitle">Utiliza esta página para solicitar la eliminación de tu cuenta de ShredMembers y de los datos personales asociados a ella.</p>
+      <h2>Cómo solicitar la eliminación</h2>
+      <ol>
+        <li>Envía un correo electrónico desde la dirección registrada en tu cuenta de ShredMembers.</li>
+        <li>Usa el asunto <strong>«Eliminar cuenta de ShredMembers»</strong>.</li>
+        <li>Confirma en el mensaje que deseas eliminar tu cuenta y tus datos personales.</li>
+      </ol>
+      <div class="request-card">
+        <p><strong>Destinatario:</strong> tim.doodlerino@protonmail.com</p>
+        <a class="request-button" href="mailto:tim.doodlerino@protonmail.com?subject=Eliminar%20cuenta%20de%20ShredMembers&body=Eliminen%20mi%20cuenta%20de%20ShredMembers%20y%20los%20datos%20personales%20asociados%20a%20ella.%0A%0ADirecci%C3%B3n%20de%20correo%20registrada%3A%20">Enviar la solicitud por correo</a>
+      </div>
+      <p>Podemos contactarte para verificar tu identidad. No necesitas tener la aplicación instalada para solicitar la eliminación. Las solicitudes se procesan en un plazo de 30 días.</p>
+      <h2>Datos eliminados</h2>
+      <ul>
+        <li>Datos de cuenta y autenticación</li>
+        <li>Datos de perfil y fitness</li>
+        <li>Planes y sesiones de entrenamiento y datos de progreso</li>
+        <li>Datos de suscripción e identificadores relacionados almacenados por ShredMembers</li>
+      </ul>
+      <h2>Datos que pueden conservarse</h2>
+      <p>La información que deba conservarse para cumplir obligaciones legales, fiscales, contables o de seguridad podrá permanecer almacenada durante el período exigido por la ley. Los proveedores de pago como Stripe pueden conservar datos de transacciones conforme a sus propias obligaciones legales. Estos datos no se utilizarán para otros fines.</p>
+      <h2>Suscripciones activas</h2>
+      <p>Indica en tu solicitud si tienes una suscripción activa. Nos aseguraremos de que finalice antes de completar la eliminación de la cuenta. Eliminar una cuenta no reembolsa automáticamente los pagos anteriores.</p>
+      <p><a href="/privacy-policy">Ver la Política de Privacidad</a></p>
+    </section>
+
+    <footer class="footer">
+      <p>&copy; 2026 ShredMembers. All rights reserved.</p>
+    </footer>
+  </main>
+
+  <script>
+    (function () {
+      const supportedLangs = ['de', 'en', 'fr', 'it', 'es'];
+      const browserLang = (navigator.language || 'en').split('-')[0].toLowerCase();
+      const storedLang = localStorage.getItem('shredmembers-language');
+      const activeLang = storedLang && supportedLangs.includes(storedLang)
+        ? storedLang
+        : supportedLangs.includes(browserLang) ? browserLang : 'en';
+
+      function showLanguage(lang) {
+        document.querySelectorAll('[data-lang]').forEach(function (element) {
+          element.classList.toggle('active', element.dataset.lang === lang);
+        });
+        document.querySelectorAll('[data-set-lang]').forEach(function (button) {
+          button.classList.toggle('active', button.dataset.setLang === lang);
+        });
+        document.documentElement.lang = lang;
+        localStorage.setItem('shredmembers-language', lang);
+      }
+
+      document.querySelectorAll('[data-set-lang]').forEach(function (button) {
+        button.addEventListener('click', function () {
+          showLanguage(button.dataset.setLang);
+        });
+      });
+
+      showLanguage(activeLang);
+    })();
+  </script>
+</body>
+</html>

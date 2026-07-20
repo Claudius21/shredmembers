@@ -23,6 +23,10 @@
           "destination": "/privacy-policy.html"
         },
         {
+          "source": "/delete-account",
+          "destination": "/delete-account.html"
+        },
+        {
           "source": "/auth/callback",
           "destination": "/auth-callback.html"
         },
