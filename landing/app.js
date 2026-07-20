@@ -32,6 +32,12 @@ var TRANSLATIONS = {
     linkPlayStore: 'Weiter zu Google Play',
     linkAppStore: 'Weiter zu App Store',
     loading: 'Bitte warten',
+    footerHome: 'Startseite',
+    footerWebApp: 'WebApp',
+    footerBilling: 'Abo',
+    footerPrivacy: 'Datenschutz',
+    footerDeleteAccount: 'Konto löschen',
+    footerContact: 'Kontakt',
   },
   en: {
     title: 'shredMembers Pro',
@@ -63,6 +69,12 @@ var TRANSLATIONS = {
     linkPlayStore: 'Continue to Google Play',
     linkAppStore: 'Continue to App Store',
     loading: 'Please wait',
+    footerHome: 'Home',
+    footerWebApp: 'Web app',
+    footerBilling: 'Subscription',
+    footerPrivacy: 'Privacy',
+    footerDeleteAccount: 'Delete account',
+    footerContact: 'Contact',
   },
   fr: {
     title: 'shredMembers Pro',
@@ -94,6 +106,12 @@ var TRANSLATIONS = {
     linkPlayStore: 'Continuer vers Google Play',
     linkAppStore: "Continuer vers l'App Store",
     loading: 'Veuillez patienter',
+    footerHome: 'Accueil',
+    footerWebApp: 'Application web',
+    footerBilling: 'Abonnement',
+    footerPrivacy: 'Confidentialité',
+    footerDeleteAccount: 'Supprimer le compte',
+    footerContact: 'Contact',
   },
   it: {
     title: 'shredMembers Pro',
@@ -125,6 +143,12 @@ var TRANSLATIONS = {
     linkPlayStore: 'Continua su Google Play',
     linkAppStore: "Continua sull'App Store",
     loading: 'Attendere prego',
+    footerHome: 'Home',
+    footerWebApp: 'Web app',
+    footerBilling: 'Abbonamento',
+    footerPrivacy: 'Privacy',
+    footerDeleteAccount: 'Elimina account',
+    footerContact: 'Contatti',
   },
 };
 
@@ -171,6 +195,17 @@ function applyTranslations() {
   const linkAppStore = document.getElementById('link-appstore');
   if (linkPlayStore) linkPlayStore.textContent = '▶ ' + t.linkPlayStore;
   if (linkAppStore) linkAppStore.textContent = ' ' + t.linkAppStore;
+  const footerLabels = {
+    home: t.footerHome,
+    webApp: t.footerWebApp,
+    billing: t.footerBilling,
+    privacy: t.footerPrivacy,
+    deleteAccount: t.footerDeleteAccount,
+    contact: t.footerContact,
+  };
+  document.querySelectorAll('[data-footer-label]').forEach((link) => {
+    link.textContent = footerLabels[link.dataset.footerLabel];
+  });
 }
 
 var STORE_URLS = {
