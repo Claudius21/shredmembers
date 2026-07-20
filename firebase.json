@@ -27,6 +27,10 @@
           "destination": "/delete-account.html"
         },
         {
+          "source": "/support",
+          "destination": "/support.html"
+        },
+        {
           "source": "/auth/callback",
           "destination": "/auth-callback.html"
         },

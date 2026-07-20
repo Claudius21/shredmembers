@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Get help and report problems with ShredMembers.">
+  <title>Support - ShredMembers</title>
+  <style>
+    :root {
+      --color-bg: #0a0a0a;
+      --color-surface: #111111;
+      --color-text: #f5f5f5;
+      --color-text-muted: #9ca3af;
+      --color-accent: #22c55e;
+      --color-border: #2a2a2a;
+      --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--color-bg);
+      color: var(--color-text);
+      font-family: var(--font-sans);
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 4rem 1.5rem;
+    }
+    .lang-switch {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+    .lang-switch button {
+      background: transparent;
+      border: 1px solid #333;
+      color: var(--color-text-muted);
+      padding: 0.4rem 0.8rem;
+      border-radius: 9999px;
+      cursor: pointer;
+      font-size: 0.875rem;
+    }
+    .lang-switch button.active,
+    .lang-switch button:hover {
+      border-color: var(--color-accent);
+      color: var(--color-accent);
+    }
+    h1 { font-size: 2rem; margin-bottom: 0.5rem; }
+    h2 {
+      color: var(--color-accent);
+      font-size: 1.25rem;
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+    }
+    p, ul { color: var(--color-text-muted); }
+    ul { padding-left: 1.5rem; }
+    li { margin-bottom: 0.65rem; }
+    strong { color: var(--color-text); }
+    a { color: var(--color-accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .subtitle { margin-bottom: 2rem; }
+    .support-card {
+      margin: 2rem 0;
+      padding: 1.5rem;
+      border: 1px solid var(--color-border);
+      border-radius: 0.75rem;
+      background: var(--color-surface);
+    }
+    .support-button {
+      display: inline-block;
+      margin-top: 0.5rem;
+      padding: 0.75rem 1rem;
+      border-radius: 0.5rem;
+      background: var(--color-accent);
+      color: #051b0b;
+      font-weight: 700;
+    }
+    .support-button:hover { text-decoration: none; filter: brightness(1.08); }
+    .footer {
+      margin-top: 4rem;
+      padding-top: 2rem;
+      border-top: 1px solid #222;
+      font-size: 0.875rem;
+    }
+    .footer-nav { display: flex; flex-wrap: wrap; gap: 0.75rem 1.25rem; }
+    [data-lang] { display: none; }
+    [data-lang].active { display: block; }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <nav class="lang-switch" aria-label="Language">
+      <button type="button" data-set-lang="de">DE</button>
+      <button type="button" data-set-lang="en">EN</button>
+      <button type="button" data-set-lang="fr">FR</button>
+      <button type="button" data-set-lang="it">IT</button>
+      <button type="button" data-set-lang="es">ES</button>
+    </nav>
+
+    <section data-lang="de">
+      <h1>ShredMembers Support</h1>
+      <p class="subtitle">Brauchst du Hilfe oder möchtest du ein Problem melden? Kontaktiere uns per E-Mail.</p>
+      <div class="support-card">
+        <p><strong>Support-Adresse:</strong> tim.doodlerino@protonmail.com</p>
+        <a class="support-button" href="mailto:tim.doodlerino@protonmail.com?subject=ShredMembers%20Supportanfrage&body=Beschreibung%20des%20Problems%3A%0A%0ASchritte%20zum%20Reproduzieren%3A%0A%0AApp-Version%3A%0AGer%C3%A4t%3A%0ABetriebssystem%3A%0A">Problem per E-Mail melden</a>
+      </div>
+      <h2>Diese Angaben helfen uns</h2>
+      <ul>
+        <li>Eine kurze Beschreibung des Problems</li>
+        <li>Die Schritte, mit denen das Problem auftritt</li>
+        <li>App-Version, Gerät und Betriebssystem</li>
+        <li>Ein Screenshot, sofern darauf keine sensiblen Daten zu sehen sind</li>
+        <li>Die E-Mail-Adresse deines ShredMembers-Kontos, falls das Problem dein Konto betrifft</li>
+      </ul>
+      <h2>Sicherheit</h2>
+      <p>Sende uns niemals Passwörter, vollständige Zahlungsdaten, Authentifizierungscodes oder andere vertrauliche Zugangsdaten. Zahlungen werden durch Stripe verarbeitet; wir benötigen keine Kreditkartendaten zur Bearbeitung einer Supportanfrage.</p>
+      <h2>Kontolöschung</h2>
+      <p>Zur Löschung deines Kontos und deiner Daten verwende bitte unsere <a href="/delete-account">Seite zur Kontolöschung</a>.</p>
+    </section>
+
+    <section data-lang="en">
+      <h1>ShredMembers Support</h1>
+      <p class="subtitle">Need help or want to report a problem? Contact us by email.</p>
+      <div class="support-card">
+        <p><strong>Support address:</strong> tim.doodlerino@protonmail.com</p>
+        <a class="support-button" href="mailto:tim.doodlerino@protonmail.com?subject=ShredMembers%20support%20request&body=Problem%20description%3A%0A%0ASteps%20to%20reproduce%3A%0A%0AApp%20version%3A%0ADevice%3A%0AOperating%20system%3A%0A">Report a problem by email</a>
+      </div>
+      <h2>Information that helps us</h2>
+      <ul>
+        <li>A short description of the problem</li>
+        <li>The steps that cause the problem</li>
+        <li>App version, device, and operating system</li>
+        <li>A screenshot, provided it does not show sensitive information</li>
+        <li>Your ShredMembers account email if the issue concerns your account</li>
+      </ul>
+      <h2>Security</h2>
+      <p>Never send passwords, complete payment details, authentication codes, or other confidential credentials. Payments are processed by Stripe; we do not need card details to handle a support request.</p>
+      <h2>Account deletion</h2>
+      <p>To delete your account and data, please use our <a href="/delete-account">account deletion page</a>.</p>
+    </section>
+
+    <section data-lang="fr">
+      <h1>Assistance ShredMembers</h1>
+      <p class="subtitle">Besoin d'aide ou envie de signaler un problème ? Contactez-nous par e-mail.</p>
+      <div class="support-card">
+        <p><strong>Adresse d'assistance :</strong> tim.doodlerino@protonmail.com</p>
+        <a class="support-button" href="mailto:tim.doodlerino@protonmail.com?subject=Demande%20d'assistance%20ShredMembers&body=Description%20du%20probl%C3%A8me%20%3A%0A%0A%C3%89tapes%20pour%20le%20reproduire%20%3A%0A%0AVersion%20de%20l'application%20%3A%0AAppareil%20%3A%0ASyst%C3%A8me%20d'exploitation%20%3A%0A">Signaler un problème par e-mail</a>
+      </div>
+      <h2>Informations utiles</h2>
+      <ul>
+        <li>Une brève description du problème</li>
+        <li>Les étapes permettant de reproduire le problème</li>
+        <li>La version de l'application, l'appareil et le système d'exploitation</li>
+        <li>Une capture d'écran ne contenant aucune donnée sensible</li>
+        <li>L'adresse e-mail du compte ShredMembers si le problème concerne votre compte</li>
+      </ul>
+      <h2>Sécurité</h2>
+      <p>N'envoyez jamais de mots de passe, de données de paiement complètes, de codes d'authentification ou d'autres identifiants confidentiels. Les paiements sont traités par Stripe ; nous n'avons pas besoin des données de votre carte pour traiter une demande.</p>
+      <h2>Suppression du compte</h2>
+      <p>Pour supprimer votre compte et vos données, utilisez notre <a href="/delete-account">page de suppression de compte</a>.</p>
+    </section>
+
+    <section data-lang="it">
+      <h1>Assistenza ShredMembers</h1>
+      <p class="subtitle">Hai bisogno di aiuto o vuoi segnalare un problema? Contattaci via e-mail.</p>
+      <div class="support-card">
+        <p><strong>Indirizzo di assistenza:</strong> tim.doodlerino@protonmail.com</p>
+        <a class="support-button" href="mailto:tim.doodlerino@protonmail.com?subject=Richiesta%20di%20assistenza%20ShredMembers&body=Descrizione%20del%20problema%3A%0A%0APassaggi%20per%20riprodurlo%3A%0A%0AVersione%20dell'app%3A%0ADispositivo%3A%0ASistema%20operativo%3A%0A">Segnala un problema via e-mail</a>
+      </div>
+      <h2>Informazioni utili</h2>
+      <ul>
+        <li>Una breve descrizione del problema</li>
+        <li>I passaggi che causano il problema</li>
+        <li>Versione dell'app, dispositivo e sistema operativo</li>
+        <li>Uno screenshot che non mostri informazioni sensibili</li>
+        <li>L'indirizzo e-mail dell'account ShredMembers se il problema riguarda il tuo account</li>
+      </ul>
+      <h2>Sicurezza</h2>
+      <p>Non inviare mai password, dati di pagamento completi, codici di autenticazione o altre credenziali riservate. I pagamenti sono elaborati da Stripe; non ci servono i dati della carta per gestire una richiesta.</p>
+      <h2>Eliminazione dell'account</h2>
+      <p>Per eliminare il tuo account e i tuoi dati, utilizza la nostra <a href="/delete-account">pagina di eliminazione dell'account</a>.</p>
+    </section>
+
+    <section data-lang="es">
+      <h1>Soporte de ShredMembers</h1>
+      <p class="subtitle">¿Necesitas ayuda o quieres informar de un problema? Contáctanos por correo electrónico.</p>
+      <div class="support-card">
+        <p><strong>Dirección de soporte:</strong> tim.doodlerino@protonmail.com</p>
+        <a class="support-button" href="mailto:tim.doodlerino@protonmail.com?subject=Solicitud%20de%20soporte%20de%20ShredMembers&body=Descripci%C3%B3n%20del%20problema%3A%0A%0APasos%20para%20reproducirlo%3A%0A%0AVersi%C3%B3n%20de%20la%20aplicaci%C3%B3n%3A%0ADispositivo%3A%0ASistema%20operativo%3A%0A">Informar de un problema por correo</a>
+      </div>
+      <h2>Información que nos ayuda</h2>
+      <ul>
+        <li>Una breve descripción del problema</li>
+        <li>Los pasos que provocan el problema</li>
+        <li>Versión de la aplicación, dispositivo y sistema operativo</li>
+        <li>Una captura de pantalla que no muestre información sensible</li>
+        <li>El correo de tu cuenta de ShredMembers si el problema está relacionado con ella</li>
+      </ul>
+      <h2>Seguridad</h2>
+      <p>Nunca envíes contraseñas, datos de pago completos, códigos de autenticación u otras credenciales confidenciales. Stripe procesa los pagos; no necesitamos los datos de tu tarjeta para gestionar una solicitud.</p>
+      <h2>Eliminación de la cuenta</h2>
+      <p>Para eliminar tu cuenta y tus datos, utiliza nuestra <a href="/delete-account">página de eliminación de cuenta</a>.</p>
+    </section>
+
+    <footer class="footer">
+      <nav class="footer-nav" aria-label="Footer navigation">
+        <a href="/">ShredMembers</a>
+        <a href="https://web.shredmember.app">WebApp</a>
+        <a href="/billing">Billing</a>
+        <a href="/privacy-policy">Privacy</a>
+        <a href="/delete-account">Delete account</a>
+      </nav>
+    </footer>
+  </main>
+
+  <script>
+    (function () {
+      const supportedLangs = ['de', 'en', 'fr', 'it', 'es'];
+      const browserLang = (navigator.language || 'en').split('-')[0].toLowerCase();
+      const storedLang = localStorage.getItem('shredmembers-language');
+      const activeLang = storedLang && supportedLangs.includes(storedLang)
+        ? storedLang
+        : supportedLangs.includes(browserLang) ? browserLang : 'en';
+
+      function showLanguage(lang) {
+        document.querySelectorAll('[data-lang]').forEach(function (element) {
+          element.classList.toggle('active', element.dataset.lang === lang);
+        });
+        document.querySelectorAll('[data-set-lang]').forEach(function (button) {
+          button.classList.toggle('active', button.dataset.setLang === lang);
+        });
+        document.documentElement.lang = lang;
+        localStorage.setItem('shredmembers-language', lang);
+      }
+
+      document.querySelectorAll('[data-set-lang]').forEach(function (button) {
+        button.addEventListener('click', function () {
+          showLanguage(button.dataset.setLang);
+        });
+      });
+
+      showLanguage(activeLang);
+    })();
+  </script>
+</body>
+</html>
