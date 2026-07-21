@@ -27,21 +27,31 @@ android {
     }
 
     signingConfigs {
-        create("release") {
-            val keystorePropertiesFile = rootProject.file("key.properties")
-            val keystoreProperties = java.util.Properties()
-            keystoreProperties.load(java.io.FileInputStream(keystorePropertiesFile))
-
-            keyAlias = keystoreProperties["keyAlias"] as String
-            keyPassword = keystoreProperties["keyPassword"] as String
-            storeFile = file(keystoreProperties["storeFile"] as String)
-            storePassword = keystoreProperties["storePassword"] as String
+        val keystorePropertiesFile = rootProject.file("key.properties")
+        if (keystorePropertiesFile.exists()) {
+            val props = mutableMapOf<String, String>()
+            keystorePropertiesFile.readLines().forEach { line ->
+                val trimmed = line.trim()
+                if (trimmed.isNotEmpty() && !trimmed.startsWith("#") && trimmed.contains("=")) {
+                    val (key, value) = trimmed.split("=", limit = 2)
+                    props[key.trim()] = value.trim()
+                }
+            }
+            create("release") {
+                keyAlias = props["keyAlias"] ?: ""
+                keyPassword = props["keyPassword"] ?: ""
+                storeFile = file(props["storeFile"] ?: "")
+                storePassword = props["storePassword"] ?: ""
+            }
         }
     }
 
     buildTypes {
         release {
-            signingConfig = signingConfigs.getByName("release")
+            val releaseConfig = try { signingConfigs.getByName("release") } catch (_: Exception) { null }
+            if (releaseConfig != null) {
+                signingConfig = releaseConfig
+            }
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
