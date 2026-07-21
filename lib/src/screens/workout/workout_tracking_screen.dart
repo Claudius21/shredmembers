@@ -1637,7 +1637,7 @@ class _CompletionSheetState extends ConsumerState<_CompletionSheet> {
                   
                   const SizedBox(height: 16),
                   Text(
-                    'shredMembers',
+                    'https://shredmember.app/',
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           color: AppColors.onSurfaceMuted,
                         ),

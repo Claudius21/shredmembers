@@ -1595,7 +1595,7 @@ class _SessionDetailsSheetState extends ConsumerState<_SessionDetailsSheet> {
 
                       const SizedBox(height: 12),
                       Text(
-                        'shredMembers',
+                        'https://shredmember.app/',
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
                               color: AppColors.onSurfaceMuted,
                             ),
