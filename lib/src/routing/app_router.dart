@@ -5,7 +5,6 @@ import 'package:go_router/go_router.dart';
 import '../providers/auth_provider.dart';
 import '../screens/onboarding/onboarding_screen.dart';
 import '../screens/auth/login_screen.dart';
-import '../screens/auth/signup_screen.dart';
 import '../screens/home/home_screen.dart';
 import '../screens/plans/plans_screen.dart';
 import '../screens/plans/plan_edit_screen.dart';
@@ -116,7 +115,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: AppRoutes.signup,
-        builder: (context, state) => const SignupScreen(),
+        redirect: (_, __) => AppRoutes.login,
       ),
       ShellRoute(
         builder: (context, state, child) => MainScaffold(child: child),

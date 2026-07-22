@@ -83,6 +83,14 @@ class AuthRepository {
     }
   }
 
+  Future<void> sendMagicLink(String email) async {
+    await _client.auth.signInWithOtp(
+      email: email,
+      shouldCreateUser: true,
+      emailRedirectTo: 'shredmembers://auth/callback',
+    );
+  }
+
   Future<void> resetPassword(String email) async {
     await _client.auth.resetPasswordForEmail(email);
   }

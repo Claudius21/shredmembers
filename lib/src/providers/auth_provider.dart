@@ -195,6 +195,21 @@ class AuthNotifier extends Notifier<AuthState> {
     state = const AuthState(status: AuthStatus.unauthenticated);
   }
 
+  Future<bool> sendMagicLink(String email) async {
+    state = AuthState(status: AuthStatus.loading);
+    try {
+      await _repo.sendMagicLink(email);
+      state = const AuthState(status: AuthStatus.unauthenticated);
+      return true;
+    } catch (e) {
+      state = AuthState(
+        status: AuthStatus.unauthenticated,
+        errorMessage: _parseError(e),
+      );
+      return false;
+    }
+  }
+
   Future<bool> resetPassword(String email) async {
     try {
       await _repo.resetPassword(email);
