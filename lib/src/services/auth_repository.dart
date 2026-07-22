@@ -87,7 +87,7 @@ class AuthRepository {
     await _client.auth.signInWithOtp(
       email: email,
       shouldCreateUser: true,
-      emailRedirectTo: 'shredmembers://auth/callback',
+      emailRedirectTo: 'https://shredmember.app/auth/callback',
     );
   }
 
