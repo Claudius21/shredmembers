@@ -78,7 +78,8 @@ final routerProvider = Provider<GoRouter>((ref) {
       final isAuthenticated = authState.isAuthenticated;
       final isAuthRoute = state.matchedLocation == AppRoutes.login ||
           state.matchedLocation == AppRoutes.signup ||
-          state.matchedLocation == AppRoutes.onboarding;
+          state.matchedLocation == AppRoutes.onboarding ||
+          state.matchedLocation == AppRoutes.authCallback;
 
       // Subscription-Check: Bei abgelaufenem Trial zu Paywall
       if (isAuthenticated) {

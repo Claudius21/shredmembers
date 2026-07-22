@@ -35,6 +35,8 @@ class _AuthCallbackScreenState extends ConsumerState<AuthCallbackScreen> {
     final accessToken = widget.accessToken;
     final refreshToken = widget.refreshToken;
 
+    debugPrint('[AUTH-CB] token=$token, type=$type, accessToken=${accessToken != null ? '***' : 'null'}, refreshToken=${refreshToken != null ? '***' : 'null'}');
+
     if (accessToken != null && refreshToken != null) {
       // Session already provided in URL
       final success = await ref.read(authProvider.notifier).setSession(accessToken, refreshToken);
