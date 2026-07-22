@@ -128,13 +128,6 @@ class ProfileScreen extends ConsumerWidget {
                         ],
                       ),
                     ),
-                    const SizedBox(height: AppSpacing.xl),
-                    Center(
-                      child: Text(
-                        'shredMembers v1.0.0 · MVP',
-                        style: Theme.of(context).textTheme.bodySmall,
-                      ),
-                    ),
                     const SizedBox(height: AppSpacing.lg),
                   ],
                 ),
@@ -150,7 +143,7 @@ class ProfileScreen extends ConsumerWidget {
     showAboutDialog(
       context: context,
       applicationName: 'shredMembers',
-      applicationVersion: '1.0.0',
+      applicationVersion: '1.0.1',
       applicationLegalese: '© 2025 shredMembers',
     );
   }
