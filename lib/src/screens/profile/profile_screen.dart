@@ -156,52 +156,13 @@ class ProfileScreen extends ConsumerWidget {
   }
 }
 
-class _ProfileHeader extends ConsumerWidget {
+class _ProfileHeader extends StatelessWidget {
   final AppUser user;
 
   const _ProfileHeader({required this.user});
 
-  void _editName(BuildContext context, WidgetRef ref) {
-    final ctrl = TextEditingController(text: user.name);
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: AppColors.surface,
-        title: Text(AppLocalizations.of(context)!.editName),
-        content: TextField(
-          controller: ctrl,
-          autofocus: true,
-          textCapitalization: TextCapitalization.words,
-          decoration: InputDecoration(
-            hintText: AppLocalizations.of(context)!.nameHint,
-          ),
-          onSubmitted: (_) {
-            Navigator.pop(ctx, ctrl.text.trim());
-          },
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx),
-            child: Text(AppLocalizations.of(context)!.cancel),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(ctx, ctrl.text.trim()),
-            child: Text(
-              AppLocalizations.of(context)!.save,
-              style: const TextStyle(color: AppColors.primary),
-            ),
-          ),
-        ],
-      ),
-    ).then((name) {
-      if (name != null && name.isNotEmpty && name != user.name) {
-        ref.read(authProvider.notifier).updateUser(user.copyWith(name: name));
-      }
-    });
-  }
-
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.fromLTRB(20, 40, 20, 24),
       decoration: const BoxDecoration(
@@ -232,22 +193,7 @@ class _ProfileHeader extends ConsumerWidget {
             ),
           ),
           const SizedBox(height: AppSpacing.md),
-          GestureDetector(
-            onTap: () => _editName(context, ref),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  user.name.isNotEmpty ? user.name : AppLocalizations.of(context)!.tapToSetName,
-                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    color: user.name.isNotEmpty ? null : AppColors.onSurfaceMuted,
-                  ),
-                ),
-                const SizedBox(width: 6),
-                const Icon(Icons.edit_outlined, size: 16, color: AppColors.onSurfaceMuted),
-              ],
-            ),
-          ),
+          Text(user.name, style: Theme.of(context).textTheme.headlineSmall),
           const SizedBox(height: 4),
           Text(user.email, style: Theme.of(context).textTheme.bodySmall),
           const SizedBox(height: AppSpacing.md),
@@ -468,6 +414,7 @@ class _PersonalDetailsSelector extends StatefulWidget {
 }
 
 class _PersonalDetailsSelectorState extends State<_PersonalDetailsSelector> {
+  late final TextEditingController _nameCtrl;
   late final TextEditingController _heightCtrl;
   late final TextEditingController _weightCtrl;
   late Gender _selectedGender;
@@ -476,6 +423,7 @@ class _PersonalDetailsSelectorState extends State<_PersonalDetailsSelector> {
   @override
   void initState() {
     super.initState();
+    _nameCtrl = TextEditingController(text: widget.user.name);
     _heightCtrl = TextEditingController(
       text: widget.user.heightCm?.toStringAsFixed(1) ?? '',
     );
@@ -485,12 +433,14 @@ class _PersonalDetailsSelectorState extends State<_PersonalDetailsSelector> {
     _selectedGender = widget.user.gender ?? Gender.preferNotToSay;
 
     // Add listeners to track changes
+    _nameCtrl.addListener(_checkChanges);
     _heightCtrl.addListener(_checkChanges);
     _weightCtrl.addListener(_checkChanges);
   }
 
   @override
   void dispose() {
+    _nameCtrl.dispose();
     _heightCtrl.dispose();
     _weightCtrl.dispose();
     super.dispose();
@@ -500,22 +450,25 @@ class _PersonalDetailsSelectorState extends State<_PersonalDetailsSelector> {
     final height = double.tryParse(_heightCtrl.text);
     final weight = double.tryParse(_weightCtrl.text);
 
+    final hasNameChanged = _nameCtrl.text.trim() != widget.user.name;
     final hasHeightChanged = height != widget.user.heightCm;
     final hasWeightChanged = weight != widget.user.weightKg;
     final hasGenderChanged = _selectedGender != widget.user.gender;
 
     setState(() {
-      _hasChanges = hasHeightChanged || hasWeightChanged || hasGenderChanged;
+      _hasChanges = hasNameChanged || hasHeightChanged || hasWeightChanged || hasGenderChanged;
     });
   }
 
   void _save() async {
+    final name = _nameCtrl.text.trim();
     final height = double.tryParse(_heightCtrl.text);
     final weight = double.tryParse(_weightCtrl.text);
 
     try {
       await widget.ref.read(authProvider.notifier).updateUser(
             widget.user.copyWith(
+              name: name.isNotEmpty ? name : widget.user.name,
               gender: _selectedGender,
               heightCm: height,
               weightKg: weight,
@@ -575,6 +528,35 @@ class _PersonalDetailsSelectorState extends State<_PersonalDetailsSelector> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Name
+          Row(
+            children: [
+              const Icon(Icons.badge_outlined,
+                  color: AppColors.onSurface, size: 22),
+              const SizedBox(width: AppSpacing.md),
+              Expanded(
+                child: Text(AppLocalizations.of(context)!.editName,
+                    style: Theme.of(context).textTheme.bodyMedium),
+              ),
+              SizedBox(
+                width: 160,
+                child: TextField(
+                  controller: _nameCtrl,
+                  textCapitalization: TextCapitalization.words,
+                  decoration: InputDecoration(
+                    hintText: AppLocalizations.of(context)!.nameHint,
+                    isDense: true,
+                    contentPadding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                  ),
+                  style: const TextStyle(fontSize: 14),
+                ),
+              ),
+            ],
+          ),
+
+          const SizedBox(height: AppSpacing.lg),
+
           // Gender
           Row(
             children: [
