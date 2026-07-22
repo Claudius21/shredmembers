@@ -156,13 +156,52 @@ class ProfileScreen extends ConsumerWidget {
   }
 }
 
-class _ProfileHeader extends StatelessWidget {
+class _ProfileHeader extends ConsumerWidget {
   final AppUser user;
 
   const _ProfileHeader({required this.user});
 
+  void _editName(BuildContext context, WidgetRef ref) {
+    final ctrl = TextEditingController(text: user.name);
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: AppColors.surface,
+        title: Text(AppLocalizations.of(context)!.editName),
+        content: TextField(
+          controller: ctrl,
+          autofocus: true,
+          textCapitalization: TextCapitalization.words,
+          decoration: InputDecoration(
+            hintText: AppLocalizations.of(context)!.nameHint,
+          ),
+          onSubmitted: (_) {
+            Navigator.pop(ctx, ctrl.text.trim());
+          },
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: Text(AppLocalizations.of(context)!.cancel),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, ctrl.text.trim()),
+            child: Text(
+              AppLocalizations.of(context)!.save,
+              style: const TextStyle(color: AppColors.primary),
+            ),
+          ),
+        ],
+      ),
+    ).then((name) {
+      if (name != null && name.isNotEmpty && name != user.name) {
+        ref.read(authProvider.notifier).updateUser(user.copyWith(name: name));
+      }
+    });
+  }
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Container(
       padding: const EdgeInsets.fromLTRB(20, 40, 20, 24),
       decoration: const BoxDecoration(
@@ -193,7 +232,22 @@ class _ProfileHeader extends StatelessWidget {
             ),
           ),
           const SizedBox(height: AppSpacing.md),
-          Text(user.name, style: Theme.of(context).textTheme.headlineSmall),
+          GestureDetector(
+            onTap: () => _editName(context, ref),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  user.name.isNotEmpty ? user.name : AppLocalizations.of(context)!.tapToSetName,
+                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    color: user.name.isNotEmpty ? null : AppColors.onSurfaceMuted,
+                  ),
+                ),
+                const SizedBox(width: 6),
+                const Icon(Icons.edit_outlined, size: 16, color: AppColors.onSurfaceMuted),
+              ],
+            ),
+          ),
           const SizedBox(height: 4),
           Text(user.email, style: Theme.of(context).textTheme.bodySmall),
           const SizedBox(height: AppSpacing.md),

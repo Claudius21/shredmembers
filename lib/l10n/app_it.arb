@@ -280,6 +280,10 @@
   "@saveDetails": {
     "description": "Button label to save personal details"
   },
+  "save": "Salva",
+  "editName": "Modifica nome",
+  "nameHint": "Il tuo nome",
+  "tapToSetName": "Tocca per impostare il nome",
   "weeklyTarget": "Obiettivo settimanale",
   "@weeklyTarget": {
     "description": "Label for weekly target selector"

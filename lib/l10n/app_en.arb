@@ -280,6 +280,22 @@
   "@saveDetails": {
     "description": "Button label to save personal details"
   },
+  "save": "Save",
+  "@save": {
+    "description": "Generic save button label"
+  },
+  "editName": "Edit Name",
+  "@editName": {
+    "description": "Dialog title for editing the user name"
+  },
+  "nameHint": "Your name",
+  "@nameHint": {
+    "description": "Hint text for name input"
+  },
+  "tapToSetName": "Tap to set name",
+  "@tapToSetName": {
+    "description": "Placeholder text when no name is set"
+  },
   "weeklyTarget": "Weekly Target",
   "@weeklyTarget": {
     "description": "Label for weekly target selector"

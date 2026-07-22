@@ -217,6 +217,18 @@ class AppLocalizationsDe extends AppLocalizations {
   String get saveDetails => 'Details speichern';
 
   @override
+  String get save => 'Speichern';
+
+  @override
+  String get editName => 'Name bearbeiten';
+
+  @override
+  String get nameHint => 'Dein Name';
+
+  @override
+  String get tapToSetName => 'Tippe, um Namen zu setzen';
+
+  @override
   String get language => 'Sprache';
 
   @override

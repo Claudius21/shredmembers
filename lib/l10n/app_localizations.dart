@@ -482,6 +482,30 @@ abstract class AppLocalizations {
   /// **'Save Details'**
   String get saveDetails;
 
+  /// Generic save button label
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get save;
+
+  /// Dialog title for editing the user name
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Name'**
+  String get editName;
+
+  /// Hint text for name input
+  ///
+  /// In en, this message translates to:
+  /// **'Your name'**
+  String get nameHint;
+
+  /// Placeholder text when no name is set
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to set name'**
+  String get tapToSetName;
+
   /// Label for language selector
   ///
   /// In en, this message translates to:

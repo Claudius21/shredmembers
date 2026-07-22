@@ -65,6 +65,10 @@
   "weight": "Gewicht",
   "weightHint": "kg",
   "saveDetails": "Details speichern",
+  "save": "Speichern",
+  "editName": "Name bearbeiten",
+  "nameHint": "Dein Name",
+  "tapToSetName": "Tippe, um Namen zu setzen",
   "weeklyTarget": "Wöchentliches Ziel",
 
   "language": "Sprache",
