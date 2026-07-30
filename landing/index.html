@@ -56,6 +56,27 @@
       font-size: 16px;
       margin-bottom: 16px;
     }
+    .lang-switch {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+    .lang-switch button {
+      background: transparent;
+      border: 1px solid #333;
+      color: #b0b0b0;
+      padding: 0.4rem 0.8rem;
+      border-radius: 9999px;
+      cursor: pointer;
+      font-size: 0.875rem;
+    }
+    .lang-switch button.active,
+    .lang-switch button:hover {
+      border-color: #00E5A0;
+      color: #00E5A0;
+    }
     .btn {
       width: 100%;
       padding: 16px;
@@ -126,6 +147,13 @@
 </head>
 <body>
   <div class="container">
+    <div class="lang-switch">
+      <button data-lang="de" class="active">DE</button>
+      <button data-lang="en">EN</button>
+      <button data-lang="fr">FR</button>
+      <button data-lang="it">IT</button>
+      <button data-lang="es">ES</button>
+    </div>
     <div class="logo">S</div>
     <h1>shredMembers Pro</h1>
     <p class="subtitle">Voller Zugriff auf alle Trainingspläne, Progress-Tracking und Premium-Features.</p>
@@ -145,8 +173,8 @@
       <p id="start-free-msg" style="margin-bottom:16px; font-size:15px; line-height:1.5;"></p>
       <a id="btn-open-app" class="btn" href="shredmembers://" style="display:block; text-align:center; text-decoration:none;">App öffnen</a>
       <div id="download-links" style="margin-top:16px; display:flex; flex-direction:column; gap:10px;">
-        <a id="link-playstore" href="#" target="_blank" rel="noopener" style="display:block; text-align:center; padding:12px; border-radius:12px; border:1px solid #333; color:#fff; text-decoration:none; font-size:14px;">▶ Weiter zu Google Play</a>
-        <a id="link-appstore" href="#" target="_blank" rel="noopener" style="display:block; text-align:center; padding:12px; border-radius:12px; border:1px solid #333; color:#fff; text-decoration:none; font-size:14px;"> Weiter zu App Store</a>
+        <a id="link-playstore" href="/store-android" style="display:block; text-align:center; padding:12px; border-radius:12px; border:1px solid #333; color:#fff; text-decoration:none; font-size:14px;">▶ Weiter zu Google Play</a>
+        <a id="link-appstore" href="/store-ios" style="display:block; text-align:center; padding:12px; border-radius:12px; border:1px solid #333; color:#fff; text-decoration:none; font-size:14px;"> Weiter zu App Store</a>
       </div>
       <p style="text-align:center; margin-top:16px; font-size:13px; color:#b0b0b0;">Abo verwalten: <a href="/billing" style="color:#00E5A0; text-decoration:underline;">shredmember.app/billing</a></p>
       <button class="btn btn-secondary" id="btn-logout">Andere E-Mail verwenden</button>

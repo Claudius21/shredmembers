@@ -113,6 +113,43 @@ var TRANSLATIONS = {
     footerDeleteAccount: 'Supprimer le compte',
     footerContact: 'Contact',
   },
+  es: {
+    title: 'shredMembers Pro',
+    subtitle: 'Acceso completo a todos los planes de entrenamiento, seguimiento de progreso y funciones premium.',
+    emailLabel: 'Dirección de correo electrónico',
+    emailPlaceholder: 'tu@email.com',
+    sendLink: 'Enviar Magic Link',
+    linkSent: 'Enlace enviado',
+    linkSentMsg: 'Te hemos enviado un enlace de inicio de sesión. Abre tu correo y haz clic en el enlace para continuar.',
+    invalidEmail: 'Por favor, introduce una dirección de correo electrónico válida.',
+    loadError: 'Error al cargar: ',
+    signupError: 'El registro no está disponible en este momento. Inténtalo de nuevo en unos minutos o utiliza una dirección de correo electrónico ya registrada.',
+    loggedInAs: 'Conectado como',
+    monthly: 'Mensual',
+    monthlyPeriod: 'por mes',
+    yearly: 'Anual',
+    yearlyPeriod: 'por año · 30% más barato',
+    upgrade: 'Actualizar ahora',
+    trialDays: (d) => `Tu prueba gratuita tiene ${d} día${d !== 1 ? 's' : ''} restante${d !== 1 ? 's' : ''}.`,
+    trialLink: (d) => `Prueba gratis durante ${d} día${d !== 1 ? 's' : ''} más`,
+    otherEmail: 'Usar otro correo electrónico',
+    openApp: 'Abrir app',
+    startFreeMsg: 'Comienza tu prueba gratuita de 30 días ahora. Descarga la app o ábrela directamente.',
+    manageSubscription: 'Gestionar suscripción',
+    alreadyActive: 'Ya tienes una suscripción activa. Abre la app para usar Premium.',
+    alreadyActiveBtn: 'Ya activa',
+    appStore: 'Descárgala en el App Store',
+    playStore: 'Disponible en Google Play',
+    linkPlayStore: 'Continuar a Google Play',
+    linkAppStore: 'Continuar al App Store',
+    loading: 'Por favor espera',
+    footerHome: 'Inicio',
+    footerWebApp: 'Aplicación web',
+    footerBilling: 'Suscripción',
+    footerPrivacy: 'Privacidad',
+    footerDeleteAccount: 'Eliminar cuenta',
+    footerContact: 'Contacto',
+  },
   it: {
     title: 'shredMembers Pro',
     subtitle: 'Accesso completo a tutti i piani di allenamento, monitoraggio dei progressi e funzionalità premium.',
@@ -153,8 +190,21 @@ var TRANSLATIONS = {
 };
 
 function getLang() {
+  const saved = localStorage.getItem('shredmembers-lang');
+  if (saved && TRANSLATIONS[saved]) return saved;
   const lang = (navigator.language || 'de').toLowerCase().substring(0, 2);
   return TRANSLATIONS[lang] ? lang : 'de';
+}
+
+function setLang(lang) {
+  if (!TRANSLATIONS[lang]) return;
+  localStorage.setItem('shredmembers-lang', lang);
+  t = TRANSLATIONS[lang];
+  applyTranslations();
+  document.documentElement.lang = lang;
+  document.querySelectorAll('.lang-switch button').forEach((btn) => {
+    btn.classList.toggle('active', btn.dataset.lang === lang);
+  });
 }
 
 var t = TRANSLATIONS[getLang()];
@@ -209,13 +259,17 @@ function applyTranslations() {
 }
 
 var STORE_URLS = {
-  playStore: 'https://play.google.com/store/apps/details?id=com.shredmembers.app',
-  appStore: 'https://apps.apple.com/app/shredmembers/id0000000000',
+  playStore: '/store-android',
+  appStore: '/store-ios',
 };
 
 async function init() {
   console.log('[WEB] init started');
   applyTranslations();
+  document.querySelectorAll('.lang-switch button').forEach((btn) => {
+    btn.classList.toggle('active', btn.dataset.lang === getLang());
+    btn.addEventListener('click', () => setLang(btn.dataset.lang));
+  });
   const lps = document.getElementById('link-playstore');
   const las = document.getElementById('link-appstore');
   if (lps) lps.href = STORE_URLS.playStore;

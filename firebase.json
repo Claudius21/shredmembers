@@ -38,6 +38,14 @@
           "destination": "/billing.html"
         },
         {
+          "source": "/store-android",
+          "destination": "/store-android.html"
+        },
+        {
+          "source": "/store-ios",
+          "destination": "/store-ios.html"
+        },
+        {
           "source": "**",
           "destination": "/index.html"
         }
