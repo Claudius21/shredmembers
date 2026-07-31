@@ -139,6 +139,13 @@
     .plan-title { font-weight: bold; margin-bottom: 4px; }
     .plan-price { color: #00E5A0; font-size: 22px; font-weight: bold; }
     .plan-period { color: #b0b0b0; font-size: 14px; }
+    #download-links a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    #download-links a svg { flex-shrink: 0; }
     .site-footer { margin-top: 32px; padding-top: 20px; border-top: 1px solid #2a2a2a; }
     .footer-nav { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px 16px; }
     .footer-nav a { color: #b0b0b0; font-size: 13px; text-decoration: none; }
@@ -173,8 +180,20 @@
       <p id="start-free-msg" style="margin-bottom:16px; font-size:15px; line-height:1.5;"></p>
       <a id="btn-open-app" class="btn" href="shredmembers://" style="display:block; text-align:center; text-decoration:none;">App öffnen</a>
       <div id="download-links" style="margin-top:16px; display:flex; flex-direction:column; gap:10px;">
-        <a id="link-playstore" href="/store-android" style="display:block; text-align:center; padding:12px; border-radius:12px; border:1px solid #333; color:#fff; text-decoration:none; font-size:14px;">▶ Weiter zu Google Play</a>
-        <a id="link-appstore" href="/store-ios" style="display:block; text-align:center; padding:12px; border-radius:12px; border:1px solid #333; color:#fff; text-decoration:none; font-size:14px;"> Weiter zu App Store</a>
+        <a id="link-playstore" href="/store-android" style="display:flex; align-items:center; justify-content:center; gap:10px; padding:12px; border-radius:12px; border:1px solid #333; color:#fff; text-decoration:none; font-size:14px;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M3 20.77V3.23C3 2.43 3.81 1.95 4.48 2.39L19.08 12.22C19.64 12.61 19.64 13.39 19.08 13.78L4.48 23.61C3.81 24.05 3 23.57 3 22.77Z" fill="#ffffff"/>
+            <path d="M3 20.77V3.23C3 2.43 3.81 1.95 4.48 2.39L19.08 12.22C19.64 12.61 19.64 13.39 19.08 13.78L4.48 23.61C3.81 24.05 3 23.57 3 22.77Z" stroke="#ffffff" stroke-width="0.5" stroke-linejoin="round"/>
+            <path d="M4.92 2.2L14.46 16.92L9.82 20.16L4.92 2.2Z" fill="#ffffff" fill-opacity="0.3"/>
+          </svg>
+          <span id="playstore-text">Weiter zu Google Play</span>
+        </a>
+        <a id="link-appstore" href="/store-ios" style="display:flex; align-items:center; justify-content:center; gap:10px; padding:12px; border-radius:12px; border:1px solid #333; color:#fff; text-decoration:none; font-size:14px;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.96 15.93 3.5 12.38 5.4 9.06c.93-1.62 2.66-2.72 4.67-2.75 1.3-.02 2.57.89 3.37.89.8 0 2.3-1.1 3.87-.94.66.03 2.52.27 3.71 1.99-.09.06-2.21 1.29-2.19 3.84.02 3.07 2.68 4.09 2.73 4.11-.02.12-.43 1.45-1.27 2.87zM13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+          </svg>
+          <span id="appstore-text">Weiter zu App Store</span>
+        </a>
       </div>
       <p style="text-align:center; margin-top:16px; font-size:13px; color:#b0b0b0;">Abo verwalten: <a href="/billing" style="color:#00E5A0; text-decoration:underline;">shredmember.app/billing</a></p>
       <button class="btn btn-secondary" id="btn-logout">Andere E-Mail verwenden</button>

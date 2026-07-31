@@ -237,14 +237,22 @@ function applyTranslations() {
   btnLogout.textContent = t.otherEmail;
   const iosLink = document.getElementById('ios-link');
   const androidLink = document.getElementById('android-link');
-  if (iosLink) iosLink.textContent = t.appStore;
-  if (androidLink) androidLink.textContent = t.playStore;
+  if (iosLink) {
+    const span = iosLink.querySelector('span');
+    if (span) span.textContent = t.appStore;
+    else iosLink.textContent = t.appStore;
+  }
+  if (androidLink) {
+    const span = androidLink.querySelector('span');
+    if (span) span.textContent = t.playStore;
+    else androidLink.textContent = t.playStore;
+  }
   const openApp = document.getElementById('btn-open-app');
   if (openApp) openApp.textContent = t.openApp;
-  const linkPlayStore = document.getElementById('link-playstore');
-  const linkAppStore = document.getElementById('link-appstore');
-  if (linkPlayStore) linkPlayStore.textContent = '▶ ' + t.linkPlayStore;
-  if (linkAppStore) linkAppStore.textContent = ' ' + t.linkAppStore;
+  const linkPlayStore = document.getElementById('playstore-text');
+  const linkAppStore = document.getElementById('appstore-text');
+  if (linkPlayStore) linkPlayStore.textContent = t.linkPlayStore;
+  if (linkAppStore) linkAppStore.textContent = t.linkAppStore;
   const footerLabels = {
     home: t.footerHome,
     webApp: t.footerWebApp,
